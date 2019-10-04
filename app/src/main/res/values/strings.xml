@@ -1,0 +1,28 @@
+<resources>
+    <string name="app_name">Dashboard of Things</string>
+    <string name="title_activity_map">Map</string>
+
+    <string name="log_info_actuator_command_sent_success">Actuator updated with value %s.</string>
+    <string name="log_info_mqtt_network_connected">MQTT network is connected</string>
+    <string name="log_info_actuator_command_sent_success_mqtt">Actuator updated though MQTT.</string>
+    <string name="log_critical_unexpected_http_network">Unexpected error when sending HTTP message.</string>
+    <string name="log_critical_wrong_network_conf">Wrong configuration for the network.</string>
+    <string name="log_critical_wrong_ssl_network_conf">Wrong SSL configuration for the network.</string>
+    <string name="log_critical_unrecognized_http_method">Unrecognized HTTP method.</string>
+    <string name="log_critical_malformed_url">Check URL formed for the sensor.</string>
+    <string name="log_critical_connectivity">There are connection problems.</string>
+    <string name="log_critical_http_no_response">No HTTP response received.</string>
+    <string name="log_critical_http_bad_response">The HTTP response to the request (%1$d) is not valid.</string>
+    <string name="log_critical_http_message_body">No HTTP response body received.</string>
+    <string name="log_critical_message_parser">Problem parsing the message.</string>
+    <string name="log_critical_message_building">Problem building the message.</string>
+    <string name="log_critical_data_format">Data format is not expected.</string>
+    <string name="log_critical_sensor_scheduling">Not possible to schedule sensor.</string>
+    <string name="log_critical_mqtt_connection_lost">MQTT connection lost.</string>
+    <string name="log_critical_mqtt_connection_fail">MQTT connection failed.</string>
+    <string name="log_critical_mqtt_disconnection_fail">MQTT disconnection failed.</string>
+    <string name="log_critical_mqtt_sensor_subscription_fail">MQTT sensor subscription failed.</string>
+    <string name="log_critical_mqtt_sensor_unsubscription_fail">MQTT sensor unsubscription failed.</string>
+    <string name="log_critical_mqtt_actuator_send_failed">Failed to send MQTT message for actuator.</string>
+    <string name="log_critical_unexpected_mqtt_network">Unexpected error when sending MQTT message.</string>
+</resources>

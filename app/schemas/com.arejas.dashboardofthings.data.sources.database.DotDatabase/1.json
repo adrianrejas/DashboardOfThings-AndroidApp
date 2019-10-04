@@ -1,0 +1,584 @@
+{
+  "formatVersion": 1,
+  "database": {
+    "version": 1,
+    "identityHash": "4d56fc3b9ced0205bf63a0a2fa08bdf5",
+    "entities": [
+      {
+        "tableName": "networks",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `name` TEXT, `status` INTEGER, `networkType` INTEGER, `imageUri` TEXT, `httpBaseUrl` TEXT, `httpAauthenticationType` INTEGER, `httpUsername` TEXT, `httpPassword` TEXT, `httpUseSsl` INTEGER, `certAuthorityUrl` TEXT, `mttBrokerUrl` TEXT, `mqttClientId` TEXT, `mqttUsername` TEXT, `mqttPassword` TEXT, `mqttCleanSession` INTEGER, `mqttConnTimeout` INTEGER, `mqttKeepaliveInterval` INTEGER, `mqttUseSsl` INTEGER, `mqttCertAuthorityUrl` TEXT)",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "name",
+            "columnName": "name",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "status",
+            "columnName": "status",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "networkType",
+            "columnName": "networkType",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "imageUri",
+            "columnName": "imageUri",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "httpConfiguration.httpBaseUrl",
+            "columnName": "httpBaseUrl",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "httpConfiguration.httpAauthenticationType",
+            "columnName": "httpAauthenticationType",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "httpConfiguration.httpUsername",
+            "columnName": "httpUsername",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "httpConfiguration.httpPassword",
+            "columnName": "httpPassword",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "httpConfiguration.httpUseSsl",
+            "columnName": "httpUseSsl",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "httpConfiguration.certAuthorityUrl",
+            "columnName": "certAuthorityUrl",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "mqttConfiguration.mttBrokerUrl",
+            "columnName": "mttBrokerUrl",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "mqttConfiguration.mqttClientId",
+            "columnName": "mqttClientId",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "mqttConfiguration.mqttUsername",
+            "columnName": "mqttUsername",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "mqttConfiguration.mqttPassword",
+            "columnName": "mqttPassword",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "mqttConfiguration.mqttCleanSession",
+            "columnName": "mqttCleanSession",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "mqttConfiguration.mqttConnTimeout",
+            "columnName": "mqttConnTimeout",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "mqttConfiguration.mqttKeepaliveInterval",
+            "columnName": "mqttKeepaliveInterval",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "mqttConfiguration.mqttUseSsl",
+            "columnName": "mqttUseSsl",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "mqttConfiguration.mqttCertAuthorityUrl",
+            "columnName": "mqttCertAuthorityUrl",
+            "affinity": "TEXT",
+            "notNull": false
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "id"
+          ],
+          "autoGenerate": true
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "sensors",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `name` TEXT, `type` TEXT, `imageUri` TEXT, `networkId` INTEGER, `httpRelativeUrl` TEXT, `httpHeaders` TEXT, `httpSecondsBetweenRequests` INTEGER, `mqttTopicToSubscribe` TEXT, `mqttQosLevel` INTEGER, `messageType` INTEGER, `dataType` INTEGER, `xmlOrJsonNode` TEXT, `rawRegularExpression` TEXT, `dataUnit` TEXT, `thresholdAboveCritical` TEXT, `thresholdAboveWarning` TEXT, `thresholdBelowCritical` TEXT, `thresholdBelowWarning` TEXT, `thresholdEqualsWarning` TEXT, `thresholdEqualsCritical` TEXT, `locationLat` INTEGER, `localtionLong` INTEGER, `showInMainDashboard` INTEGER, FOREIGN KEY(`networkId`) REFERENCES `networks`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE )",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "name",
+            "columnName": "name",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "type",
+            "columnName": "type",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "imageUri",
+            "columnName": "imageUri",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "networkId",
+            "columnName": "networkId",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "httpRelativeUrl",
+            "columnName": "httpRelativeUrl",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "httpHeaders",
+            "columnName": "httpHeaders",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "httpSecondsBetweenRequests",
+            "columnName": "httpSecondsBetweenRequests",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "mqttTopicToSubscribe",
+            "columnName": "mqttTopicToSubscribe",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "mqttQosLevel",
+            "columnName": "mqttQosLevel",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "messageType",
+            "columnName": "messageType",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "dataType",
+            "columnName": "dataType",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "xmlOrJsonNode",
+            "columnName": "xmlOrJsonNode",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "rawRegularExpression",
+            "columnName": "rawRegularExpression",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "dataUnit",
+            "columnName": "dataUnit",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "thresholdAboveCritical",
+            "columnName": "thresholdAboveCritical",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "thresholdAboveWarning",
+            "columnName": "thresholdAboveWarning",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "thresholdBelowCritical",
+            "columnName": "thresholdBelowCritical",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "thresholdBelowWarning",
+            "columnName": "thresholdBelowWarning",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "thresholdEqualsWarning",
+            "columnName": "thresholdEqualsWarning",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "thresholdEqualsCritical",
+            "columnName": "thresholdEqualsCritical",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "locationLat",
+            "columnName": "locationLat",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "localtionLong",
+            "columnName": "localtionLong",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "showInMainDashboard",
+            "columnName": "showInMainDashboard",
+            "affinity": "INTEGER",
+            "notNull": false
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "id"
+          ],
+          "autoGenerate": true
+        },
+        "indices": [
+          {
+            "name": "index_sensors_networkId",
+            "unique": false,
+            "columnNames": [
+              "networkId"
+            ],
+            "createSql": "CREATE  INDEX `index_sensors_networkId` ON `${TABLE_NAME}` (`networkId`)"
+          }
+        ],
+        "foreignKeys": [
+          {
+            "table": "networks",
+            "onDelete": "CASCADE",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "networkId"
+            ],
+            "referencedColumns": [
+              "id"
+            ]
+          }
+        ]
+      },
+      {
+        "tableName": "actuators",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `name` TEXT, `type` TEXT, `imageUri` TEXT, `networkId` INTEGER, `httpRelativeUrl` TEXT, `httpMethod` INTEGER, `httpHeaders` TEXT, `mqttTopicToPublish` TEXT, `mqttQosLevel` INTEGER, `dataType` INTEGER, `dataFormatMessageToSend` TEXT, `mimeType` TEXT, `dataUnit` TEXT, `locationLat` INTEGER, `localtionLong` INTEGER, `showInMainDashboard` INTEGER, FOREIGN KEY(`networkId`) REFERENCES `networks`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE )",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "name",
+            "columnName": "name",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "type",
+            "columnName": "type",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "imageUri",
+            "columnName": "imageUri",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "networkId",
+            "columnName": "networkId",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "httpRelativeUrl",
+            "columnName": "httpRelativeUrl",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "httpMethod",
+            "columnName": "httpMethod",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "httpHeaders",
+            "columnName": "httpHeaders",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "mqttTopicToPublish",
+            "columnName": "mqttTopicToPublish",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "mqttQosLevel",
+            "columnName": "mqttQosLevel",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "dataType",
+            "columnName": "dataType",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "dataFormatMessageToSend",
+            "columnName": "dataFormatMessageToSend",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "mimeType",
+            "columnName": "mimeType",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "dataUnit",
+            "columnName": "dataUnit",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "locationLat",
+            "columnName": "locationLat",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "localtionLong",
+            "columnName": "localtionLong",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "showInMainDashboard",
+            "columnName": "showInMainDashboard",
+            "affinity": "INTEGER",
+            "notNull": false
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "id"
+          ],
+          "autoGenerate": true
+        },
+        "indices": [
+          {
+            "name": "index_actuators_networkId",
+            "unique": false,
+            "columnNames": [
+              "networkId"
+            ],
+            "createSql": "CREATE  INDEX `index_actuators_networkId` ON `${TABLE_NAME}` (`networkId`)"
+          }
+        ],
+        "foreignKeys": [
+          {
+            "table": "networks",
+            "onDelete": "CASCADE",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "networkId"
+            ],
+            "referencedColumns": [
+              "id"
+            ]
+          }
+        ]
+      },
+      {
+        "tableName": "values",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `sensorId` INTEGER, `value` TEXT, `dateReceived` INTEGER, FOREIGN KEY(`sensorId`) REFERENCES `sensors`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE )",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "sensorId",
+            "columnName": "sensorId",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "value",
+            "columnName": "value",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "dateReceived",
+            "columnName": "dateReceived",
+            "affinity": "INTEGER",
+            "notNull": false
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "id"
+          ],
+          "autoGenerate": true
+        },
+        "indices": [
+          {
+            "name": "index_values_sensorId_dateReceived",
+            "unique": false,
+            "columnNames": [
+              "sensorId",
+              "dateReceived"
+            ],
+            "createSql": "CREATE  INDEX `index_values_sensorId_dateReceived` ON `${TABLE_NAME}` (`sensorId`, `dateReceived`)"
+          }
+        ],
+        "foreignKeys": [
+          {
+            "table": "sensors",
+            "onDelete": "CASCADE",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "sensorId"
+            ],
+            "referencedColumns": [
+              "id"
+            ]
+          }
+        ]
+      },
+      {
+        "tableName": "logs",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `elementId` INTEGER, `elementType` INTEGER, `logMessage` TEXT, `logLevel` INTEGER, `dateRegistered` INTEGER)",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "elementId",
+            "columnName": "elementId",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "elementType",
+            "columnName": "elementType",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "logMessage",
+            "columnName": "logMessage",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "logLevel",
+            "columnName": "logLevel",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "dateRegistered",
+            "columnName": "dateRegistered",
+            "affinity": "INTEGER",
+            "notNull": false
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "id"
+          ],
+          "autoGenerate": true
+        },
+        "indices": [
+          {
+            "name": "index_logs_elementId_dateRegistered",
+            "unique": false,
+            "columnNames": [
+              "elementId",
+              "dateRegistered"
+            ],
+            "createSql": "CREATE  INDEX `index_logs_elementId_dateRegistered` ON `${TABLE_NAME}` (`elementId`, `dateRegistered`)"
+          }
+        ],
+        "foreignKeys": []
+      }
+    ],
+    "views": [],
+    "setupQueries": [
+      "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '4d56fc3b9ced0205bf63a0a2fa08bdf5')"
+    ]
+  }
+}
