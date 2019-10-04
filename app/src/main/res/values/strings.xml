@@ -24,5 +24,7 @@
     <string name="log_critical_mqtt_sensor_subscription_fail">MQTT sensor subscription failed.</string>
     <string name="log_critical_mqtt_sensor_unsubscription_fail">MQTT sensor unsubscription failed.</string>
     <string name="log_critical_mqtt_actuator_send_failed">Failed to send MQTT message for actuator.</string>
-    <string name="log_critical_unexpected_mqtt_network">Unexpected error when sending MQTT message.</string>
+    <string name="log_critical_unexpected_mqtt_network_sending">Unexpected error when sending MQTT message.</string>
+    <string name="log_critical_unexpected_mqtt_network_receiving">Unexpected error when processing received MQTT message.</string>
+    <string name="log_critical_mqtt_message_body">No MQTT message body received.</string>
 </resources>

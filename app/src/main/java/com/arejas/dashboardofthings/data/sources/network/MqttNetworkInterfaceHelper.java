@@ -23,6 +23,7 @@ import org.eclipse.paho.client.mqttv3.MqttCallbackExtended;
 import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
 import org.eclipse.paho.client.mqttv3.MqttException;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
+import org.eclipse.paho.client.mqttv3.MqttTopic;
 
 import java.util.Map;
 
@@ -64,7 +65,39 @@ public class MqttNetworkInterfaceHelper extends NetworkInterfaceHelper {
 
                 @Override
                 public void messageArrived(String topic, MqttMessage mqttMessage) throws Exception {
-                    Log.w("Mqtt", mqttMessage.toString());
+                    try {
+                        // For each sensor, check if its topic filter matches
+                        for (Sensor sensor : sensors) {
+                            if (MqttTopic.isMatched(sensor.getMqttTopicToSubscribe(), topic)) {
+                                // If filter matches, extract data and report data received
+                                if (mqttMessage.getPayload() != null) {
+                                    String messageBody = new String(mqttMessage.getPayload());
+                                    String data = DataMessageHelper.extractDataFromSensorResponse(messageBody, sensor);
+                                    if (data != null) {
+                                        if (DataTransformationHelper.checkIfDataTypeIsCorrect(data, sensor.getDataType())) {
+                                            RxHelper.publishSensorData(sensor.getId(), data);
+                                        } else {
+                                            RxHelper.publishLog(sensor.getId(), Enumerators.ElementType.SENSOR,
+                                                    Enumerators.LogLevel.CRITICAL,
+                                                    context.getString(R.string.log_critical_data_format));
+                                        }
+                                    } else {
+                                        RxHelper.publishLog(sensor.getId(), Enumerators.ElementType.SENSOR,
+                                                Enumerators.LogLevel.CRITICAL,
+                                                context.getString(R.string.log_critical_message_parser));
+                                    }
+                                } else {
+                                    RxHelper.publishLog(sensor.getId(), Enumerators.ElementType.SENSOR,
+                                            Enumerators.LogLevel.CRITICAL,
+                                            context.getString(R.string.log_critical_mqtt_message_body));
+                                }
+                            }
+                        }
+                    } catch (Exception e) {
+                        RxHelper.publishLog(getNetwork().getId(), Enumerators.ElementType.NETWORK,
+                                Enumerators.LogLevel.CRITICAL,
+                                context.getString(R.string.log_critical_mqtt_connection_fail));
+                    }
                 }
 
                 @Override
@@ -107,7 +140,9 @@ public class MqttNetworkInterfaceHelper extends NetworkInterfaceHelper {
                     }
                 });
             } catch (MqttException e) {
-                e.printStackTrace();
+                RxHelper.publishLog(getNetwork().getId(), Enumerators.ElementType.NETWORK,
+                        Enumerators.LogLevel.CRITICAL,
+                        context.getString(R.string.log_critical_mqtt_connection_fail));
             }
         } catch (Exception e) {
             RxHelper.publishLog(getNetwork().getId(), Enumerators.ElementType.NETWORK,
