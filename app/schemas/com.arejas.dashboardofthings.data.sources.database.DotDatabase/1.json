@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "4d56fc3b9ced0205bf63a0a2fa08bdf5",
+    "identityHash": "4334f5f7d670fb85922fb6814f8735fa",
     "entities": [
       {
         "tableName": "networks",
@@ -516,7 +516,7 @@
       },
       {
         "tableName": "logs",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `elementId` INTEGER, `elementType` INTEGER, `logMessage` TEXT, `logLevel` INTEGER, `dateRegistered` INTEGER)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `elementId` INTEGER, `elementName` TEXT, `elementType` INTEGER, `logMessage` TEXT, `logLevel` INTEGER, `dateRegistered` INTEGER)",
         "fields": [
           {
             "fieldPath": "id",
@@ -528,6 +528,12 @@
             "fieldPath": "elementId",
             "columnName": "elementId",
             "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "elementName",
+            "columnName": "elementName",
+            "affinity": "TEXT",
             "notNull": false
           },
           {
@@ -578,7 +584,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '4d56fc3b9ced0205bf63a0a2fa08bdf5')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '4334f5f7d670fb85922fb6814f8735fa')"
     ]
   }
 }

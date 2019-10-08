@@ -8,6 +8,8 @@ import androidx.room.Query;
 import androidx.room.Update;
 
 import com.arejas.dashboardofthings.domain.entities.Actuator;
+import com.arejas.dashboardofthings.domain.entities.extended.ActuatorExtended;
+import com.arejas.dashboardofthings.domain.entities.extended.SensorExtended;
 
 import java.util.List;
 
@@ -28,6 +30,9 @@ public abstract class ActuatorsDao {
 
     @Query("SELECT * FROM actuators WHERE id=:id LIMIT 1")
     public abstract LiveData<Actuator> findById(int id);
+
+    @Query("SELECT actuators.*, networks.name AS networkName, networks.networkType AS networkType FROM actuators, networks WHERE actuators.id=:id AND actuators.networkId= networks.id LIMIT 1")
+    public abstract LiveData<ActuatorExtended> findByIdExtended(int id);
 
     @Insert
     public abstract void insert(Actuator actuator);

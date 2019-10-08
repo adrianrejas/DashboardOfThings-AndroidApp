@@ -27,20 +27,16 @@ import org.eclipse.paho.client.mqttv3.MqttTopic;
 
 import java.util.Map;
 
-import okhttp3.Response;
-
 public class MqttNetworkInterfaceHelper extends NetworkInterfaceHelper {
 
     private MqttAndroidClient mqttAndroidClient;
-
-    private Map<Integer, Sensor> sensorsRegistered;
 
     public MqttNetworkInterfaceHelper(Network network) {
         super(network);
     }
 
     @Override
-    public void initNetworkInterface(Context context, Sensor[] sensors) {
+    public boolean initNetworkInterface(Context context, Sensor[] sensors) {
         try {
             mqttAndroidClient = new MqttAndroidClient(context,
                     getNetwork().getMqttConfiguration().getMttBrokerUrl(),
@@ -49,7 +45,7 @@ public class MqttNetworkInterfaceHelper extends NetworkInterfaceHelper {
                 @Override
                 public void connectComplete(boolean b, String s) {
                     RxHelper.publishLog(getNetwork().getId(), Enumerators.ElementType.NETWORK,
-                            Enumerators.LogLevel.INFO,
+                            getNetwork().getName(), Enumerators.LogLevel.INFO,
                             context.getString(R.string.log_info_mqtt_network_connected));
                     for (Sensor sensor : sensors) {
                         configureSensorReceiving(context, sensor);
@@ -59,7 +55,7 @@ public class MqttNetworkInterfaceHelper extends NetworkInterfaceHelper {
                 @Override
                 public void connectionLost(Throwable throwable) {
                     RxHelper.publishLog(getNetwork().getId(), Enumerators.ElementType.NETWORK,
-                            Enumerators.LogLevel.CRITICAL,
+                            getNetwork().getName(), Enumerators.LogLevel.CRITICAL,
                             context.getString(R.string.log_critical_mqtt_connection_lost));
                 }
 
@@ -78,24 +74,24 @@ public class MqttNetworkInterfaceHelper extends NetworkInterfaceHelper {
                                             RxHelper.publishSensorData(sensor.getId(), data);
                                         } else {
                                             RxHelper.publishLog(sensor.getId(), Enumerators.ElementType.SENSOR,
-                                                    Enumerators.LogLevel.CRITICAL,
+                                                    sensor.getName(), Enumerators.LogLevel.CRITICAL,
                                                     context.getString(R.string.log_critical_data_format));
                                         }
                                     } else {
                                         RxHelper.publishLog(sensor.getId(), Enumerators.ElementType.SENSOR,
-                                                Enumerators.LogLevel.CRITICAL,
+                                                sensor.getName(), Enumerators.LogLevel.CRITICAL,
                                                 context.getString(R.string.log_critical_message_parser));
                                     }
                                 } else {
                                     RxHelper.publishLog(sensor.getId(), Enumerators.ElementType.SENSOR,
-                                            Enumerators.LogLevel.CRITICAL,
+                                            sensor.getName(), Enumerators.LogLevel.CRITICAL,
                                             context.getString(R.string.log_critical_mqtt_message_body));
                                 }
                             }
                         }
                     } catch (Exception e) {
                         RxHelper.publishLog(getNetwork().getId(), Enumerators.ElementType.NETWORK,
-                                Enumerators.LogLevel.CRITICAL,
+                                getNetwork().getName(), Enumerators.LogLevel.CRITICAL,
                                 context.getString(R.string.log_critical_mqtt_connection_fail));
                     }
                 }
@@ -103,7 +99,7 @@ public class MqttNetworkInterfaceHelper extends NetworkInterfaceHelper {
                 @Override
                 public void deliveryComplete(IMqttDeliveryToken iMqttDeliveryToken) {
                     RxHelper.publishLog(getNetwork().getId(), Enumerators.ElementType.NETWORK,
-                            Enumerators.LogLevel.INFO,
+                            getNetwork().getName(), Enumerators.LogLevel.INFO,
                             context.getString(R.string.log_info_mqtt_network_connected));
                 }
             });
@@ -135,24 +131,27 @@ public class MqttNetworkInterfaceHelper extends NetworkInterfaceHelper {
                     @Override
                     public void onFailure(IMqttToken asyncActionToken, Throwable exception) {
                         RxHelper.publishLog(getNetwork().getId(), Enumerators.ElementType.NETWORK,
-                                Enumerators.LogLevel.CRITICAL,
+                                getNetwork().getName(), Enumerators.LogLevel.CRITICAL,
                                 context.getString(R.string.log_critical_mqtt_connection_fail));
                     }
                 });
+                return true;
             } catch (MqttException e) {
                 RxHelper.publishLog(getNetwork().getId(), Enumerators.ElementType.NETWORK,
-                        Enumerators.LogLevel.CRITICAL,
+                        getNetwork().getName(), Enumerators.LogLevel.CRITICAL,
                         context.getString(R.string.log_critical_mqtt_connection_fail));
+                return false;
             }
         } catch (Exception e) {
             RxHelper.publishLog(getNetwork().getId(), Enumerators.ElementType.NETWORK,
-                    Enumerators.LogLevel.CRITICAL,
+                    getNetwork().getName(), Enumerators.LogLevel.CRITICAL,
                     context.getString(R.string.log_critical_mqtt_connection_fail));
+            return false;
         }
     }
 
     @Override
-    public void closeNetworkInterface(Context context) {
+    public boolean closeNetworkInterface(Context context) {
         try {
             if (mqttAndroidClient != null) {
                 mqttAndroidClient.unregisterResources();
@@ -161,39 +160,45 @@ public class MqttNetworkInterfaceHelper extends NetworkInterfaceHelper {
                 mqttAndroidClient.setCallback(null);
                 mqttAndroidClient = null;
             }
+            return true;
         } catch (Exception e) {
             RxHelper.publishLog(getNetwork().getId(), Enumerators.ElementType.NETWORK,
-                    Enumerators.LogLevel.CRITICAL,
+                    getNetwork().getName(), Enumerators.LogLevel.CRITICAL,
                     context.getString(R.string.log_critical_mqtt_disconnection_fail));
+            return false;
         }
     }
 
     @Override
-    public void configureSensorReceiving(Context context, Sensor sensor) {
+    public boolean configureSensorReceiving(Context context, Sensor sensor) {
         try {
-            sensorsRegistered.put(sensor.getId(), sensor);
+            getSensorsRegistered().put(sensor.getId(), sensor);
             mqttAndroidClient.subscribe(sensor.getMqttTopicToSubscribe(), sensor.getMqttQosLevel().ordinal());
+            return true;
         } catch (Exception e) {
             RxHelper.publishLog(sensor.getId(), Enumerators.ElementType.SENSOR,
-                    Enumerators.LogLevel.CRITICAL,
+                    sensor.getName(), Enumerators.LogLevel.CRITICAL,
                     context.getString(R.string.log_critical_mqtt_sensor_subscription_fail));
+            return false;
         }
     }
 
     @Override
-    public void unconfigureSensorReceiving(Context context, Sensor sensor) {
+    public boolean unconfigureSensorReceiving(Context context, Sensor sensor) {
         try {
             mqttAndroidClient.unsubscribe(sensor.getMqttTopicToSubscribe());
-            sensorsRegistered.remove(sensor.getId());
+            getSensorsRegistered().remove(sensor.getId());
+            return true;
         } catch (Exception e) {
             RxHelper.publishLog(sensor.getId(), Enumerators.ElementType.SENSOR,
-                    Enumerators.LogLevel.CRITICAL,
+                    sensor.getName(), Enumerators.LogLevel.CRITICAL,
                     context.getString(R.string.log_critical_mqtt_sensor_unsubscription_fail));
+            return false;
         }
     }
 
     @Override
-    public void sendActuatorData(Context context, Actuator actuator, String dataToSend) {
+    public boolean sendActuatorData(Context context, Actuator actuator, String dataToSend) {
         try {
             if (DataTransformationHelper.checkIfDataTypeIsCorrect(dataToSend, actuator.getDataType())) {
                 String messageToSend = DataMessageHelper.formatActuatorMessage(dataToSend, actuator);
@@ -203,18 +208,20 @@ public class MqttNetworkInterfaceHelper extends NetworkInterfaceHelper {
                             false);
                 } else {
                     RxHelper.publishLog(actuator.getId(), Enumerators.ElementType.ACTUATOR,
-                            Enumerators.LogLevel.CRITICAL,
+                            actuator.getName(), Enumerators.LogLevel.CRITICAL,
                             context.getString(R.string.log_critical_message_building));
                 }
             } else {
                 RxHelper.publishLog(actuator.getId(), Enumerators.ElementType.ACTUATOR,
-                        Enumerators.LogLevel.CRITICAL,
+                        actuator.getName(), Enumerators.LogLevel.CRITICAL,
                         context.getString(R.string.log_critical_data_format));
             }
+            return true;
         } catch (Exception e) {
             RxHelper.publishLog(actuator.getId(), Enumerators.ElementType.ACTUATOR,
-                    Enumerators.LogLevel.CRITICAL,
+                    actuator.getName(), Enumerators.LogLevel.CRITICAL,
                     context.getString(R.string.log_critical_mqtt_actuator_send_failed));
+            return false;
         }
     }
 }

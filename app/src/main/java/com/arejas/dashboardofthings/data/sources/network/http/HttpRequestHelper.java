@@ -69,47 +69,47 @@ public class HttpRequestHelper {
                             RxHelper.publishSensorData(sensor.getId(), data);
                         } else {
                             RxHelper.publishLog(sensor.getId(), Enumerators.ElementType.SENSOR,
-                                    Enumerators.LogLevel.CRITICAL,
+                                    sensor.getName(),Enumerators.LogLevel.CRITICAL,
                                     context.getString(R.string.log_critical_data_format));
                         }
                     } else {
                         RxHelper.publishLog(sensor.getId(), Enumerators.ElementType.SENSOR,
-                                Enumerators.LogLevel.CRITICAL,
+                                sensor.getName(),Enumerators.LogLevel.CRITICAL,
                                 context.getString(R.string.log_critical_message_parser));
                     }
                 } else {
                     RxHelper.publishLog(sensor.getId(), Enumerators.ElementType.SENSOR,
-                            Enumerators.LogLevel.CRITICAL,
+                            sensor.getName(),Enumerators.LogLevel.CRITICAL,
                             context.getString(R.string.log_critical_http_message_body));
                 }
             } else {
                 RxHelper.publishLog(sensor.getId(), Enumerators.ElementType.SENSOR,
-                        Enumerators.LogLevel.CRITICAL,
+                        sensor.getName(),Enumerators.LogLevel.CRITICAL,
                         context.getString(R.string.log_critical_http_bad_response, response.code()));
             }
         } catch (IllegalArgumentException e) {
             RxHelper.publishLog(network.getId(), Enumerators.ElementType.NETWORK,
-                    Enumerators.LogLevel.CRITICAL,
+                    sensor.getName(),Enumerators.LogLevel.CRITICAL,
                     context.getString(R.string.log_critical_wrong_network_conf));
         } catch (SSLException e) {
             RxHelper.publishLog(network.getId(), Enumerators.ElementType.NETWORK,
-                    Enumerators.LogLevel.CRITICAL,
+                    network.getName(),Enumerators.LogLevel.CRITICAL,
                     context.getString(R.string.log_critical_wrong_ssl_network_conf));
         } catch (MalformedURLException e) {
             RxHelper.publishLog(sensor.getId(), Enumerators.ElementType.SENSOR,
-                    Enumerators.LogLevel.CRITICAL,
+                    sensor.getName(),Enumerators.LogLevel.CRITICAL,
                     context.getString(R.string.log_critical_malformed_url));
         } catch (UnsupportedOperationException e) {
             RxHelper.publishLog(network.getId(), Enumerators.ElementType.NETWORK,
-                    Enumerators.LogLevel.CRITICAL,
+                    network.getName(), Enumerators.LogLevel.CRITICAL,
                     context.getString(R.string.log_critical_unrecognized_http_method));
         } catch (NoSuchElementException e) {
             RxHelper.publishLog(network.getId(), Enumerators.ElementType.NETWORK,
-                    Enumerators.LogLevel.CRITICAL,
+                    network.getName(), Enumerators.LogLevel.CRITICAL,
                     context.getString(R.string.log_critical_http_no_response));
         } catch (Exception e) {
             RxHelper.publishLog(network.getId(), Enumerators.ElementType.NETWORK,
-                    Enumerators.LogLevel.CRITICAL,
+                    network.getName(), Enumerators.LogLevel.CRITICAL,
                     context.getString(R.string.log_critical_unexpected_http_network));
         }
     }
@@ -149,46 +149,46 @@ public class HttpRequestHelper {
                             network.getHttpConfiguration().getHttpUseSsl(), socketFactory, trustManager);
                     if (response.isSuccessful()) {
                         RxHelper.publishLog(actuator.getId(), Enumerators.ElementType.ACTUATOR,
-                                Enumerators.LogLevel.INFO,
+                                actuator.getName(), Enumerators.LogLevel.INFO,
                                 context.getString(R.string.log_info_actuator_command_sent_success, dataToSend));
                     } else {
                         RxHelper.publishLog(actuator.getId(), Enumerators.ElementType.ACTUATOR,
-                                Enumerators.LogLevel.CRITICAL,
+                                actuator.getName(), Enumerators.LogLevel.CRITICAL,
                                 context.getString(R.string.log_critical_http_bad_response, response.code()));
                     }
                 } else {
                     RxHelper.publishLog(actuator.getId(), Enumerators.ElementType.ACTUATOR,
-                            Enumerators.LogLevel.CRITICAL,
+                            actuator.getName(), Enumerators.LogLevel.CRITICAL,
                             context.getString(R.string.log_critical_message_building));
                 }
             } else {
                 RxHelper.publishLog(actuator.getId(), Enumerators.ElementType.ACTUATOR,
-                        Enumerators.LogLevel.CRITICAL,
+                        actuator.getName(), Enumerators.LogLevel.CRITICAL,
                         context.getString(R.string.log_critical_data_format));
             }
         } catch (IllegalArgumentException e) {
             RxHelper.publishLog(network.getId(), Enumerators.ElementType.NETWORK,
-                    Enumerators.LogLevel.CRITICAL,
+                    network.getName(), Enumerators.LogLevel.CRITICAL,
                     context.getString(R.string.log_critical_wrong_network_conf));
         } catch (SSLException e) {
             RxHelper.publishLog(network.getId(), Enumerators.ElementType.NETWORK,
-                    Enumerators.LogLevel.CRITICAL,
+                    network.getName(), Enumerators.LogLevel.CRITICAL,
                     context.getString(R.string.log_critical_wrong_ssl_network_conf));
         } catch (MalformedURLException e) {
             RxHelper.publishLog(actuator.getId(), Enumerators.ElementType.ACTUATOR,
-                    Enumerators.LogLevel.CRITICAL,
+                    actuator.getName(), Enumerators.LogLevel.CRITICAL,
                     context.getString(R.string.log_critical_malformed_url));
         } catch (UnsupportedOperationException e) {
             RxHelper.publishLog(network.getId(), Enumerators.ElementType.NETWORK,
-                    Enumerators.LogLevel.CRITICAL,
+                    network.getName(), Enumerators.LogLevel.CRITICAL,
                     context.getString(R.string.log_critical_unrecognized_http_method));
         } catch (NoSuchElementException e) {
             RxHelper.publishLog(network.getId(), Enumerators.ElementType.NETWORK,
-                    Enumerators.LogLevel.CRITICAL,
+                    network.getName(), Enumerators.LogLevel.CRITICAL,
                     context.getString(R.string.log_critical_http_no_response));
         } catch (Exception e) {
             RxHelper.publishLog(network.getId(), Enumerators.ElementType.NETWORK,
-                    Enumerators.LogLevel.CRITICAL,
+                    network.getName(), Enumerators.LogLevel.CRITICAL,
                     context.getString(R.string.log_critical_unexpected_http_network));
         }
     }

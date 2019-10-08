@@ -36,9 +36,6 @@ public class Actuator implements Parcelable {
     @ColumnInfo(name = "networkId")
     private Integer networkId;
 
-    @Ignore
-    private Network network;
-
     private String httpRelativeUrl;
 
     private Enumerators.HttpMethod httpMethod;
@@ -79,7 +76,6 @@ public class Actuator implements Parcelable {
         } else {
             networkId = in.readInt();
         }
-        network = in.readParcelable(Network.class.getClassLoader());
         httpRelativeUrl = in.readString();
         httpMethod = Enumerators.HttpMethod.valueOf(in.readInt());
         int size = in.readInt();
@@ -156,14 +152,6 @@ public class Actuator implements Parcelable {
 
     public void setNetworkId(Integer iNetworkId) {
         this.networkId = iNetworkId;
-    }
-
-    public Network getNetwork() {
-        return network;
-    }
-
-    public void setNetwork(Network stNetwork) {
-        this.network = stNetwork;
     }
 
     public String getHttpRelativeUrl() {
@@ -284,7 +272,6 @@ public class Actuator implements Parcelable {
             parcel.writeByte((byte) 1);
             parcel.writeInt(networkId);
         }
-        parcel.writeParcelable(network, i);
         parcel.writeString(httpRelativeUrl);
         parcel.writeInt(httpMethod.ordinal());
         parcel.writeInt(httpHeaders.size());

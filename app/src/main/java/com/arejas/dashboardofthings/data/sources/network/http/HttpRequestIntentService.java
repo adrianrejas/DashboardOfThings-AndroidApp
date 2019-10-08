@@ -11,6 +11,12 @@ import com.arejas.dashboardofthings.domain.entities.Sensor;
 import com.arejas.dashboardofthings.utils.Enumerators;
 import com.arejas.dashboardofthings.utils.rx.RxHelper;
 
+import java.lang.reflect.Executable;
+import java.util.concurrent.Executor;
+
+import javax.inject.Inject;
+import javax.inject.Named;
+
 /**
  * An {@link IntentService} subclass for handling asynchronous task requests in
  * a service on a separate handler thread.
@@ -28,6 +34,10 @@ public class HttpRequestIntentService extends IntentService {
     private static final String EXTRA_SENSOR = "com.arejas.dashboardofthings.data.sources.network.http.extra.SENSOR";
     private static final String EXTRA_ACTUATOR = "com.arejas.dashboardofthings.data.sources.network.http.extra.ACTUATOR";
     private static final String EXTRA_DATATOSEND = "com.arejas.dashboardofthings.data.sources.network.http.extra.DATATOSEND";
+
+    @Inject
+    @Named("httpExecutor")
+    Executor httpExecutor;
 
     public HttpRequestIntentService() {
         super("HttpRequestIntentService");
@@ -64,19 +74,24 @@ public class HttpRequestIntentService extends IntentService {
 
     @Override
     protected void onHandleIntent(Intent intent) {
-        if (intent != null) {
-            final String action = intent.getAction();
-            if (ACTION_SENSOR_REQUEST.equals(action)) {
-                final Network network = intent.getParcelableExtra(EXTRA_NETWORK);
-                final Sensor sensor = intent.getParcelableExtra(EXTRA_SENSOR);
-                handleActionSensorRequest(network, sensor);
-            } else if (ACTION_ACTUATOR_COMMNAND.equals(action)) {
-                final Network network = intent.getParcelableExtra(EXTRA_NETWORK);
-                final Actuator actuator = intent.getParcelableExtra(EXTRA_ACTUATOR);
-                final String dataToSend = intent.getStringExtra(EXTRA_DATATOSEND);
-                handleActionActuatorCommand(network, actuator, dataToSend);
+        httpExecutor.execute(new Runnable() {
+            @Override
+            public void run() {
+                if (intent != null) {
+                    final String action = intent.getAction();
+                    if (ACTION_SENSOR_REQUEST.equals(action)) {
+                        final Network network = intent.getParcelableExtra(EXTRA_NETWORK);
+                        final Sensor sensor = intent.getParcelableExtra(EXTRA_SENSOR);
+                        handleActionSensorRequest(network, sensor);
+                    } else if (ACTION_ACTUATOR_COMMNAND.equals(action)) {
+                        final Network network = intent.getParcelableExtra(EXTRA_NETWORK);
+                        final Actuator actuator = intent.getParcelableExtra(EXTRA_ACTUATOR);
+                        final String dataToSend = intent.getStringExtra(EXTRA_DATATOSEND);
+                        handleActionActuatorCommand(network, actuator, dataToSend);
+                    }
+                }
             }
-        }
+        });
     }
 
     /**
@@ -88,7 +103,7 @@ public class HttpRequestIntentService extends IntentService {
             HttpRequestHelper.sendSensorDataHttpRequest(getApplicationContext(), network, sensor);
         } catch (Exception e) {
             RxHelper.publishLog(network.getId(), Enumerators.ElementType.NETWORK,
-                    Enumerators.LogLevel.CRITICAL,
+                    network.getName(), Enumerators.LogLevel.CRITICAL,
                     getString(R.string.log_critical_unexpected_http_network));
         }
     }
@@ -102,7 +117,7 @@ public class HttpRequestIntentService extends IntentService {
             HttpRequestHelper.sendActuatorCommand(getApplicationContext(), network, actuator, dataToSend);
         } catch (Exception e) {
             RxHelper.publishLog(network.getId(), Enumerators.ElementType.NETWORK,
-                    Enumerators.LogLevel.CRITICAL,
+                    network.getName(), Enumerators.LogLevel.CRITICAL,
                     getString(R.string.log_critical_unexpected_http_network));
         }
     }

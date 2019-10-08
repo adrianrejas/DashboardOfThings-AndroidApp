@@ -8,10 +8,6 @@ import androidx.room.Entity;
 import androidx.room.ForeignKey;
 import androidx.room.Index;
 import androidx.room.PrimaryKey;
-import androidx.room.TypeConverters;
-
-import com.arejas.dashboardofthings.data.sources.database.converters.DotTypeConverters;
-import com.arejas.dashboardofthings.utils.Enumerators;
 
 import java.util.Date;
 

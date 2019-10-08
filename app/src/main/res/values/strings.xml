@@ -27,4 +27,5 @@
     <string name="log_critical_unexpected_mqtt_network_sending">Unexpected error when sending MQTT message.</string>
     <string name="log_critical_unexpected_mqtt_network_receiving">Unexpected error when processing received MQTT message.</string>
     <string name="log_critical_mqtt_message_body">No MQTT message body received.</string>
+    <string name="log_critical_create_connection">Non possible to create connection.</string>
 </resources>

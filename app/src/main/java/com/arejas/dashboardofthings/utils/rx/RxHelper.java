@@ -85,10 +85,11 @@ public class RxHelper {
     }
 
     public static void publishLog(Integer elementId, Enumerators.ElementType elementType,
-                                        Enumerators.LogLevel logLevel, String message) {
+                                  String elementName, Enumerators.LogLevel logLevel, String message) {
         try {
             Log log = new Log();
             log.setElementId(elementId);
+            log.setElementName(elementName);
             log.setElementType(elementType);
             log.setLogLevel(logLevel);
             log.setLogMessage(message);

@@ -8,6 +8,7 @@ import androidx.room.Query;
 import androidx.room.Update;
 
 import com.arejas.dashboardofthings.domain.entities.Network;
+import com.arejas.dashboardofthings.domain.entities.extended.NetworkBasic;
 
 import java.util.List;
 
@@ -16,6 +17,9 @@ public abstract class NetworksDao {
 
     @Query("SELECT * FROM networks")
     public abstract LiveData<List<Network>> getAll();
+
+    @Query("SELECT id, name FROM networks")
+    public abstract LiveData<List<NetworkBasic>> getAllBasic();
 
     @Query("SELECT * FROM networks WHERE id=:id LIMIT 1")
     public abstract LiveData<Network> findById(int id);

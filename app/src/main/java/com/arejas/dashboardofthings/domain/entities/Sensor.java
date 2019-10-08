@@ -36,9 +36,6 @@ public class Sensor implements Parcelable {
     @ColumnInfo(name = "networkId")
     private Integer networkId;
 
-    @Ignore
-    private Network network;
-
     private String httpRelativeUrl;
 
     private Map<String, String> httpHeaders;
@@ -93,7 +90,6 @@ public class Sensor implements Parcelable {
         } else {
             networkId = in.readInt();
         }
-        network = in.readParcelable(Network.class.getClassLoader());
         httpRelativeUrl = in.readString();
         int size = in.readInt();
         for(int i = 0; i < size; i++){
@@ -183,14 +179,6 @@ public class Sensor implements Parcelable {
 
     public void setNetworkId(Integer iNetworkId) {
         this.networkId = iNetworkId;
-    }
-
-    public Network getNetwork() {
-        return network;
-    }
-
-    public void setNetwork(Network stNetwork) {
-        this.network = stNetwork;
     }
 
     public String getHttpRelativeUrl() {
@@ -367,7 +355,6 @@ public class Sensor implements Parcelable {
             parcel.writeByte((byte) 1);
             parcel.writeInt(networkId);
         }
-        parcel.writeParcelable(network, i);
         parcel.writeString(httpRelativeUrl);
         parcel.writeInt(httpHeaders.size());
         for(Map.Entry<String,String> entry : httpHeaders.entrySet()){

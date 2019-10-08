@@ -22,6 +22,8 @@ public class Log implements Parcelable {
 
     private Integer elementId;
 
+    String elementName;
+
     private Enumerators.ElementType elementType;
 
     private String logMessage;
@@ -43,6 +45,7 @@ public class Log implements Parcelable {
         } else {
             elementId = in.readInt();
         }
+        elementName = in.readString();
         elementType = Enumerators.ElementType.valueOf(in.readInt());
         logMessage = in.readString();
         logLevel = Enumerators.LogLevel.valueOf(in.readInt());
@@ -75,6 +78,14 @@ public class Log implements Parcelable {
 
     public void setElementId(Integer iElementId) {
         this.elementId = iElementId;
+    }
+
+    public String getElementName() {
+        return elementName;
+    }
+
+    public void setElementName(String elementName) {
+        this.elementName = elementName;
     }
 
     public Enumerators.ElementType getElementType() {
@@ -128,6 +139,7 @@ public class Log implements Parcelable {
             parcel.writeByte((byte) 1);
             parcel.writeInt(elementId);
         }
+        parcel.writeString(elementName);
         parcel.writeInt(elementType.ordinal());
         parcel.writeString(logMessage);
         parcel.writeInt(logLevel.ordinal());

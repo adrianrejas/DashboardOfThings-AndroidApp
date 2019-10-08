@@ -29,24 +29,27 @@ public class HttpNetworkInterfaceHelper extends NetworkInterfaceHelper{
     }
 
     @Override
-    public void initNetworkInterface(Context context, Sensor[] sensors) {
+    public boolean initNetworkInterface(Context context, Sensor[] sensors) {
         // Create a new dispatcher using the Google Play driver.
         dispatcher = new FirebaseJobDispatcher(new GooglePlayDriver(context));
         for (Sensor sensor: sensors) {
             configureSensorReceiving(context, sensor);
         }
+        return true;
     }
 
     @Override
-    public void closeNetworkInterface(Context context) {
+    public boolean closeNetworkInterface(Context context) {
         // cancell all jobs and set the job dispatcher to null
         dispatcher.cancelAll();
         dispatcher = null;
+        return true;
     }
 
     @Override
-    public void configureSensorReceiving(Context context, Sensor sensor) {
+    public boolean configureSensorReceiving(Context context, Sensor sensor) {
         try {
+            getSensorsRegistered().put(sensor.getId(), sensor);
             Bundle extras = new Bundle();
             extras.putParcelable(HttpSensorRequestJobService.NETWORK_OBJECT, getNetwork());
             extras.putParcelable(HttpSensorRequestJobService.SENSOR_OBJECT, sensor);
@@ -65,25 +68,31 @@ public class HttpNetworkInterfaceHelper extends NetworkInterfaceHelper{
                     .setExtras(extras)                              //Send the extras required for the service
                     .build();
             dispatcher.mustSchedule(sensorJob);
+            return true;
         } catch (Exception e) {
             RxHelper.publishLog(sensor.getId(), Enumerators.ElementType.SENSOR,
-                    Enumerators.LogLevel.CRITICAL,
+                    sensor.getName(), Enumerators.LogLevel.CRITICAL,
                     context.getString(R.string.log_critical_sensor_scheduling));
+            return false;
         }
     }
 
-    public void unconfigureSensorReceiving(Context context, Sensor sensor) {
+    public boolean unconfigureSensorReceiving(Context context, Sensor sensor) {
         dispatcher.cancel(Integer.toString(sensor.getId()));
+        getSensorsRegistered().remove(sensor.getId());
+        return true;
     }
 
     @Override
-    public void sendActuatorData(Context context, Actuator actuator, String dataToSend) {
+    public boolean sendActuatorData(Context context, Actuator actuator, String dataToSend) {
         try {
             HttpRequestIntentService.startActionActuatorCommand(context, getNetwork(), actuator, dataToSend);
+            return true;
         } catch (Exception e) {
             RxHelper.publishLog(actuator.getId(), Enumerators.ElementType.ACTUATOR,
-                    Enumerators.LogLevel.CRITICAL,
+                    actuator.getName(), Enumerators.LogLevel.CRITICAL,
                     context.getString(R.string.log_critical_sensor_scheduling));
+            return false;
         }
     }
 
