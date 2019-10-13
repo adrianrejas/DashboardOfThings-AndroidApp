@@ -1,10 +1,15 @@
 package com.arejas.dashboardofthings.utils.rx;
 
+import android.util.Pair;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import com.arejas.dashboardofthings.domain.entities.DataValue;
-import com.arejas.dashboardofthings.domain.entities.Log;
+import com.arejas.dashboardofthings.domain.entities.database.Actuator;
+import com.arejas.dashboardofthings.domain.entities.database.DataValue;
+import com.arejas.dashboardofthings.domain.entities.database.Log;
+import com.arejas.dashboardofthings.domain.entities.database.Network;
+import com.arejas.dashboardofthings.domain.entities.database.Sensor;
 import com.arejas.dashboardofthings.utils.Enumerators;
 
 import org.jetbrains.annotations.NotNull;
@@ -16,6 +21,14 @@ import io.reactivex.functions.Consumer;
 import io.reactivex.subjects.BehaviorSubject;
 
 public class RxHelper {
+
+    // Subject to communicate element management changes to Control Service
+    private static final BehaviorSubject<Pair<Network, Enumerators.ElementManagementFunction>> networkManagementSubject = BehaviorSubject.create();
+    private static final BehaviorSubject<Pair<Sensor, Enumerators.ElementManagementFunction>> sensorManagementSubject = BehaviorSubject.create();
+    private static final BehaviorSubject<Pair<Actuator, Enumerators.ElementManagementFunction>> actuatorManagementSubject = BehaviorSubject.create();
+
+    // Subject to communicate actuator data updates to Control Service
+    private static final BehaviorSubject<Pair<Actuator, String>> actuatorDataUpdateSubject = BehaviorSubject.create();
 
     // Subject to communicate data values received from sensors
     private static final BehaviorSubject<DataValue> sensorDataSubject = BehaviorSubject.create();
@@ -98,5 +111,53 @@ public class RxHelper {
         } catch (Exception e) {
             e.printStackTrace();    // We don't report through RX this exception for avoiding loops
         }
+    }
+
+    // Receive data values from all sensors
+    public static Disposable subscribeToAllActuatorUpdates(@NonNull Consumer<Pair<Actuator, String>> action) {
+        return actuatorDataUpdateSubject.subscribe(action);
+    }
+
+    // Receive data values from one sensor
+    public static Disposable subscribeToOneActuatorUpdates(
+            @NonNull Integer actuatorId, @NonNull Consumer<Pair<Actuator, String>> action) {
+        return actuatorDataUpdateSubject
+                .filter(data -> actuatorId.equals(data.first.getId()))
+                .subscribe(action);
+    }
+
+    // Send actuator updates to those interested
+    public static void publishActuatorUpdate(@NonNull Pair<Actuator, String> message) {
+        actuatorDataUpdateSubject.onNext(message);
+    }
+
+    // Receive management changes from all networks
+    public static Disposable subscribeToAllNetworskManagementChanges(@NonNull Consumer<Pair<Network, Enumerators.ElementManagementFunction>> action) {
+        return networkManagementSubject.subscribe(action);
+    }
+
+    // Send network management changes to those interested
+    public static void publishNetworkManagementChange(@NonNull Pair<Network, Enumerators.ElementManagementFunction> message) {
+        networkManagementSubject.onNext(message);
+    }
+
+    // Receive management changes from all sensors
+    public static Disposable subscribeToAllSensorsManagementChanges(@NonNull Consumer<Pair<Sensor, Enumerators.ElementManagementFunction>> action) {
+        return sensorManagementSubject.subscribe(action);
+    }
+
+    // Send sensor management changes to those interested
+    public static void publishSensorManagementChange(@NonNull Pair<Sensor, Enumerators.ElementManagementFunction> message) {
+        sensorManagementSubject.onNext(message);
+    }
+
+    // Receive management changes from all actuators
+    public static Disposable subscribeToAllActuatorsManagementChanges(@NonNull Consumer<Pair<Actuator, Enumerators.ElementManagementFunction>> action) {
+        return actuatorManagementSubject.subscribe(action);
+    }
+
+    // Send actuator management changes to those interested
+    public static void publishActuatorManagementChange(@NonNull Pair<Actuator, Enumerators.ElementManagementFunction> message) {
+        actuatorManagementSubject.onNext(message);
     }
 }

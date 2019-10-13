@@ -1,10 +1,11 @@
-package com.arejas.dashboardofthings.domain.entities;
+package com.arejas.dashboardofthings.domain.entities.database;
 
 import android.os.Parcel;
 import android.os.Parcelable;
 
 import androidx.room.Embedded;
 import androidx.room.Entity;
+import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
 import com.arejas.dashboardofthings.utils.Enumerators;
@@ -17,8 +18,6 @@ public class Network implements Parcelable {
 
     private String name;
 
-    private Enumerators.NetworkStatus status;
-
     private Enumerators.NetworkType networkType;
 
     private String imageUri;
@@ -29,21 +28,11 @@ public class Network implements Parcelable {
     @Embedded
     private MqttNetworkParameters mqttConfiguration;
 
-    public Network(Integer id, String name, Enumerators.NetworkStatus status, Enumerators.NetworkType networkType, String imageUri,
-                   HttpNetworkParameters httpConfiguration, MqttNetworkParameters mqttConfiguration) {
-        this.id = id;
-        this.name = name;
-        this.status = status;
-        this.networkType = networkType;
-        this.imageUri = imageUri;
-        this.httpConfiguration = httpConfiguration;
-        this.mqttConfiguration = mqttConfiguration;
-    }
+    public Network() {}
 
     protected Network(Parcel in) {
         id = in.readInt();
         name = in.readString();
-        status = Enumerators.NetworkStatus.valueOf(in.readInt());
         networkType = Enumerators.NetworkType.valueOf(in.readInt());
         imageUri = in.readString();
         httpConfiguration = in.readParcelable(HttpNetworkParameters.class.getClassLoader());
@@ -71,7 +60,6 @@ public class Network implements Parcelable {
     public void writeToParcel(Parcel parcel, int i) {
         parcel.writeInt(id);
         parcel.writeString(name);
-        parcel.writeInt(status.ordinal());
         parcel.writeInt(networkType.ordinal());
         parcel.writeString(imageUri);
         parcel.writeParcelable(httpConfiguration, i);
@@ -92,14 +80,6 @@ public class Network implements Parcelable {
 
     public void setName(String sName) {
         this.name = sName;
-    }
-
-    public Enumerators.NetworkStatus getStatus() {
-        return status;
-    }
-
-    public void setStatus(Enumerators.NetworkStatus eStatus) {
-        this.status = eStatus;
     }
 
     public Enumerators.NetworkType getNetworkType() {

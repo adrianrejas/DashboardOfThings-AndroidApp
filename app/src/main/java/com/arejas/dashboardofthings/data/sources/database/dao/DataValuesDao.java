@@ -7,7 +7,7 @@ import androidx.room.Insert;
 import androidx.room.Query;
 import androidx.room.Transaction;
 
-import com.arejas.dashboardofthings.domain.entities.DataValue;
+import com.arejas.dashboardofthings.domain.entities.database.DataValue;
 
 import java.util.List;
 
@@ -17,10 +17,15 @@ public abstract class DataValuesDao {
     @Query("SELECT * FROM `values`")
     public abstract LiveData<List<DataValue>> getAll();
 
-    @Query("SELECT * FROM `values` WHERE sensorId=:id LIMIT 1")
+    @Query("SELECT `values`.id, `values`.sensorId, `values`.value, " +
+            "MAX(`values`.dateReceived) AS dateReceived FROM `values` GROUP BY `values`.sensorId")
+    public abstract LiveData<List<DataValue>> getLastValuesForAll();
+
+    @Query("SELECT * FROM `values` WHERE sensorId=:id ORDER BY dateReceived DESC LIMIT 1")
     public abstract LiveData<DataValue> findLastForSensorId(int id);
 
-    @Query("SELECT * FROM `values` WHERE sensorId IN(:ids)")
+    @Query("SELECT `values`.id, `values`.sensorId, `values`.value, " +
+            "MAX(`values`.dateReceived) AS dateReceived FROM `values` WHERE sensorId IN(:ids) GROUP BY `values`.sensorId")
     public abstract LiveData<DataValue> findLastForSensorIds(int[] ids);
 
     @Query("SELECT * FROM `values` WHERE sensorId=:id ORDER BY dateReceived DESC LIMIT 20")

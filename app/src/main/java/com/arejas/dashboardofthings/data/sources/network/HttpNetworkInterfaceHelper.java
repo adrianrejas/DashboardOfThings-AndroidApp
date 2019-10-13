@@ -6,9 +6,9 @@ import android.os.Bundle;
 import com.arejas.dashboardofthings.R;
 import com.arejas.dashboardofthings.data.sources.network.http.HttpRequestIntentService;
 import com.arejas.dashboardofthings.data.sources.network.http.HttpSensorRequestJobService;
-import com.arejas.dashboardofthings.domain.entities.Actuator;
-import com.arejas.dashboardofthings.domain.entities.Network;
-import com.arejas.dashboardofthings.domain.entities.Sensor;
+import com.arejas.dashboardofthings.domain.entities.database.Actuator;
+import com.arejas.dashboardofthings.domain.entities.database.Network;
+import com.arejas.dashboardofthings.domain.entities.database.Sensor;
 import com.arejas.dashboardofthings.utils.Enumerators;
 import com.arejas.dashboardofthings.utils.rx.RxHelper;
 import com.firebase.jobdispatcher.FirebaseJobDispatcher;
@@ -49,7 +49,6 @@ public class HttpNetworkInterfaceHelper extends NetworkInterfaceHelper{
     @Override
     public boolean configureSensorReceiving(Context context, Sensor sensor) {
         try {
-            getSensorsRegistered().put(sensor.getId(), sensor);
             Bundle extras = new Bundle();
             extras.putParcelable(HttpSensorRequestJobService.NETWORK_OBJECT, getNetwork());
             extras.putParcelable(HttpSensorRequestJobService.SENSOR_OBJECT, sensor);
@@ -68,18 +67,19 @@ public class HttpNetworkInterfaceHelper extends NetworkInterfaceHelper{
                     .setExtras(extras)                              //Send the extras required for the service
                     .build();
             dispatcher.mustSchedule(sensorJob);
+            getSensorsRegistered().put(sensor.getId(), sensor);
             return true;
         } catch (Exception e) {
             RxHelper.publishLog(sensor.getId(), Enumerators.ElementType.SENSOR,
-                    sensor.getName(), Enumerators.LogLevel.CRITICAL,
+                    sensor.getName(), Enumerators.LogLevel.ERROR_CONF,
                     context.getString(R.string.log_critical_sensor_scheduling));
             return false;
         }
     }
 
     public boolean unconfigureSensorReceiving(Context context, Sensor sensor) {
-        dispatcher.cancel(Integer.toString(sensor.getId()));
         getSensorsRegistered().remove(sensor.getId());
+        dispatcher.cancel(Integer.toString(sensor.getId()));
         return true;
     }
 
@@ -90,7 +90,7 @@ public class HttpNetworkInterfaceHelper extends NetworkInterfaceHelper{
             return true;
         } catch (Exception e) {
             RxHelper.publishLog(actuator.getId(), Enumerators.ElementType.ACTUATOR,
-                    actuator.getName(), Enumerators.LogLevel.CRITICAL,
+                    actuator.getName(), Enumerators.LogLevel.ERROR_CONF,
                     context.getString(R.string.log_critical_sensor_scheduling));
             return false;
         }

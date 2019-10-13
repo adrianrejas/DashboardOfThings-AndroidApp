@@ -2,8 +2,7 @@ package com.arejas.dashboardofthings.domain.entities.extended;
 
 import android.os.Parcel;
 
-import com.arejas.dashboardofthings.domain.entities.Actuator;
-import com.arejas.dashboardofthings.domain.entities.Sensor;
+import com.arejas.dashboardofthings.domain.entities.database.Actuator;
 import com.arejas.dashboardofthings.utils.Enumerators;
 
 public class ActuatorExtended extends Actuator {
@@ -12,12 +11,19 @@ public class ActuatorExtended extends Actuator {
 
     private Enumerators.NetworkType networkType;
 
+    private Integer recentErrorLogs;
+
     public ActuatorExtended() {}
 
     public ActuatorExtended(Parcel in) {
         super(in);
         networkName = in.readString();
         networkType = Enumerators.NetworkType.valueOf(in.readInt());
+        if (in.readByte() == 0) {
+            recentErrorLogs = null;
+        } else {
+            recentErrorLogs = in.readInt();
+        }
     }
 
     public String getNetworkName() {
@@ -36,10 +42,24 @@ public class ActuatorExtended extends Actuator {
         this.networkType = networkType;
     }
 
+    public Integer getRecentErrorLogs() {
+        return recentErrorLogs;
+    }
+
+    public void setRecentErrorLogs(Integer recentErrorLogs) {
+        this.recentErrorLogs = recentErrorLogs;
+    }
+
     @Override
     public void writeToParcel(Parcel parcel, int i) {
         super.writeToParcel(parcel, i);
         parcel.writeString(networkName);
         parcel.writeInt(networkType.ordinal());
+        if (recentErrorLogs == null) {
+            parcel.writeByte((byte) 0);
+        } else {
+            parcel.writeByte((byte) 1);
+            parcel.writeInt(recentErrorLogs);
+        }
     }
 }

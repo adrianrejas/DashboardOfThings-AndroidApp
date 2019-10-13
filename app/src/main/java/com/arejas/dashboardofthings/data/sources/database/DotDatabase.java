@@ -10,11 +10,11 @@ import com.arejas.dashboardofthings.data.sources.database.dao.DataValuesDao;
 import com.arejas.dashboardofthings.data.sources.database.dao.LogsDao;
 import com.arejas.dashboardofthings.data.sources.database.dao.NetworksDao;
 import com.arejas.dashboardofthings.data.sources.database.dao.SensorsDao;
-import com.arejas.dashboardofthings.domain.entities.Actuator;
-import com.arejas.dashboardofthings.domain.entities.DataValue;
-import com.arejas.dashboardofthings.domain.entities.Log;
-import com.arejas.dashboardofthings.domain.entities.Network;
-import com.arejas.dashboardofthings.domain.entities.Sensor;
+import com.arejas.dashboardofthings.domain.entities.database.Actuator;
+import com.arejas.dashboardofthings.domain.entities.database.DataValue;
+import com.arejas.dashboardofthings.domain.entities.database.Log;
+import com.arejas.dashboardofthings.domain.entities.database.Network;
+import com.arejas.dashboardofthings.domain.entities.database.Sensor;
 
 @Database(entities = {Network.class, Sensor.class, Actuator.class, DataValue.class, Log.class}, version = 1)
 @TypeConverters(DotTypeConverters.class)

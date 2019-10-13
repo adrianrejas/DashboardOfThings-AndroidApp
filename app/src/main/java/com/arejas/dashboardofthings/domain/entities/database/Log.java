@@ -1,4 +1,4 @@
-package com.arejas.dashboardofthings.domain.entities;
+package com.arejas.dashboardofthings.domain.entities.database;
 
 import android.os.Parcel;
 import android.os.Parcelable;
@@ -6,9 +6,7 @@ import android.os.Parcelable;
 import androidx.room.Entity;
 import androidx.room.Index;
 import androidx.room.PrimaryKey;
-import androidx.room.TypeConverters;
 
-import com.arejas.dashboardofthings.data.sources.database.converters.DotTypeConverters;
 import com.arejas.dashboardofthings.utils.Enumerators;
 
 import java.util.Date;

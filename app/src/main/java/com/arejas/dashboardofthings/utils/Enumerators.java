@@ -33,26 +33,6 @@ public class Enumerators {
         }
     }
 
-    public enum NetworkStatus {
-        STOPPED,
-        CONNECTED,
-        DISCONNECTED,
-        FAILURE;
-
-        public static NetworkStatus valueOf(int ordinal) {
-            switch (ordinal) {
-                case 0:
-                    return STOPPED;
-                case 1:
-                    return CONNECTED;
-                case 2:
-                    return DISCONNECTED;
-                default:
-                    return FAILURE;
-            }
-        }
-    }
-
     public enum HttpAuthenticationType {
         NONE,
         BASIC;
@@ -171,8 +151,8 @@ public class Enumerators {
 
     public enum LogLevel {
         INFO,
+        ERROR_CONF,
         WARN,
-        ERROR,
         CRITICAL;
 
         public static LogLevel valueOf(int ordinal) {
@@ -180,9 +160,40 @@ public class Enumerators {
                 case 0:
                     return INFO;
                 case 1:
-                    return WARN;
+                    return ERROR_CONF;
                 case 2:
-                    return ERROR;
+                    return WARN;
+                default:
+                    return CRITICAL;
+            }
+        }
+
+        @Override
+        public String toString() {
+            switch (ordinal()) {
+                case 0:
+                    return "INFO";
+                case 1:
+                    return "ERROR_CONF";
+                case 2:
+                    return "WARN";
+                default:
+                    return "CRITICAL";
+            }
+        }
+    }
+
+    public enum NotificationType {
+        NONE,
+        WARN,
+        CRITICAL;
+
+        public static NotificationType valueOf(int ordinal) {
+            switch (ordinal) {
+                case 0:
+                    return NONE;
+                case 1:
+                    return WARN;
                 default:
                     return CRITICAL;
             }
@@ -195,10 +206,37 @@ public class Enumerators {
                     return "INFO";
                 case 1:
                     return "WARN";
-                case 2:
-                    return "ERROR";
                 default:
                     return "CRITICAL";
+            }
+        }
+    }
+
+    public enum ElementManagementFunction {
+        CREATE,
+        UPDATE,
+        DELETE;
+
+        public static ElementManagementFunction valueOf(int ordinal) {
+            switch (ordinal) {
+                case 0:
+                    return CREATE;
+                case 1:
+                    return UPDATE;
+                default:
+                    return DELETE;
+            }
+        }
+
+        @Override
+        public String toString() {
+            switch (ordinal()) {
+                case 0:
+                    return "CREATE";
+                case 1:
+                    return "UPDATE";
+                default:
+                    return "DELETE";
             }
         }
     }

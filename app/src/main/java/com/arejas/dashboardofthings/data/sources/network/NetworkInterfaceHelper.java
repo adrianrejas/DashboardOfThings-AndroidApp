@@ -2,12 +2,9 @@ package com.arejas.dashboardofthings.data.sources.network;
 
 import android.content.Context;
 
-import com.arejas.dashboardofthings.R;
-import com.arejas.dashboardofthings.domain.entities.Actuator;
-import com.arejas.dashboardofthings.domain.entities.Network;
-import com.arejas.dashboardofthings.domain.entities.Sensor;
-import com.arejas.dashboardofthings.utils.Enumerators;
-import com.arejas.dashboardofthings.utils.rx.RxHelper;
+import com.arejas.dashboardofthings.domain.entities.database.Actuator;
+import com.arejas.dashboardofthings.domain.entities.database.Network;
+import com.arejas.dashboardofthings.domain.entities.database.Sensor;
 
 import java.util.HashMap;
 import java.util.Map;

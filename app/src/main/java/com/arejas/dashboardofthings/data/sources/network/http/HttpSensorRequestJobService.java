@@ -2,8 +2,8 @@ package com.arejas.dashboardofthings.data.sources.network.http;
 
 
 import com.arejas.dashboardofthings.R;
-import com.arejas.dashboardofthings.domain.entities.Network;
-import com.arejas.dashboardofthings.domain.entities.Sensor;
+import com.arejas.dashboardofthings.domain.entities.database.Network;
+import com.arejas.dashboardofthings.domain.entities.database.Sensor;
 import com.arejas.dashboardofthings.utils.Enumerators;
 import com.arejas.dashboardofthings.utils.rx.RxHelper;
 import com.firebase.jobdispatcher.JobParameters;
@@ -24,7 +24,7 @@ public class HttpSensorRequestJobService extends JobService {
             return false;
         } catch (Exception e) {
             RxHelper.publishLog(0, Enumerators.ElementType.NETWORK,
-                    null, Enumerators.LogLevel.CRITICAL,
+                    null, Enumerators.LogLevel.ERROR_CONF,
                     getString(R.string.log_critical_sensor_scheduling));
             return false;
         }

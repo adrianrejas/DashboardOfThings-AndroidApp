@@ -2,11 +2,11 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "4334f5f7d670fb85922fb6814f8735fa",
+    "identityHash": "e43b4a04c36a60de0c82fd3a0cbf923c",
     "entities": [
       {
         "tableName": "networks",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `name` TEXT, `status` INTEGER, `networkType` INTEGER, `imageUri` TEXT, `httpBaseUrl` TEXT, `httpAauthenticationType` INTEGER, `httpUsername` TEXT, `httpPassword` TEXT, `httpUseSsl` INTEGER, `certAuthorityUrl` TEXT, `mttBrokerUrl` TEXT, `mqttClientId` TEXT, `mqttUsername` TEXT, `mqttPassword` TEXT, `mqttCleanSession` INTEGER, `mqttConnTimeout` INTEGER, `mqttKeepaliveInterval` INTEGER, `mqttUseSsl` INTEGER, `mqttCertAuthorityUrl` TEXT)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `name` TEXT, `networkType` INTEGER, `imageUri` TEXT, `httpBaseUrl` TEXT, `httpAauthenticationType` INTEGER, `httpUsername` TEXT, `httpPassword` TEXT, `httpUseSsl` INTEGER, `certAuthorityUrl` TEXT, `mttBrokerUrl` TEXT, `mqttClientId` TEXT, `mqttUsername` TEXT, `mqttPassword` TEXT, `mqttCleanSession` INTEGER, `mqttConnTimeout` INTEGER, `mqttKeepaliveInterval` INTEGER, `mqttUseSsl` INTEGER, `mqttCertAuthorityUrl` TEXT)",
         "fields": [
           {
             "fieldPath": "id",
@@ -18,12 +18,6 @@
             "fieldPath": "name",
             "columnName": "name",
             "affinity": "TEXT",
-            "notNull": false
-          },
-          {
-            "fieldPath": "status",
-            "columnName": "status",
-            "affinity": "INTEGER",
             "notNull": false
           },
           {
@@ -584,7 +578,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '4334f5f7d670fb85922fb6814f8735fa')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'e43b4a04c36a60de0c82fd3a0cbf923c')"
     ]
   }
 }

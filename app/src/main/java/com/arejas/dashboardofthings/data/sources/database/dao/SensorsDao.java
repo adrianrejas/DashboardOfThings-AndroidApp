@@ -5,15 +5,21 @@ import androidx.room.Dao;
 import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.Query;
+import androidx.room.Transaction;
 import androidx.room.Update;
 
-import com.arejas.dashboardofthings.domain.entities.Sensor;
+import com.arejas.dashboardofthings.domain.entities.database.Network;
+import com.arejas.dashboardofthings.domain.entities.database.Sensor;
 import com.arejas.dashboardofthings.domain.entities.extended.SensorExtended;
+import com.arejas.dashboardofthings.utils.Enumerators;
 
 import java.util.List;
 
 @Dao
 public abstract class SensorsDao {
+
+    @Query("SELECT * FROM sensors")
+    public abstract List<Sensor> getAllBlocking();
 
     @Query("SELECT * FROM sensors")
     public abstract LiveData<List<Sensor>> getAll();
@@ -31,14 +37,20 @@ public abstract class SensorsDao {
     public abstract LiveData<Sensor> findById(int id);
 
     @Query("SELECT sensors.*, networks.name AS networkName, networks.networkType AS networkType, " +
-            "`values`.value AS lastValue, `values`.dateReceived AS dateReceivedLastValue " +
+            "`values`.value AS lastValue, `values`.dateReceived AS dateReceivedLastValue, " +
+            "(SELECT COUNT(`logs`.elementId) FROM `logs` WHERE `logs`.elementId=sensors.id " +
+            "AND `logs`.elementType=1 AND `logs`.logLevel=1 AND `logs`.dateRegistered >= date('now','-5 minute')) " +
+            "AS recentErrorLogs " +
             "FROM sensors " +
             "INNER JOIN networks ON sensors.networkId=networks.id " +
             "INNER JOIN `values` ON sensors.networkId=`values`.sensorId")
     public abstract LiveData<List<SensorExtended>> getAllExtended();
 
     @Query("SELECT sensors.*, networks.name AS networkName, networks.networkType AS networkType, " +
-            "`values`.value AS lastValue, `values`.dateReceived AS dateReceivedLastValue " +
+            "`values`.value AS lastValue, `values`.dateReceived AS dateReceivedLastValue, " +
+            "(SELECT COUNT(`logs`.elementId) FROM `logs` WHERE `logs`.elementId=sensors.id " +
+            "AND `logs`.elementType=1 AND `logs`.logLevel=1 AND `logs`.dateRegistered >= date('now','-5 minute')) " +
+            "AS recentErrorLogs " +
             "FROM sensors " +
             "INNER JOIN networks ON sensors.networkId=networks.id " +
             "INNER JOIN `values` ON sensors.networkId=`values`.sensorId " +
@@ -46,7 +58,10 @@ public abstract class SensorsDao {
     public abstract LiveData<List<SensorExtended>> getAllExtendedFromSameNetwork(int networkId);
 
     @Query("SELECT sensors.*, networks.name AS networkName, networks.networkType AS networkType, " +
-            "`values`.value AS lastValue, `values`.dateReceived AS dateReceivedLastValue " +
+            "`values`.value AS lastValue, `values`.dateReceived AS dateReceivedLastValue, " +
+            "(SELECT COUNT(`logs`.elementId) FROM `logs` WHERE `logs`.elementId=sensors.id " +
+            "AND `logs`.elementType=1 AND `logs`.logLevel=1 AND `logs`.dateRegistered >= date('now','-5 minute')) " +
+            "AS recentErrorLogs " +
             "FROM sensors " +
             "INNER JOIN networks ON sensors.networkId=networks.id " +
             "INNER JOIN `values` ON sensors.networkId=`values`.sensorId " +
@@ -54,7 +69,10 @@ public abstract class SensorsDao {
     public abstract LiveData<List<SensorExtended>> getAllExtendedToBeShownInMainDashboard();
 
     @Query("SELECT sensors.*, networks.name AS networkName, networks.networkType AS networkType, " +
-            "`values`.value AS lastValue, `values`.dateReceived AS dateReceivedLastValue " +
+            "`values`.value AS lastValue, `values`.dateReceived AS dateReceivedLastValue, " +
+            "(SELECT COUNT(`logs`.elementId) FROM `logs` WHERE `logs`.elementId=sensors.id " +
+            "AND `logs`.elementType=1 AND `logs`.logLevel=1 AND `logs`.dateRegistered >= date('now','-5 minute')) " +
+            "AS recentErrorLogs " +
             "FROM sensors " +
             "INNER JOIN networks ON sensors.networkId=networks.id " +
             "INNER JOIN `values` ON sensors.networkId=`values`.sensorId " +
@@ -62,7 +80,10 @@ public abstract class SensorsDao {
     public abstract LiveData<List<SensorExtended>> getAllExtendedLocated();
 
     @Query("SELECT sensors.*, networks.name AS networkName, networks.networkType AS networkType, " +
-            "`values`.value AS lastValue, `values`.dateReceived AS dateReceivedLastValue " +
+            "`values`.value AS lastValue, `values`.dateReceived AS dateReceivedLastValue, " +
+            "(SELECT COUNT(`logs`.elementId) FROM `logs` WHERE `logs`.elementId=sensors.id " +
+            "AND `logs`.elementType=1 AND `logs`.logLevel=1 AND `logs`.dateRegistered >= date('now','-5 minute')) " +
+            "AS recentErrorLogs " +
             "FROM sensors " +
             "INNER JOIN networks ON sensors.networkId=networks.id " +
             "INNER JOIN `values` ON sensors.networkId=`values`.sensorId " +
@@ -83,5 +104,23 @@ public abstract class SensorsDao {
 
     @Update
     public abstract void update(Sensor sensor);
+
+    @Query("UPDATE `logs` SET elementName=:name WHERE id=:id AND elementType=:type")
+    protected abstract void updateLogElementName(Integer id, Enumerators.ElementType type, String name);
+
+    @Query("DELETE FROM `logs` WHERE id=:id AND elementType=:type")
+    protected abstract void deleteLogsForElement(Integer id, Enumerators.ElementType type);
+
+    @Transaction
+    public void updateExtended(Sensor sensor) {
+        update(sensor);
+        updateLogElementName(sensor.getId(), Enumerators.ElementType.SENSOR, sensor.getName());
+    }
+
+    @Transaction
+    public void deleteExtended(Sensor sensor) {
+        delete(sensor);
+        deleteLogsForElement(sensor.getId(), Enumerators.ElementType.SENSOR);
+    }
 
 }

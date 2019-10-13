@@ -2,6 +2,15 @@
     <string name="app_name">Dashboard of Things</string>
     <string name="title_activity_map">Map</string>
 
+    <string name="dashboard_of_things_channel_name">Dashboard of Things notification channel</string>
+    <string name="dashboard_of_things_channel_desc">Notification channel about the state of Dashboard of Things app</string>
+
+    <string name="control_service_notification_active">Network connections running on foreground.</string>
+
+    <string name="log_notification_sensor_normal">Sensor data in normal state.</string>
+    <string name="log_notification_sensor_warning">Sensor data in warning state.</string>
+    <string name="log_notification_sensor_critical">Sensor data in critical state.</string>
+
     <string name="log_info_actuator_command_sent_success">Actuator updated with value %s.</string>
     <string name="log_info_mqtt_network_connected">MQTT network is connected</string>
     <string name="log_info_actuator_command_sent_success_mqtt">Actuator updated though MQTT.</string>

@@ -3,9 +3,8 @@ package com.arejas.dashboardofthings.data.sources.network.data;
 import android.util.Xml;
 
 import com.arejas.dashboardofthings.data.format.DataTransformationHelper;
-import com.arejas.dashboardofthings.domain.entities.Actuator;
-import com.arejas.dashboardofthings.domain.entities.Sensor;
-import com.arejas.dashboardofthings.utils.Enumerators;
+import com.arejas.dashboardofthings.domain.entities.database.Actuator;
+import com.arejas.dashboardofthings.domain.entities.database.Sensor;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;

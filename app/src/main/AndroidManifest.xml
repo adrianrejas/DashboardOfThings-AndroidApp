@@ -9,8 +9,8 @@
     -->
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
-    <uses-permission android:name="android.permission.WAKE_LOCK"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
 
     <application
         android:allowBackup="true"
@@ -19,17 +19,26 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-
-        <service android:name="org.eclipse.paho.android.service.MqttService"
+        <receiver
+            android:name=".domain.services.BootDeviceReceiver"
+            android:enabled="true"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED"/>
+            </intent-filter>
+        </receiver>
+        <service
+            android:name="org.eclipse.paho.android.service.MqttService"
             android:enabled="true"
             android:exported="true" />
-        <service android:name=".data.sources.network.http.HttpRequestIntentService"
+        <service
+            android:name=".data.sources.network.http.HttpRequestIntentService"
             android:enabled="true"
             android:exported="true" />
         <service
             android:name=".data.sources.network.http.HttpSensorRequestJobService"
             android:enabled="true"
-            android:exported="true"></service>
+            android:exported="true" />
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
              (See the file "res/values/google_maps_api.xml").

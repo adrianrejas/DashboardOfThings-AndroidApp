@@ -5,13 +5,12 @@ import android.content.Intent;
 import android.content.Context;
 
 import com.arejas.dashboardofthings.R;
-import com.arejas.dashboardofthings.domain.entities.Actuator;
-import com.arejas.dashboardofthings.domain.entities.Network;
-import com.arejas.dashboardofthings.domain.entities.Sensor;
+import com.arejas.dashboardofthings.domain.entities.database.Actuator;
+import com.arejas.dashboardofthings.domain.entities.database.Network;
+import com.arejas.dashboardofthings.domain.entities.database.Sensor;
 import com.arejas.dashboardofthings.utils.Enumerators;
 import com.arejas.dashboardofthings.utils.rx.RxHelper;
 
-import java.lang.reflect.Executable;
 import java.util.concurrent.Executor;
 
 import javax.inject.Inject;
@@ -103,7 +102,7 @@ public class HttpRequestIntentService extends IntentService {
             HttpRequestHelper.sendSensorDataHttpRequest(getApplicationContext(), network, sensor);
         } catch (Exception e) {
             RxHelper.publishLog(network.getId(), Enumerators.ElementType.NETWORK,
-                    network.getName(), Enumerators.LogLevel.CRITICAL,
+                    network.getName(), Enumerators.LogLevel.ERROR_CONF,
                     getString(R.string.log_critical_unexpected_http_network));
         }
     }
@@ -117,7 +116,7 @@ public class HttpRequestIntentService extends IntentService {
             HttpRequestHelper.sendActuatorCommand(getApplicationContext(), network, actuator, dataToSend);
         } catch (Exception e) {
             RxHelper.publishLog(network.getId(), Enumerators.ElementType.NETWORK,
-                    network.getName(), Enumerators.LogLevel.CRITICAL,
+                    network.getName(), Enumerators.LogLevel.ERROR_CONF,
                     getString(R.string.log_critical_unexpected_http_network));
         }
     }

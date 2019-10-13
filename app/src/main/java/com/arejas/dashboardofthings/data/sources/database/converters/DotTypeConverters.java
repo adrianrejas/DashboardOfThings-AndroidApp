@@ -14,14 +14,7 @@ public class DotTypeConverters {
 
     @TypeConverter
     public static Enumerators.ElementType valueOfElementType(int ordinal) {
-        switch (ordinal) {
-            case 0:
-                return Enumerators.ElementType.NETWORK;
-            case 1:
-                return Enumerators.ElementType.SENSOR;
-            default:
-                return Enumerators.ElementType.ACTUATOR;
-        }
+        return Enumerators.ElementType.valueOf(ordinal);
     }
 
     @TypeConverter
@@ -31,12 +24,7 @@ public class DotTypeConverters {
 
     @TypeConverter
     public static Enumerators.NetworkType valueOfNetworkType(int ordinal) {
-        switch (ordinal) {
-            case 0:
-                return Enumerators.NetworkType.HTTP;
-            default:
-                return Enumerators.NetworkType.MQTT;
-        }
+        return Enumerators.NetworkType.valueOf(ordinal);
     }
 
     @TypeConverter
@@ -45,32 +33,8 @@ public class DotTypeConverters {
     }
 
     @TypeConverter
-    public static Enumerators.NetworkStatus valueOfNetworkStatus(int ordinal) {
-        switch (ordinal) {
-            case 0:
-                return Enumerators.NetworkStatus.STOPPED;
-            case 1:
-                return Enumerators.NetworkStatus.CONNECTED;
-            case 2:
-                return Enumerators.NetworkStatus.DISCONNECTED;
-            default:
-                return Enumerators.NetworkStatus.FAILURE;
-        }
-    }
-
-    @TypeConverter
-    public static Integer getValueIntNetworkStatus(Enumerators.NetworkStatus value) {
-        return value.ordinal();
-    }
-
-    @TypeConverter
     public static Enumerators.HttpAuthenticationType valueOfHttpAuthenticationType(int ordinal) {
-        switch (ordinal) {
-            case 0:
-                return Enumerators.HttpAuthenticationType.NONE;
-            default:
-                return Enumerators.HttpAuthenticationType.BASIC;
-        }
+        return Enumerators.HttpAuthenticationType.valueOf(ordinal);
     }
 
     @TypeConverter
@@ -80,12 +44,7 @@ public class DotTypeConverters {
 
     @TypeConverter
     public static Enumerators.MqttAuthenticationType valueOfMqttAuthenticationType(int ordinal) {
-        switch (ordinal) {
-            case 0:
-                return Enumerators.MqttAuthenticationType.NONE;
-            default:
-                return Enumerators.MqttAuthenticationType.BASIC;
-        }
+        return Enumerators.MqttAuthenticationType.valueOf(ordinal);
     }
 
     @TypeConverter
@@ -95,16 +54,7 @@ public class DotTypeConverters {
 
     @TypeConverter
     public static Enumerators.DataType valueOfDataType(int ordinal) {
-        switch (ordinal) {
-            case 0:
-                return Enumerators.DataType.BOOLEAN;
-            case 1:
-                return Enumerators.DataType.INTEGER;
-            case 2:
-                return Enumerators.DataType.DECIMAL;
-            default:
-                return Enumerators.DataType.STRING;
-        }
+        return Enumerators.DataType.valueOf(ordinal);
     }
 
     @TypeConverter
@@ -114,14 +64,7 @@ public class DotTypeConverters {
 
     @TypeConverter
     public static Enumerators.MessageType valueOfMessageType(int ordinal) {
-        switch (ordinal) {
-            case 0:
-                return Enumerators.MessageType.XML;
-            case 1:
-                return Enumerators.MessageType.JSON;
-            default:
-                return Enumerators.MessageType.RAW;
-        }
+        return Enumerators.MessageType.valueOf(ordinal);
     }
 
     @TypeConverter
@@ -131,14 +74,7 @@ public class DotTypeConverters {
 
     @TypeConverter
     public static Enumerators.MqttQosLevel valueOfMqttQosLevel(int ordinal) {
-        switch (ordinal) {
-            case 0:
-                return Enumerators.MqttQosLevel.QOS_0;
-            case 1:
-                return Enumerators.MqttQosLevel.QOS_1;
-            default:
-                return Enumerators.MqttQosLevel.QOS_2;
-        }
+        return Enumerators.MqttQosLevel.valueOf(ordinal);
     }
 
     @TypeConverter
@@ -148,16 +84,7 @@ public class DotTypeConverters {
 
     @TypeConverter
     public static Enumerators.HttpMethod valueOfHttpCommand(int ordinal) {
-        switch (ordinal) {
-            case 0:
-                return Enumerators.HttpMethod.GET;
-            case 1:
-                return Enumerators.HttpMethod.PUT;
-            case 2:
-                return Enumerators.HttpMethod.POST;
-            default:
-                return Enumerators.HttpMethod.PATCH;
-        }
+        return Enumerators.HttpMethod.valueOf(ordinal);
     }
 
     @TypeConverter
@@ -167,16 +94,7 @@ public class DotTypeConverters {
 
     @TypeConverter
     public static Enumerators.LogLevel valueOfLogLevel(int ordinal) {
-        switch (ordinal) {
-            case 0:
-                return Enumerators.LogLevel.INFO;
-            case 1:
-                return Enumerators.LogLevel.WARN;
-            case 2:
-                return Enumerators.LogLevel.ERROR;
-            default:
-                return Enumerators.LogLevel.CRITICAL;
-        }
+        return Enumerators.LogLevel.valueOf(ordinal);
     }
 
     @TypeConverter

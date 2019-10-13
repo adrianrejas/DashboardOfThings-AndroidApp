@@ -1,4 +1,4 @@
-package com.arejas.dashboardofthings.domain.entities;
+package com.arejas.dashboardofthings.domain.entities.database;
 
 import android.os.Parcel;
 import android.os.Parcelable;

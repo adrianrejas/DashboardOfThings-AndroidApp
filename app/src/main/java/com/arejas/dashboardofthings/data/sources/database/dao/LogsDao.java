@@ -7,7 +7,7 @@ import androidx.room.Insert;
 import androidx.room.Query;
 import androidx.room.Transaction;
 
-import com.arejas.dashboardofthings.domain.entities.Log;
+import com.arejas.dashboardofthings.domain.entities.database.Log;
 import com.arejas.dashboardofthings.utils.Enumerators;
 
 import java.util.List;
