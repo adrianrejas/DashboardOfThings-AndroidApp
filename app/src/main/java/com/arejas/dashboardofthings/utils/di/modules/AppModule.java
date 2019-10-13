@@ -7,7 +7,18 @@ import android.content.Context;
 import androidx.room.Room;
 
 import com.arejas.dashboardofthings.DotApplication;
+import com.arejas.dashboardofthings.data.interfaces.DotRepository;
 import com.arejas.dashboardofthings.data.sources.database.DotDatabase;
+import com.arejas.dashboardofthings.domain.usecases.ActuatorManagementUseCase;
+import com.arejas.dashboardofthings.domain.usecases.DataRequestUseCase;
+import com.arejas.dashboardofthings.domain.usecases.LogsRequestUseCase;
+import com.arejas.dashboardofthings.domain.usecases.NetworkManagementUseCase;
+import com.arejas.dashboardofthings.domain.usecases.SensorManagementUseCase;
+import com.arejas.dashboardofthings.domain.usecases.implementations.ActuatorManagementUseCaseImpl;
+import com.arejas.dashboardofthings.domain.usecases.implementations.DataRequestUseCaseImpl;
+import com.arejas.dashboardofthings.domain.usecases.implementations.LogsRequestUseCaseImpl;
+import com.arejas.dashboardofthings.domain.usecases.implementations.NetworkManagementUseCaseImpl;
+import com.arejas.dashboardofthings.domain.usecases.implementations.SensorManagementUseCaseImpl;
 
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
@@ -58,6 +69,36 @@ public class AppModule {
         return Room.databaseBuilder(application,
                 DotDatabase.class, DotDatabase.DOT_DB_NAME)
                 .build();
+    }
+
+    @Provides
+    @Singleton
+    public NetworkManagementUseCase provideNetworkManagementUseCase (DotRepository repository) {
+        return new NetworkManagementUseCaseImpl(repository);
+    }
+
+    @Provides
+    @Singleton
+    public SensorManagementUseCase provideSensorManagementUseCase (DotRepository repository) {
+        return new SensorManagementUseCaseImpl(repository);
+    }
+
+    @Provides
+    @Singleton
+    public ActuatorManagementUseCase provideActuatorManagementUseCase (DotRepository repository) {
+        return new ActuatorManagementUseCaseImpl(repository);
+    }
+
+    @Provides
+    @Singleton
+    public DataRequestUseCase provideDataRequestUseCase (DotRepository repository) {
+        return new DataRequestUseCaseImpl(repository);
+    }
+
+    @Provides
+    @Singleton
+    public LogsRequestUseCase provideLogsRequestUseCase (DotRepository repository) {
+        return new LogsRequestUseCaseImpl(repository);
     }
 
 }

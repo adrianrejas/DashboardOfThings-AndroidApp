@@ -346,7 +346,7 @@ public class DotRepository {
 
     /* Functions for managing request operations over data values stored */
 
-    public LiveData<List<DataValue>> getLastFromAll() {
+    public LiveData<List<DataValue>> getLastValuesFromAll() {
         try {
             return this.dotDatabase.dataValuesDao().getLastValuesForAll();
         } catch (Exception e) {
@@ -354,7 +354,7 @@ public class DotRepository {
         }
     }
 
-    public LiveData<DataValue> findLastForSensorId(int id) {
+    public LiveData<DataValue> findLastValuesForSensorId(int id) {
         try {
             return this.dotDatabase.dataValuesDao().findLastForSensorId(id);
         } catch (Exception e) {
@@ -362,7 +362,7 @@ public class DotRepository {
         }
     }
 
-    public LiveData<DataValue> findLastForSensorIds(int[] ids) {
+    public LiveData<DataValue> findLastValuesForSensorIds(int[] ids) {
         try {
             return this.dotDatabase.dataValuesDao().findLastForSensorIds(ids);
         } catch (Exception e) {
@@ -451,6 +451,8 @@ public class DotRepository {
             return null;
         }
     }
+
+    /* Static functions to be used outside */
 
     public static void checkThresholdsForDataReceived(Context context, Sensor sensor, String dataReceived){
         try {
