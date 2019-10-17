@@ -222,4 +222,11 @@ public class MqttNetworkInterfaceHelper extends NetworkInterfaceHelper {
             return false;
         }
     }
+
+    @Override
+    public boolean requestSensorReload(Context context, Sensor sensor) {
+        // Not applicable in MQTT networks
+        return false;
+    }
+
 }

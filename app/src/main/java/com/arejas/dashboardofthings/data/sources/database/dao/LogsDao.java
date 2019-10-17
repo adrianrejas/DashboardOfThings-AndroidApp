@@ -21,6 +21,9 @@ public abstract class LogsDao {
     @Query("SELECT * FROM `logs` ORDER BY dateRegistered DESC LIMIT 100")
     public abstract LiveData<List<Log>> getAllLastHundredLogs();
 
+    @Query("SELECT * FROM `logs` WHERE logLevel IN(:logLevels) ORDER BY dateRegistered DESC LIMIT 100")
+    public abstract LiveData<List<Log>> getAllLastHundredLogs(Enumerators.LogLevel[] logLevels);
+
     @Query("SELECT * FROM `logs` WHERE elementId=:id AND elementType=:elementType LIMIT 1")
     public abstract LiveData<Log> findLastForElementId(int id, Enumerators.ElementType elementType);
 
@@ -35,14 +38,18 @@ public abstract class LogsDao {
     @Query("SELECT * FROM `logs` WHERE dateRegistered IN (SELECT MAX(dateRegistered) FROM `logs` GROUP BY ElementId, elementType)")
     public abstract LiveData<List<Log>> getLastLogForEachElement();
 
-    @Query("SELECT * FROM `logs` WHERE dateRegistered IN (SELECT MAX(dateRegistered) FROM `logs` WHERE elementType IN(:elementType) " +
+    @Query("SELECT * FROM `logs` WHERE dateRegistered IN (SELECT MAX(dateRegistered) FROM `logs` WHERE elementType IN(:elementTypes) " +
             "GROUP BY ElementId, elementType)")
-    public abstract LiveData<List<Log>> getLastLogForEachElement(Enumerators.ElementType elementType);
+    public abstract LiveData<List<Log>> getLastLogForEachElement(Enumerators.ElementType[] elementTypes);
 
     @Query("SELECT * FROM `logs` WHERE dateRegistered IN (SELECT MAX(dateRegistered) FROM `logs` " +
-            "WHERE elementType IN(:elementType) AND logLevel IN(:logLevels)" +
+            "WHERE logLevel IN(:logLevels) GROUP BY ElementId, elementType)")
+    public abstract LiveData<List<Log>> getLastLogForEachElement(Enumerators.LogLevel[] logLevels);
+
+    @Query("SELECT * FROM `logs` WHERE dateRegistered IN (SELECT MAX(dateRegistered) FROM `logs` " +
+            "WHERE elementType IN(:elementTypes) AND logLevel IN(:logLevels) " +
             "GROUP BY ElementId, elementType)")
-    public abstract LiveData<List<Log>> getLastLogForEachElement(Enumerators.ElementType elementType,
+    public abstract LiveData<List<Log>> getLastLogForEachElement(Enumerators.ElementType[] elementTypes,
                                                                  Enumerators.LogLevel[] logLevels);
 
     @Insert

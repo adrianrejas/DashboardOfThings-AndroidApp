@@ -30,6 +30,9 @@ public class RxHelper {
     // Subject to communicate actuator data updates to Control Service
     private static final BehaviorSubject<Pair<Actuator, String>> actuatorDataUpdateSubject = BehaviorSubject.create();
 
+    // Subject to communicate sensor reload requests to Control Service
+    private static final BehaviorSubject<Sensor> sensorReloadRequestSubject = BehaviorSubject.create();
+
     // Subject to communicate data values received from sensors
     private static final BehaviorSubject<DataValue> sensorDataSubject = BehaviorSubject.create();
 
@@ -129,6 +132,24 @@ public class RxHelper {
     // Send actuator updates to those interested
     public static void publishActuatorUpdate(@NonNull Pair<Actuator, String> message) {
         actuatorDataUpdateSubject.onNext(message);
+    }
+
+    // Receive reload requests from all sensors
+    public static Disposable subscribeToAllSensorReloadRequests(@NonNull Consumer<Sensor> action) {
+        return sensorReloadRequestSubject.subscribe(action);
+    }
+
+    // Receive reload requests from one sensor
+    public static Disposable subscribeToOneSensorReloadRequests(
+            @NonNull Integer sensorId, @NonNull Consumer<Sensor> action) {
+        return sensorReloadRequestSubject
+                .filter(data -> sensorId.equals(data.getId()))
+                .subscribe(action);
+    }
+
+    // Send sensor reload reqeust to those interested
+    public static void publishSensorReloadRequest(@NonNull Sensor message) {
+        sensorReloadRequestSubject.onNext(message);
     }
 
     // Receive management changes from all networks

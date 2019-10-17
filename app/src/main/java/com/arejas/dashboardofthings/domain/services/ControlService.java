@@ -53,6 +53,8 @@ public class ControlService extends Service {
                 NotificationsHelper.showNotificationForegroundService(getApplicationContext()));
         initializeNetworkHelpers();
         initializeSubscriptionsToNetworksAndSensorsManagementChanges();
+        initializeSubscriptionsToActuatorDataUpdates();
+        initializeSubscriptionsToSensorReloadRequests();
         return START_NOT_STICKY;
     }
 
@@ -108,6 +110,12 @@ public class ControlService extends Service {
         });
     }
 
+    private void initializeSubscriptionsToSensorReloadRequests() {
+        RxHelper.subscribeToAllSensorReloadRequests(sensor -> {
+            sendSensorReloadRequestToNetworkHelper(sensor);
+        });
+    }
+
     public void initializeNetworkHelpers() {
         synchronized (networkHelpersLock) {
             networks = dotRepository.getListOfNetworksBlocking();
@@ -142,65 +150,87 @@ public class ControlService extends Service {
 
     private boolean initNetworkHelper(@NotNull Network network) {
         synchronized (networkHelpersLock) {
-            closeNetworkHelper(network);
-            NetworkInterfaceHelper helper = null;
-            switch (network.getNetworkType()) {
-                case HTTP:
-                    helper = new HttpNetworkInterfaceHelper(network);
-                    break;
-                case MQTT:
-                    helper = new MqttNetworkInterfaceHelper(network);
-                    break;
-            }
-            if (helper != null) {
-                List<Sensor> initialSensors = new ArrayList<>();
-                for (Sensor sensor : sensors) {
-                    if (sensor.getNetworkId().equals(network.getId())) {
-                        initialSensors.add(sensor);
-                    }
+            try {
+                closeNetworkHelper(network);
+                NetworkInterfaceHelper helper = null;
+                switch (network.getNetworkType()) {
+                    case HTTP:
+                        helper = new HttpNetworkInterfaceHelper(network);
+                        break;
+                    case MQTT:
+                        helper = new MqttNetworkInterfaceHelper(network);
+                        break;
                 }
-                helper.initNetworkInterface(getApplicationContext(),
-                        initialSensors.toArray(new Sensor[initialSensors.size()]));
-                this.networkHelpers.put(network.getId(), helper);
-                return true;
+                if (helper != null) {
+                    List<Sensor> initialSensors = new ArrayList<>();
+                    for (Sensor sensor : sensors) {
+                        if (sensor.getNetworkId().equals(network.getId())) {
+                            initialSensors.add(sensor);
+                        }
+                    }
+                    helper.initNetworkInterface(getApplicationContext(),
+                            initialSensors.toArray(new Sensor[initialSensors.size()]));
+                    this.networkHelpers.put(network.getId(), helper);
+                    return true;
+                }
+                return false;
+            } catch (Exception e) {
+                e.printStackTrace();
+                return false;
             }
-            return false;
         }
     }
 
     private boolean closeNetworkHelper(@NotNull Network network) {
         synchronized (networkHelpersLock) {
-            if (this.networkHelpers.containsKey(network.getId())) {
-                this.networkHelpers.get(network.getId()).closeNetworkInterface(getApplicationContext());
-                this.networkHelpers.remove(network.getId());
+            try {
+                if (this.networkHelpers.containsKey(network.getId())) {
+                    this.networkHelpers.get(network.getId()).closeNetworkInterface(getApplicationContext());
+                    this.networkHelpers.remove(network.getId());
+                    return true;
+                } else {
+                    return false;
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+                return false;
             }
-            return true;
         }
     }
 
     private boolean restartNetworkHelper(@NotNull Network network) {
         synchronized (networkHelpersLock) {
-            closeNetworkHelper(network);
-            initNetworkHelper(network);
-            return true;
+            if(closeNetworkHelper(network))
+                return initNetworkHelper(network);
+            return false;
         }
     }
 
     private boolean registerSensorInNetwork(@NotNull Sensor sensor) {
         synchronized (networkHelpersLock) {
-            if (networkHelpers.containsKey(sensor.getNetworkId())) {
-                return networkHelpers.get(sensor.getNetworkId()).configureSensorReceiving(getApplicationContext(), sensor);
+            try {
+                if (networkHelpers.containsKey(sensor.getNetworkId())) {
+                    return networkHelpers.get(sensor.getNetworkId()).configureSensorReceiving(getApplicationContext(), sensor);
+                }
+                return false;
+            } catch (Exception e) {
+                e.printStackTrace();
+                return false;
             }
-            return false;
         }
     }
 
     private boolean unregisterSensorInNetwork(@NotNull Sensor sensor) {
         synchronized (networkHelpersLock) {
-            if (networkHelpers.containsKey(sensor.getNetworkId())) {
-                return networkHelpers.get(sensor.getNetworkId()).unconfigureSensorReceiving(getApplicationContext(), sensor);
+            try {
+                if (networkHelpers.containsKey(sensor.getNetworkId())) {
+                    return networkHelpers.get(sensor.getNetworkId()).unconfigureSensorReceiving(getApplicationContext(), sensor);
+                }
+                return false;
+            } catch (Exception e) {
+                e.printStackTrace();
+                return false;
             }
-            return false;
         }
     }
 
@@ -214,16 +244,30 @@ public class ControlService extends Service {
     }
 
     private boolean sendActuatorUpdateToNetworkHelper(@NotNull Actuator actuator, @NotNull String data) {
-        try {
-            synchronized (networkHelpersLock) {
+        synchronized (networkHelpersLock) {
+            try {
                 if (networkHelpers.containsKey(actuator.getNetworkId())) {
                     return networkHelpers.get(actuator.getNetworkId()).sendActuatorData(getApplicationContext(), actuator, data);
                 }
                 return false;
+            } catch (Exception e) {
+                e.printStackTrace();
+                return false;
             }
-        } catch (Exception e) {
-            e.printStackTrace();
-            return false;
+        }
+    }
+
+    private boolean sendSensorReloadRequestToNetworkHelper(@NotNull Sensor sensor) {
+        synchronized (networkHelpersLock) {
+            try {
+                if (networkHelpers.containsKey(sensor.getNetworkId())) {
+                    return networkHelpers.get(sensor.getNetworkId()).requestSensorReload(getApplicationContext(), sensor);
+                }
+                return false;
+            } catch (Exception e) {
+                e.printStackTrace();
+                return false;
+            }
         }
     }
 

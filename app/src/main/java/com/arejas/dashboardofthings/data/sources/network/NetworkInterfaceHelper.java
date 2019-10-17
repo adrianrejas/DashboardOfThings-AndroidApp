@@ -30,6 +30,8 @@ public abstract class NetworkInterfaceHelper {
 
     public abstract boolean sendActuatorData(Context context, Actuator actuator, String dataToSend);
 
+    public abstract boolean requestSensorReload(Context context, Sensor sensor);
+
     public Network getNetwork() {
         return network;
     }

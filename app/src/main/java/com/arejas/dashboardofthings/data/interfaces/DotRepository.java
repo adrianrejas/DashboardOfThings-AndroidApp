@@ -439,22 +439,29 @@ public class DotRepository {
         return result;
     }
 
-    /* Functions for managing actuator data to update */
+    /* Functions for managing users request to reload or update info */
+
+    public LiveData<Resource> requestSensorReload(@NotNull Sensor sensor) {
+        MutableLiveData<Resource> result = new MutableLiveData<>();
+        result.postValue(Resource.loading(null));
+        try {
+            RxHelper.publishSensorReloadRequest(sensor);
+            result.postValue(Resource.success(null));
+        } catch (Exception e) {
+            result.postValue(Resource.error(e, null));
+        }
+        return result;
+    }
 
     public LiveData<Resource> updateActuatorData(@NotNull Actuator actuator, @NotNull String data) {
         MutableLiveData<Resource> result = new MutableLiveData<>();
         result.postValue(Resource.loading(null));
-        dbExecutorManagement.execute(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    RxHelper.publishActuatorUpdate(new Pair<>(actuator, data));
-                    result.postValue(Resource.success(null));
-                } catch (Exception e) {
-                    result.postValue(Resource.error(e, null));
-                }
-            }
-        });
+        try {
+            RxHelper.publishActuatorUpdate(new Pair<>(actuator, data));
+            result.postValue(Resource.success(null));
+        } catch (Exception e) {
+            result.postValue(Resource.error(e, null));
+        }
         return result;
     }
 
@@ -550,9 +557,41 @@ public class DotRepository {
 
     /* Functions for managing request operations over logs stored */
 
-    public LiveData<List<Log>> getLastLogs() {
+    public LiveData<List<Log>> getLastConfigurationLogs() {
         try {
-            return this.dotDatabase.logsDao().getAllLastHundredLogs();
+            Enumerators.LogLevel[] logLevels = new Enumerators.LogLevel[3];
+            logLevels[0] = Enumerators.LogLevel.INFO;
+            logLevels[1] = Enumerators.LogLevel.WARN;
+            logLevels[2] = Enumerators.LogLevel.ERROR;
+            return this.dotDatabase.logsDao().getAllLastHundredLogs(logLevels);
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    public LiveData<List<Log>> getLastNotificationLogs() {
+        try {
+            Enumerators.ElementType[] elementTypes = new Enumerators.ElementType[0];
+            elementTypes[0] = Enumerators.ElementType.SENSOR;
+            Enumerators.LogLevel[] logLevels = new Enumerators.LogLevel[3];
+            logLevels[0] = Enumerators.LogLevel.NOTIF_NONE;
+            logLevels[1] = Enumerators.LogLevel.NOTIF_WARN;
+            logLevels[2] = Enumerators.LogLevel.NOTIF_CRITICAL;
+            return this.dotDatabase.logsDao().getLastLogForEachElement(elementTypes, logLevels);
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    public LiveData<Log> getLastNotificationLogForElement(int elementId,
+                                                                Enumerators.ElementType elementType) {
+        try {
+            Enumerators.LogLevel[] logLevels = new Enumerators.LogLevel[3];
+            logLevels[0] = Enumerators.LogLevel.NOTIF_NONE;
+            logLevels[1] = Enumerators.LogLevel.NOTIF_WARN;
+            logLevels[2] = Enumerators.LogLevel.NOTIF_CRITICAL;
+            return this.dotDatabase.logsDao().findLastForElementId(elementId,
+                    elementType, logLevels);
         } catch (Exception e) {
             return null;
         }

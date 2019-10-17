@@ -77,6 +77,7 @@ public class HttpNetworkInterfaceHelper extends NetworkInterfaceHelper{
         }
     }
 
+    @Override
     public boolean unconfigureSensorReceiving(Context context, Sensor sensor) {
         getSensorsRegistered().remove(sensor.getId());
         dispatcher.cancel(Integer.toString(sensor.getId()));
@@ -91,6 +92,19 @@ public class HttpNetworkInterfaceHelper extends NetworkInterfaceHelper{
         } catch (Exception e) {
             RxHelper.publishLog(actuator.getId(), Enumerators.ElementType.ACTUATOR,
                     actuator.getName(), Enumerators.LogLevel.ERROR,
+                    context.getString(R.string.log_critical_actautor_send));
+            return false;
+        }
+    }
+
+    @Override
+    public boolean requestSensorReload(Context context, Sensor sensor) {
+        try {
+            HttpRequestIntentService.startActionSensorRequest(context, getNetwork(), sensor);
+            return true;
+        } catch (Exception e) {
+            RxHelper.publishLog(sensor.getId(), Enumerators.ElementType.SENSOR,
+                    sensor.getName(), Enumerators.LogLevel.ERROR,
                     context.getString(R.string.log_critical_sensor_scheduling));
             return false;
         }

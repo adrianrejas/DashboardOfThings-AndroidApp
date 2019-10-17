@@ -42,6 +42,7 @@
     <string name="log_critical_message_building">Problem building the message.</string>
     <string name="log_critical_data_format">Data format is not expected.</string>
     <string name="log_critical_sensor_scheduling">Not possible to schedule sensor.</string>
+    <string name="log_critical_actautor_send">Not possible to send actuator info.</string>
     <string name="log_critical_mqtt_connection_lost">MQTT connection lost.</string>
     <string name="log_critical_mqtt_connection_fail">MQTT connection failed.</string>
     <string name="log_critical_mqtt_disconnection_fail">MQTT disconnection failed.</string>
