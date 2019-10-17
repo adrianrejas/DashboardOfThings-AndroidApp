@@ -39,56 +39,54 @@ public abstract class SensorsDao {
     @Query("SELECT sensors.*, networks.name AS networkName, networks.networkType AS networkType, " +
             "`values`.value AS lastValue, `values`.dateReceived AS dateReceivedLastValue, " +
             "(SELECT COUNT(`logs`.elementId) FROM `logs` WHERE `logs`.elementId=sensors.id " +
-            "AND `logs`.elementType=1 AND `logs`.logLevel=1 AND `logs`.dateRegistered >= date('now','-5 minute')) " +
+            "AND `logs`.elementType IN(:elementTypes) AND `logs`.logLevel IN(:logLevels) " +
+            "AND `logs`.dateRegistered >= date('now','-5 minute')) " +
             "AS recentErrorLogs " +
             "FROM sensors " +
             "INNER JOIN networks ON sensors.networkId=networks.id " +
             "INNER JOIN `values` ON sensors.networkId=`values`.sensorId")
-    public abstract LiveData<List<SensorExtended>> getAllExtended();
+    public abstract LiveData<List<SensorExtended>> getAllExtended(Enumerators.ElementType[] elementTypes,
+                                                                     Enumerators.LogLevel[] logLevels);
 
     @Query("SELECT sensors.*, networks.name AS networkName, networks.networkType AS networkType, " +
             "`values`.value AS lastValue, `values`.dateReceived AS dateReceivedLastValue, " +
             "(SELECT COUNT(`logs`.elementId) FROM `logs` WHERE `logs`.elementId=sensors.id " +
-            "AND `logs`.elementType=1 AND `logs`.logLevel=1 AND `logs`.dateRegistered >= date('now','-5 minute')) " +
-            "AS recentErrorLogs " +
-            "FROM sensors " +
-            "INNER JOIN networks ON sensors.networkId=networks.id " +
-            "INNER JOIN `values` ON sensors.networkId=`values`.sensorId " +
-            "WHERE networkId=:networkId")
-    public abstract LiveData<List<SensorExtended>> getAllExtendedFromSameNetwork(int networkId);
-
-    @Query("SELECT sensors.*, networks.name AS networkName, networks.networkType AS networkType, " +
-            "`values`.value AS lastValue, `values`.dateReceived AS dateReceivedLastValue, " +
-            "(SELECT COUNT(`logs`.elementId) FROM `logs` WHERE `logs`.elementId=sensors.id " +
-            "AND `logs`.elementType=1 AND `logs`.logLevel=1 AND `logs`.dateRegistered >= date('now','-5 minute')) " +
+            "AND `logs`.elementType IN(:elementTypes) AND `logs`.logLevel IN(:logLevels) " +
+            "AND `logs`.dateRegistered >= date('now','-5 minute')) " +
             "AS recentErrorLogs " +
             "FROM sensors " +
             "INNER JOIN networks ON sensors.networkId=networks.id " +
             "INNER JOIN `values` ON sensors.networkId=`values`.sensorId " +
             "WHERE showInMainDashboard=1")
-    public abstract LiveData<List<SensorExtended>> getAllExtendedToBeShownInMainDashboard();
+    public abstract LiveData<List<SensorExtended>> getAllExtendedToBeShownInMainDashboard(Enumerators.ElementType[] elementTypes,
+                                                                                          Enumerators.LogLevel[] logLevels);
 
     @Query("SELECT sensors.*, networks.name AS networkName, networks.networkType AS networkType, " +
             "`values`.value AS lastValue, `values`.dateReceived AS dateReceivedLastValue, " +
             "(SELECT COUNT(`logs`.elementId) FROM `logs` WHERE `logs`.elementId=sensors.id " +
-            "AND `logs`.elementType=1 AND `logs`.logLevel=1 AND `logs`.dateRegistered >= date('now','-5 minute')) " +
+            "AND `logs`.elementType IN(:elementTypes) AND `logs`.logLevel IN(:logLevels) " +
+            "AND `logs`.dateRegistered >= date('now','-5 minute')) " +
             "AS recentErrorLogs " +
             "FROM sensors " +
             "INNER JOIN networks ON sensors.networkId=networks.id " +
             "INNER JOIN `values` ON sensors.networkId=`values`.sensorId " +
             "WHERE locationLat IS NOT NULL AND localtionLong IS NOT NULL")
-    public abstract LiveData<List<SensorExtended>> getAllExtendedLocated();
+    public abstract LiveData<List<SensorExtended>> getAllExtendedLocated(Enumerators.ElementType[] elementTypes,
+                                                                         Enumerators.LogLevel[] logLevels);
 
     @Query("SELECT sensors.*, networks.name AS networkName, networks.networkType AS networkType, " +
             "`values`.value AS lastValue, `values`.dateReceived AS dateReceivedLastValue, " +
             "(SELECT COUNT(`logs`.elementId) FROM `logs` WHERE `logs`.elementId=sensors.id " +
-            "AND `logs`.elementType=1 AND `logs`.logLevel=1 AND `logs`.dateRegistered >= date('now','-5 minute')) " +
+            "AND `logs`.elementType IN(:elementTypes) AND `logs`.logLevel IN(:logLevels) " +
+            "AND `logs`.dateRegistered >= date('now','-5 minute')) " +
             "AS recentErrorLogs " +
             "FROM sensors " +
             "INNER JOIN networks ON sensors.networkId=networks.id " +
             "INNER JOIN `values` ON sensors.networkId=`values`.sensorId " +
             "WHERE sensors.id=:id LIMIT 1")
-    public abstract LiveData<SensorExtended> findByIdExtended(int id);
+    public abstract LiveData<SensorExtended> findByIdExtended(int id,
+                                                              Enumerators.ElementType[] elementTypes,
+                                                              Enumerators.LogLevel[] logLevels);
 
     @Insert
     public abstract void insert(Sensor sensor);

@@ -102,7 +102,7 @@ public class HttpRequestIntentService extends IntentService {
             HttpRequestHelper.sendSensorDataHttpRequest(getApplicationContext(), network, sensor);
         } catch (Exception e) {
             RxHelper.publishLog(network.getId(), Enumerators.ElementType.NETWORK,
-                    network.getName(), Enumerators.LogLevel.ERROR_CONF,
+                    network.getName(), Enumerators.LogLevel.ERROR,
                     getString(R.string.log_critical_unexpected_http_network));
         }
     }
@@ -116,7 +116,7 @@ public class HttpRequestIntentService extends IntentService {
             HttpRequestHelper.sendActuatorCommand(getApplicationContext(), network, actuator, dataToSend);
         } catch (Exception e) {
             RxHelper.publishLog(network.getId(), Enumerators.ElementType.NETWORK,
-                    network.getName(), Enumerators.LogLevel.ERROR_CONF,
+                    network.getName(), Enumerators.LogLevel.ERROR,
                     getString(R.string.log_critical_unexpected_http_network));
         }
     }

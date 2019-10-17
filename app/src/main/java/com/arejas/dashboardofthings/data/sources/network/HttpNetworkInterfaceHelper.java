@@ -71,7 +71,7 @@ public class HttpNetworkInterfaceHelper extends NetworkInterfaceHelper{
             return true;
         } catch (Exception e) {
             RxHelper.publishLog(sensor.getId(), Enumerators.ElementType.SENSOR,
-                    sensor.getName(), Enumerators.LogLevel.ERROR_CONF,
+                    sensor.getName(), Enumerators.LogLevel.ERROR,
                     context.getString(R.string.log_critical_sensor_scheduling));
             return false;
         }
@@ -90,7 +90,7 @@ public class HttpNetworkInterfaceHelper extends NetworkInterfaceHelper{
             return true;
         } catch (Exception e) {
             RxHelper.publishLog(actuator.getId(), Enumerators.ElementType.ACTUATOR,
-                    actuator.getName(), Enumerators.LogLevel.ERROR_CONF,
+                    actuator.getName(), Enumerators.LogLevel.ERROR,
                     context.getString(R.string.log_critical_sensor_scheduling));
             return false;
         }

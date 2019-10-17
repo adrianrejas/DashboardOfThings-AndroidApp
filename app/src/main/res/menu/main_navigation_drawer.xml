@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+
+    <group android:checkableBehavior="single">
+
+        <item android:id="@+id/main_navigation_dashboard"
+            android:icon="@drawable/dashboard"
+            android:title="@string/main_navigation_dashboard" />
+
+        <item android:id="@+id/main_navigation_networks"
+            android:icon="@drawable/network"
+            android:title="@string/main_navigation_networks" />
+
+        <item android:id="@+id/main_navigation_sensors"
+            android:icon="@drawable/sensor"
+            android:title="@string/main_navigation_sensors" />
+
+        <item android:id="@+id/main_navigation_actuators"
+            android:icon="@drawable/actuator"
+            android:title="@string/main_navigation_actuators" />
+
+        <item android:id="@+id/main_navigation_map"
+            android:icon="@drawable/map"
+            android:title="@string/main_navigation_map" />
+
+    </group>
+
+</menu>

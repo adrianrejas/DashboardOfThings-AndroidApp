@@ -24,7 +24,7 @@ public class HttpSensorRequestJobService extends JobService {
             return false;
         } catch (Exception e) {
             RxHelper.publishLog(0, Enumerators.ElementType.NETWORK,
-                    null, Enumerators.LogLevel.ERROR_CONF,
+                    null, Enumerators.LogLevel.ERROR,
                     getString(R.string.log_critical_sensor_scheduling));
             return false;
         }

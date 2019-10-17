@@ -2,6 +2,21 @@
     <string name="app_name">Dashboard of Things</string>
     <string name="title_activity_map">Map</string>
 
+    <string name="main_navigation_dashboard">Main dashboard</string>
+    <string name="main_navigation_networks">Networks</string>
+    <string name="main_navigation_sensors">Sensors</string>
+    <string name="main_navigation_actuators">Acuators</string>
+    <string name="main_navigation_map">Map</string>
+
+    <string name="main_dashboard_tab_sensors">Sensors</string>
+    <string name="main_dashboard_tab_actuators">Actuators</string>
+    <string name="main_dashboard_tab_history">History</string>
+    <string name="main_dashboard_tab_status">Status</string>
+    <string name="main_dashboard_tab_logs">Logs</string>
+
+    <string name="loading">Loading ...</string>
+    <string name="no_elements_in_list">There are no elements in the list shown.</string>
+
     <string name="dashboard_of_things_channel_name">Dashboard of Things notification channel</string>
     <string name="dashboard_of_things_channel_desc">Notification channel about the state of Dashboard of Things app</string>
 
@@ -37,4 +52,7 @@
     <string name="log_critical_unexpected_mqtt_network_receiving">Unexpected error when processing received MQTT message.</string>
     <string name="log_critical_mqtt_message_body">No MQTT message body received.</string>
     <string name="log_critical_create_connection">Non possible to create connection.</string>
+
+    <string name="no_elements_content_description">There are no elements in the list shown.</string>
+    <string name="error_content_description">Error</string>
 </resources>

@@ -9,7 +9,6 @@ import androidx.room.Transaction;
 import androidx.room.Update;
 
 import com.arejas.dashboardofthings.domain.entities.database.Actuator;
-import com.arejas.dashboardofthings.domain.entities.database.Sensor;
 import com.arejas.dashboardofthings.domain.entities.extended.ActuatorExtended;
 import com.arejas.dashboardofthings.utils.Enumerators;
 
@@ -35,29 +34,38 @@ public abstract class ActuatorsDao {
 
     @Query("SELECT actuators.*, networks.name AS networkName, networks.networkType AS networkType, " +
             "(SELECT COUNT(`logs`.elementId) FROM `logs` WHERE `logs`.elementId=actuators.id " +
-            "AND `logs`.elementType=2 AND `logs`.logLevel=1 AND `logs`.dateRegistered >= date('now','-5 minute')) " +
+            "AND `logs`.elementType IN(:elementTypes) AND `logs`.logLevel IN(:logLevels) " +
+            "AND `logs`.dateRegistered >= date('now','-5 minute')) " +
             "AS recentErrorLogs " +
             "FROM actuators, networks WHERE actuators.id=:id AND actuators.networkId= networks.id LIMIT 1")
-    public abstract LiveData<ActuatorExtended> findByIdExtended(int id);
+    public abstract LiveData<ActuatorExtended> findByIdExtended(int id,
+                                                                Enumerators.ElementType[] elementTypes,
+                                                                Enumerators.LogLevel[] logLevels);
 
     @Query("SELECT actuators.*, networks.name AS networkName, networks.networkType AS networkType, " +
             "(SELECT COUNT(`logs`.elementId) FROM `logs` WHERE `logs`.elementId=actuators.id " +
-            "AND `logs`.elementType=2 AND `logs`.logLevel=1 AND `logs`.dateRegistered >= date('now','-5 minute')) " +
+            "AND `logs`.elementType IN(:elementTypes) AND `logs`.logLevel IN(:logLevels) " +
+            "AND `logs`.dateRegistered >= date('now','-5 minute')) " +
             "AS recentErrorLogs " +
             "FROM actuators, networks")
-    public abstract LiveData<List<ActuatorExtended>> getAllExtended();
+    public abstract LiveData<List<ActuatorExtended>> getAllExtended(Enumerators.ElementType[] elementTypes,
+                                                                       Enumerators.LogLevel[] logLevels);
 
     @Query("SELECT actuators.*, networks.name AS networkName, networks.networkType AS networkType, " +
             "(SELECT COUNT(`logs`.elementId) FROM `logs` WHERE `logs`.elementId=actuators.id " +
-            "AND `logs`.elementType=2 AND `logs`.logLevel=1 AND `logs`.dateRegistered >= date('now','-5 minute')) " +
+            "AND `logs`.elementType IN(:elementTypes) AND `logs`.logLevel IN(:logLevels) " +
+            "AND `logs`.dateRegistered >= date('now','-5 minute')) " +
             "AS recentErrorLogs FROM actuators, networks WHERE showInMainDashboard=1")
-    public abstract LiveData<List<ActuatorExtended>> getAllExtendedToBeShownInMainDashboard();
+    public abstract LiveData<List<ActuatorExtended>> getAllExtendedToBeShownInMainDashboard(Enumerators.ElementType[] elementTypes,
+                                                                                               Enumerators.LogLevel[] logLevels);
 
     @Query("SELECT actuators.*, networks.name AS networkName, networks.networkType AS networkType, " +
             "(SELECT COUNT(`logs`.elementId) FROM `logs` WHERE `logs`.elementId=actuators.id " +
-            "AND `logs`.elementType=2 AND `logs`.logLevel=1 AND `logs`.dateRegistered >= date('now','-5 minute')) " +
+            "AND `logs`.elementType IN(:elementTypes) AND `logs`.logLevel IN(:logLevels) " +
+            "AND `logs`.dateRegistered >= date('now','-5 minute')) " +
             "AS recentErrorLogs FROM actuators, networks WHERE locationLat IS NOT NULL AND localtionLong IS NOT NULL")
-    public abstract LiveData<List<ActuatorExtended>> getAllExtendedLocated();
+    public abstract LiveData<List<ActuatorExtended>> getAllExtendedLocated(Enumerators.ElementType[] elementTypes,
+                                                                              Enumerators.LogLevel[] logLevels);
 
     @Insert
     public abstract void insert(Actuator actuator);

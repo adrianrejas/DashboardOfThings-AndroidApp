@@ -45,7 +45,11 @@ public class DotRepository {
 
     LiveData<List<NetworkExtended>> networkList;
     LiveData<List<SensorExtended>> sensorList;
+    LiveData<List<SensorExtended>> sensorListMainDashboard;
+    LiveData<List<SensorExtended>> sensorListLocated;
     LiveData<List<ActuatorExtended>> actuatorList;
+    LiveData<List<ActuatorExtended>> actuatorListMainDashboard;
+    LiveData<List<ActuatorExtended>> actuatorListLocated;
 
     @Inject
     public DotRepository(DotDatabase dotDatabase,
@@ -101,7 +105,12 @@ public class DotRepository {
     public LiveData<List<NetworkExtended>> getListOfNetworks() {
         try {
             if (this.networkList == null) {
-                this.networkList = this.dotDatabase.networksDao().getAllExtended();
+                Enumerators.ElementType[] elementTypes = new Enumerators.ElementType[1];
+                elementTypes[0] = Enumerators.ElementType.NETWORK;
+                Enumerators.LogLevel[] logLevels = new Enumerators.LogLevel[2];
+                logLevels[0] = Enumerators.LogLevel.WARN;
+                logLevels[1] = Enumerators.LogLevel.ERROR;
+                this.networkList = this.dotDatabase.networksDao().getAllExtended(elementTypes, logLevels);
             }
             return this.networkList;
         } catch (Exception e) {
@@ -110,7 +119,12 @@ public class DotRepository {
     }
 
     public LiveData<NetworkExtended> getNetwork(@NotNull Integer networkId) {
-        return this.dotDatabase.networksDao().findExtendedById(networkId);
+        Enumerators.ElementType[] elementTypes = new Enumerators.ElementType[1];
+        elementTypes[0] = Enumerators.ElementType.NETWORK;
+        Enumerators.LogLevel[] logLevels = new Enumerators.LogLevel[2];
+        logLevels[0] = Enumerators.LogLevel.WARN;
+        logLevels[1] = Enumerators.LogLevel.ERROR;
+        return this.dotDatabase.networksDao().findExtendedById(networkId, elementTypes, logLevels);
     }
 
     public LiveData<Resource> createNetwork(@NotNull Network network) {
@@ -180,7 +194,12 @@ public class DotRepository {
     public LiveData<List<SensorExtended>> getListOfSensors() {
         try {
             if (this.sensorList == null) {
-                this.sensorList = this.dotDatabase.sensorsDao().getAllExtended();
+                Enumerators.ElementType[] elementTypes = new Enumerators.ElementType[1];
+                elementTypes[0] = Enumerators.ElementType.SENSOR;
+                Enumerators.LogLevel[] logLevels = new Enumerators.LogLevel[2];
+                logLevels[0] = Enumerators.LogLevel.WARN;
+                logLevels[1] = Enumerators.LogLevel.ERROR;
+                this.sensorList = this.dotDatabase.sensorsDao().getAllExtended(elementTypes, logLevels);
             }
             return this.sensorList;
         } catch (Exception e) {
@@ -188,9 +207,54 @@ public class DotRepository {
         }
     }
 
+    public LiveData<List<Sensor>> getListOfSensorsFromSameNetwork(int NetworkId) {
+        try {
+            return this.dotDatabase.sensorsDao().getAllFromSameNetwork(NetworkId);
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    public LiveData<List<SensorExtended>> getListOfSensorsMainDashboard() {
+        try {
+            if (this.sensorListMainDashboard == null) {
+                Enumerators.ElementType[] elementTypes = new Enumerators.ElementType[1];
+                elementTypes[0] = Enumerators.ElementType.SENSOR;
+                Enumerators.LogLevel[] logLevels = new Enumerators.LogLevel[2];
+                logLevels[0] = Enumerators.LogLevel.WARN;
+                logLevels[1] = Enumerators.LogLevel.ERROR;
+                this.sensorListMainDashboard = this.dotDatabase.sensorsDao().getAllExtendedToBeShownInMainDashboard(elementTypes, logLevels);
+            }
+            return this.sensorListMainDashboard;
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    public LiveData<List<SensorExtended>> getListOfSensorsLocated() {
+        try {
+            if (this.sensorListLocated == null) {
+                Enumerators.ElementType[] elementTypes = new Enumerators.ElementType[1];
+                elementTypes[0] = Enumerators.ElementType.SENSOR;
+                Enumerators.LogLevel[] logLevels = new Enumerators.LogLevel[2];
+                logLevels[0] = Enumerators.LogLevel.WARN;
+                logLevels[1] = Enumerators.LogLevel.ERROR;
+                this.sensorListLocated = this.dotDatabase.sensorsDao().getAllExtendedLocated(elementTypes, logLevels);
+            }
+            return this.sensorListLocated;
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
     public LiveData<SensorExtended> getSensor(@NotNull Integer sensorId) {
         try {
-            return this.dotDatabase.sensorsDao().findByIdExtended(sensorId);
+            Enumerators.ElementType[] elementTypes = new Enumerators.ElementType[1];
+            elementTypes[0] = Enumerators.ElementType.SENSOR;
+            Enumerators.LogLevel[] logLevels = new Enumerators.LogLevel[2];
+            logLevels[0] = Enumerators.LogLevel.WARN;
+            logLevels[1] = Enumerators.LogLevel.ERROR;
+            return this.dotDatabase.sensorsDao().findByIdExtended(sensorId, elementTypes, logLevels);
         } catch (Exception e) {
             return null;
         }
@@ -255,7 +319,12 @@ public class DotRepository {
     public LiveData<List<ActuatorExtended>> getListOfActuators() {
         try {
             if (this.actuatorList == null) {
-                this.actuatorList = this.dotDatabase.actuatorsDao().getAllExtended();
+                Enumerators.ElementType[] elementTypes = new Enumerators.ElementType[1];
+                elementTypes[0] = Enumerators.ElementType.ACTUATOR;
+                Enumerators.LogLevel[] logLevels = new Enumerators.LogLevel[2];
+                logLevels[0] = Enumerators.LogLevel.WARN;
+                logLevels[1] = Enumerators.LogLevel.ERROR;
+                this.actuatorList = this.dotDatabase.actuatorsDao().getAllExtended(elementTypes, logLevels);
             }
             return this.actuatorList;
         } catch (Exception e) {
@@ -263,9 +332,54 @@ public class DotRepository {
         }
     }
 
+    public LiveData<List<Actuator>> getListOfActuatorsFromSameNetwork(int NetworkId) {
+        try {
+            return this.dotDatabase.actuatorsDao().getAllFromSameNetwork(NetworkId);
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    public LiveData<List<ActuatorExtended>> getListOfActuatorsMainDashboard() {
+        try {
+            if (this.actuatorListMainDashboard == null) {
+                Enumerators.ElementType[] elementTypes = new Enumerators.ElementType[1];
+                elementTypes[0] = Enumerators.ElementType.ACTUATOR;
+                Enumerators.LogLevel[] logLevels = new Enumerators.LogLevel[2];
+                logLevels[0] = Enumerators.LogLevel.WARN;
+                logLevels[1] = Enumerators.LogLevel.ERROR;
+                this.actuatorListMainDashboard = this.dotDatabase.actuatorsDao().getAllExtendedToBeShownInMainDashboard(elementTypes, logLevels);
+            }
+            return this.actuatorListMainDashboard;
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    public LiveData<List<ActuatorExtended>> getListOfActuatorsLocated() {
+        try {
+            if (this.actuatorListLocated == null) {
+                Enumerators.ElementType[] elementTypes = new Enumerators.ElementType[1];
+                elementTypes[0] = Enumerators.ElementType.ACTUATOR;
+                Enumerators.LogLevel[] logLevels = new Enumerators.LogLevel[2];
+                logLevels[0] = Enumerators.LogLevel.WARN;
+                logLevels[1] = Enumerators.LogLevel.ERROR;
+                this.actuatorListLocated = this.dotDatabase.actuatorsDao().getAllExtendedLocated(elementTypes, logLevels);
+            }
+            return this.actuatorListLocated;
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
     public LiveData<ActuatorExtended> getActuator(@NotNull Integer actuatorId) {
         try {
-            return this.dotDatabase.actuatorsDao().findByIdExtended(actuatorId);
+            Enumerators.ElementType[] elementTypes = new Enumerators.ElementType[1];
+            elementTypes[0] = Enumerators.ElementType.ACTUATOR;
+            Enumerators.LogLevel[] logLevels = new Enumerators.LogLevel[2];
+            logLevels[0] = Enumerators.LogLevel.WARN;
+            logLevels[1] = Enumerators.LogLevel.ERROR;
+            return this.dotDatabase.actuatorsDao().findByIdExtended(actuatorId, elementTypes, logLevels);
         } catch (Exception e) {
             return null;
         }

@@ -37,13 +37,13 @@ public class NotificationsHelper {
             switch (state) {
                 case NONE:
                     RxHelper.publishLog(sensor.getId(), Enumerators.ElementType.SENSOR,
-                            sensor.getName(), Enumerators.LogLevel.CRITICAL,
+                            sensor.getName(), Enumerators.LogLevel.NOTIF_NONE,
                             context.getString(R.string.log_notification_sensor_normal));
                     cancelNotification(context, sensor.getId());
                     break;
                 case WARN:
                     RxHelper.publishLog(sensor.getId(), Enumerators.ElementType.SENSOR,
-                            sensor.getName(), Enumerators.LogLevel.WARN,
+                            sensor.getName(), Enumerators.LogLevel.NOTIF_WARN,
                             context.getString(R.string.log_notification_sensor_warning));
                     cancelNotification(context, sensor.getId());
                     showNotificationStateSensor(context, sensor.getId(), sensor.getName(),
@@ -51,7 +51,7 @@ public class NotificationsHelper {
                     break;
                 case CRITICAL:
                     RxHelper.publishLog(sensor.getId(), Enumerators.ElementType.SENSOR,
-                            sensor.getName(), Enumerators.LogLevel.CRITICAL,
+                            sensor.getName(), Enumerators.LogLevel.NOTIF_CRITICAL,
                             context.getString(R.string.log_notification_sensor_critical));
                     cancelNotification(context, sensor.getId());
                     showNotificationStateSensor(context, sensor.getId(), sensor.getName(),

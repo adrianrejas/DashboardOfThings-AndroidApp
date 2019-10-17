@@ -28,15 +28,20 @@ public abstract class NetworksDao {
 
     @Query("SELECT networks.*, " +
             "(SELECT COUNT(`logs`.elementId) FROM `logs` WHERE `logs`.elementId=networks.id " +
-            "AND `logs`.elementType=0 AND `logs`.logLevel=1 AND `logs`.dateRegistered >= date('now','-5 minute')) " +
+            "AND `logs`.elementType IN(:elementTypes) AND `logs`.logLevel IN(:logLevels) " +
+            "AND `logs`.dateRegistered >= date('now','-5 minute')) " +
             "AS recentErrorLogs FROM networks")
-    public abstract LiveData<List<NetworkExtended>> getAllExtended();
+    public abstract LiveData<List<NetworkExtended>> getAllExtended(Enumerators.ElementType[] elementTypes,
+                                                                   Enumerators.LogLevel[] logLevels);
 
     @Query("SELECT networks.*, " +
             "(SELECT COUNT(`logs`.elementId) FROM `logs` WHERE `logs`.elementId=networks.id " +
-            "AND `logs`.elementType=0 AND `logs`.logLevel=1 AND `logs`.dateRegistered >= date('now','-5 minute')) " +
+            "AND `logs`.elementType IN(:elementTypes) AND `logs`.logLevel IN(:logLevels) " +
+            "AND `logs`.dateRegistered >= date('now','-5 minute')) " +
             "AS recentErrorLogs FROM networks WHERE id=:id LIMIT 1")
-    public abstract LiveData<NetworkExtended> findExtendedById(int id);
+    public abstract LiveData<NetworkExtended> findExtendedById(int id,
+                                                               Enumerators.ElementType[] elementTypes,
+                                                               Enumerators.LogLevel[] logLevels);
 
     @Insert
     public abstract void insert(Network network);

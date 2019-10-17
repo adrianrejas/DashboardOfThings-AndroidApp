@@ -1,0 +1,32 @@
+<resources>
+    <!-- Fonts and text -->
+    <dimen name="font_size_standard">20dp</dimen>
+    <dimen name="font_size_list_text">18sp</dimen>
+    <dimen name="font_size_list_title">18sp</dimen>
+    <dimen name="font_size_list_byline">12sp</dimen>
+    <dimen name="font_size_list_title_actionbar">36sp</dimen>
+    <dimen name="font_size_list_byline_actionbar">16sp</dimen>
+    <item name="detail_body_line_spacing_multiplier" format="float" type="fraction">1.25</item>
+    <dimen name="space_between_paragraps">8sp</dimen>
+
+    <!-- list -->
+    <dimen name="list_side_margin">4dp</dimen>
+    <dimen name="list_toolbar_side_margin">0dp</dimen>
+    <integer name="list_column_count">2</integer>
+
+    <!-- detail -->
+    <dimen name="detail_inner_margin_small">8dp</dimen>
+    <dimen name="detail_inner_margin_big">16dp</dimen>
+    <dimen name="detail_metabar_bottom_padding">4dp</dimen>
+    <dimen name="detail_body_top_margin">16dp</dimen>
+    <dimen name="detail_body_bottom_margin">148dp</dimen>
+    <string name="detail_photo_aspect_ratio">H,1.5:1</string>
+    <dimen name="fab_margin">24dp</dimen>
+
+    <!-- elevations -->
+    <dimen name="toolbar_elevation">8dp</dimen>
+    <dimen name="fab_elevation">6dp</dimen>
+    <dimen name="fab_elevation_pressed">12dp</dimen>
+    <dimen name="card_elevation">0dp</dimen>
+    <dimen name="card_elevation_pressed">8dp</dimen>
+</resources>

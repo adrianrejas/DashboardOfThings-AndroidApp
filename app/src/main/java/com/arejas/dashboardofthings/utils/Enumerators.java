@@ -151,20 +151,26 @@ public class Enumerators {
 
     public enum LogLevel {
         INFO,
-        ERROR_CONF,
         WARN,
-        CRITICAL;
+        ERROR,
+        NOTIF_NONE,
+        NOTIF_WARN,
+        NOTIF_CRITICAL;
 
         public static LogLevel valueOf(int ordinal) {
             switch (ordinal) {
                 case 0:
                     return INFO;
                 case 1:
-                    return ERROR_CONF;
-                case 2:
                     return WARN;
+                case 2:
+                    return ERROR;
+                case 3:
+                    return NOTIF_NONE;
+                case 4:
+                    return NOTIF_WARN;
                 default:
-                    return CRITICAL;
+                    return NOTIF_CRITICAL;
             }
         }
 
@@ -174,11 +180,15 @@ public class Enumerators {
                 case 0:
                     return "INFO";
                 case 1:
-                    return "ERROR_CONF";
-                case 2:
                     return "WARN";
+                case 2:
+                    return "ERROR";
+                case 3:
+                    return "NOTIF_NONE";
+                case 4:
+                    return "NOTIF_WARN";
                 default:
-                    return "CRITICAL";
+                    return "NOTIF_CRITICAL";
             }
         }
     }
@@ -205,9 +215,9 @@ public class Enumerators {
                 case 0:
                     return "INFO";
                 case 1:
-                    return "WARN";
+                    return "NOTIF_WARN";
                 default:
-                    return "CRITICAL";
+                    return "NOTIF_CRITICAL";
             }
         }
     }

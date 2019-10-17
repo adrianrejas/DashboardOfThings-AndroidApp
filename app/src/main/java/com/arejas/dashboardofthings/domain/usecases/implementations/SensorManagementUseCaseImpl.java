@@ -25,6 +25,14 @@ public class SensorManagementUseCaseImpl implements SensorManagementUseCase {
         return repository.getListOfSensors();
     }
 
+    public LiveData<List<SensorExtended>> getListOfSensorsMainDashboard() {
+        return repository.getListOfSensorsMainDashboard();
+    }
+
+    public LiveData<List<SensorExtended>> getListOfSensorsLocated() {
+        return repository.getListOfSensorsLocated();
+    }
+
     @Override
     public LiveData<SensorExtended> getSensor(@NotNull Integer sensorId) {
         return repository.getSensor(sensorId);

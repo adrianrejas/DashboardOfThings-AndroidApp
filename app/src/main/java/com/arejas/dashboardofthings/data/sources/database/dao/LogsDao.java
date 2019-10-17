@@ -24,8 +24,26 @@ public abstract class LogsDao {
     @Query("SELECT * FROM `logs` WHERE elementId=:id AND elementType=:elementType LIMIT 1")
     public abstract LiveData<Log> findLastForElementId(int id, Enumerators.ElementType elementType);
 
+    @Query("SELECT * FROM `logs` WHERE elementId=:id AND elementType=:elementType " +
+            "AND logLevel IN(:logLevels) LIMIT 1")
+    public abstract LiveData<Log> findLastForElementId(int id, Enumerators.ElementType elementType,
+                                                       Enumerators.LogLevel[] logLevels);
+
     @Query("SELECT * FROM `logs` WHERE elementId=:id AND elementType=:elementType ORDER BY dateRegistered DESC LIMIT 100")
     public abstract LiveData<List<Log>> getLastHundredLogsForElementId(int id, Enumerators.ElementType elementType);
+
+    @Query("SELECT * FROM `logs` WHERE dateRegistered IN (SELECT MAX(dateRegistered) FROM `logs` GROUP BY ElementId, elementType)")
+    public abstract LiveData<List<Log>> getLastLogForEachElement();
+
+    @Query("SELECT * FROM `logs` WHERE dateRegistered IN (SELECT MAX(dateRegistered) FROM `logs` WHERE elementType IN(:elementType) " +
+            "GROUP BY ElementId, elementType)")
+    public abstract LiveData<List<Log>> getLastLogForEachElement(Enumerators.ElementType elementType);
+
+    @Query("SELECT * FROM `logs` WHERE dateRegistered IN (SELECT MAX(dateRegistered) FROM `logs` " +
+            "WHERE elementType IN(:elementType) AND logLevel IN(:logLevels)" +
+            "GROUP BY ElementId, elementType)")
+    public abstract LiveData<List<Log>> getLastLogForEachElement(Enumerators.ElementType elementType,
+                                                                 Enumerators.LogLevel[] logLevels);
 
     @Insert
     protected abstract void insertInner(Log log);
