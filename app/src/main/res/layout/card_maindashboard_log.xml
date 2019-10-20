@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools" >
+
+    <data>
+        <variable
+            name="log"
+            type="com.arejas.dashboardofthings.domain.entities.database.Log" />
+    </data>
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cv_status_card"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_margin="@dimen/list_side_outer_margin"
+        app:logLevel="@{log.logLevel}"
+        app:cardCornerRadius="@dimen/card_corner_radius">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@android:color/white">
+
+            <TextView
+                android:id="@+id/tv_status_title_card"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/detail_inner_margin_big"
+                android:layout_marginStart="@dimen/detail_inner_margin_small"
+                android:layout_marginEnd="@dimen/detail_inner_margin_small"
+                android:contentDescription="@string/content_description_sensor_title"
+                android:text="@{log.elementName}"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/tv_status_date_card"
+                app:layout_constraintTop_toTopOf="parent"
+                style="@style/Theme.Dot.TextTitle"
+                tools:text="Termometer"/>
+
+            <TextView
+                android:id="@+id/tv_status_date_card"
+                style="@style/Theme.Dot.TextData"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:layout_marginStart="@dimen/detail_inner_margin_small"
+                android:layout_marginTop="@dimen/detail_inner_margin_big"
+                android:layout_marginEnd="@dimen/detail_inner_margin_small"
+                android:contentDescription="@string/content_description_sensor_title"
+                app:date="@{log.dateRegistered}"
+                app:dateFormatAnotherday="@{@string/date_format_anotherday}"
+                app:dateFormatToday="@{@string/date_format_today}"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/tv_status_title_card"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="10:45" />
+
+            <TextView
+                android:id="@+id/tv_status_message_card"
+                style="@style/Theme.Dot.TextData"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/detail_inner_margin_small"
+                android:layout_marginTop="@dimen/detail_inner_margin_big"
+                android:layout_marginEnd="@dimen/detail_inner_margin_small"
+                android:layout_marginBottom="@dimen/detail_inner_margin_big"
+                android:contentDescription="@string/content_description_sensor_title"
+                android:text="@{log.logMessage}"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tv_status_title_card"
+                app:layout_constraintBottom_toBottomOf="parent"
+                tools:text="This is a test message" />
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.cardview.widget.CardView>
+
+</layout>

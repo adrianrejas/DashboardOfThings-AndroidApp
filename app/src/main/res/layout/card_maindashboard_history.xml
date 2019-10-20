@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools" >
+
+    <data>
+        <variable
+            name="sensor"
+            type="com.arejas.dashboardofthings.domain.entities.database.Sensor" />
+        <variable
+            name="presenter"
+            type="com.arejas.dashboardofthings.presentation.ui.fragments.MainHistoryFragment.HistorySpinnerChangeListener" />
+        <variable
+            name="data"
+            type="java.util.List&lt;com.arejas.dashboardofthings.domain.entities.database.DataValue>" />
+        <variable
+            name="spinnerSelected"
+            type="Integer" />
+    </data>
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cv_sensor_card"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_margin="@dimen/list_element_magin"
+        android:background="@drawable/card_border_background"
+        app:cardCornerRadius="@dimen/card_corner_radius"
+        tools:layout_width="300dp">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/history_data_layout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@android:color/white">
+
+            <TextView
+                android:id="@+id/tv_history_title_card"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/detail_inner_margin_big"
+                android:layout_marginStart="@dimen/detail_inner_margin_small"
+                android:layout_marginEnd="@dimen/detail_inner_margin_small"
+                android:contentDescription="@string/content_description_sensor_title"
+                app:elementName="@{sensor.name}"
+                app:elementType="@{sensor.type}"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toTopOf="@id/lc_history_chart_card"
+                style="@style/Theme.Dot.TextTitle"
+                tools:text="Termometer - Temperature"/>
+
+            <com.github.mikephil.charting.charts.LineChart
+                android:id="@+id/lc_history_chart_card"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/card_chart_size"
+                android:layout_marginTop="@dimen/detail_inner_margin_small"
+                android:layout_marginStart="@dimen/detail_inner_margin_small"
+                android:layout_marginEnd="@dimen/detail_inner_margin_small"
+                app:sensorInfo="@{sensor}"
+                app:data="@{data}"
+                app:spinnerHistorySelected="@{spinnerSelected}"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tv_history_title_card"
+                app:layout_constraintBottom_toTopOf="@id/lc_history_spinner_card"  />
+
+            <androidx.appcompat.widget.AppCompatSpinner
+                android:id="@+id/lc_history_spinner_card"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/detail_inner_margin_small"
+                android:layout_marginTop="@dimen/detail_inner_margin_small"
+                android:layout_marginEnd="@dimen/detail_inner_margin_small"
+                android:layout_marginBottom="@dimen/detail_inner_margin_big"
+                android:gravity="start"
+                android:paddingStart="@dimen/detail_item_padding"
+                android:paddingEnd="@dimen/detail_item_padding"
+                style="@style/Theme.Dot.TextData"
+                android:entries="@array/history_options_aray"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/lc_history_chart_card"
+                android:onItemSelected="@{(parent,view,pos,id) -> presenter.onSpinnerItemSelected(pos)}" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <include
+            android:id="@+id/history_loading_layout"
+            layout="@layout/layout_loading"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="@dimen/list_side_outer_margin"
+            android:orientation="vertical"/>
+
+        <include
+            android:id="@+id/history_error_layout"
+            layout="@layout/layout_error"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="@dimen/list_side_outer_margin"
+            android:orientation="vertical"/>
+
+    </androidx.cardview.widget.CardView>
+
+</layout>

@@ -24,7 +24,7 @@ public abstract class LogsDao {
     @Query("SELECT * FROM `logs` WHERE logLevel IN(:logLevels) ORDER BY dateRegistered DESC LIMIT 100")
     public abstract LiveData<List<Log>> getAllLastHundredLogs(Enumerators.LogLevel[] logLevels);
 
-    @Query("SELECT * FROM `logs` WHERE elementId=:id AND elementType=:elementType LIMIT 1")
+    @Query("SELECT * FROM `logs` WHERE elementId=:id AND elementType=:elementType ORDER BY dateRegistered DESC LIMIT 1")
     public abstract LiveData<Log> findLastForElementId(int id, Enumerators.ElementType elementType);
 
     @Query("SELECT * FROM `logs` WHERE elementId=:id AND elementType=:elementType " +
@@ -35,22 +35,27 @@ public abstract class LogsDao {
     @Query("SELECT * FROM `logs` WHERE elementId=:id AND elementType=:elementType ORDER BY dateRegistered DESC LIMIT 100")
     public abstract LiveData<List<Log>> getLastHundredLogsForElementId(int id, Enumerators.ElementType elementType);
 
-    @Query("SELECT * FROM `logs` WHERE dateRegistered IN (SELECT MAX(dateRegistered) FROM `logs` GROUP BY ElementId, elementType)")
+    @Query("SELECT * FROM `logs` WHERE dateRegistered IN (SELECT MAX(dateRegistered) FROM `logs` GROUP BY ElementId, elementType) ORDER BY dateRegistered DESC")
     public abstract LiveData<List<Log>> getLastLogForEachElement();
 
     @Query("SELECT * FROM `logs` WHERE dateRegistered IN (SELECT MAX(dateRegistered) FROM `logs` WHERE elementType IN(:elementTypes) " +
-            "GROUP BY ElementId, elementType)")
+            "GROUP BY ElementId, elementType) ORDER BY dateRegistered DESC")
     public abstract LiveData<List<Log>> getLastLogForEachElement(Enumerators.ElementType[] elementTypes);
 
     @Query("SELECT * FROM `logs` WHERE dateRegistered IN (SELECT MAX(dateRegistered) FROM `logs` " +
-            "WHERE logLevel IN(:logLevels) GROUP BY ElementId, elementType)")
+            "WHERE logLevel IN(:logLevels) GROUP BY ElementId, elementType) ORDER BY dateRegistered DESC")
     public abstract LiveData<List<Log>> getLastLogForEachElement(Enumerators.LogLevel[] logLevels);
 
     @Query("SELECT * FROM `logs` WHERE dateRegistered IN (SELECT MAX(dateRegistered) FROM `logs` " +
             "WHERE elementType IN(:elementTypes) AND logLevel IN(:logLevels) " +
-            "GROUP BY ElementId, elementType)")
+            "GROUP BY ElementId, elementType) ORDER BY dateRegistered DESC")
     public abstract LiveData<List<Log>> getLastLogForEachElement(Enumerators.ElementType[] elementTypes,
                                                                  Enumerators.LogLevel[] logLevels);
+
+    @Query("SELECT * FROM `logs` INNER JOIN sensors ON (sensors.id=logs.elementId AND sensors.showInMainDashboard)" +
+            "WHERE dateRegistered IN (SELECT MAX(dateRegistered) FROM `logs` " +
+            "WHERE elementType=1 AND logLevel IN(:logLevels) GROUP BY ElementId) ORDER BY dateRegistered DESC")
+    public abstract LiveData<List<Log>> getLastLogForSensorElementsInMainDashboard(Enumerators.LogLevel[] logLevels);
 
     @Insert
     protected abstract void insertInner(Log log);

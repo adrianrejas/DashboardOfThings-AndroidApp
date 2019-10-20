@@ -21,6 +21,13 @@ public abstract class DataValuesDao {
             "MAX(`values`.dateReceived) AS dateReceived FROM `values` GROUP BY `values`.sensorId")
     public abstract LiveData<List<DataValue>> getLastValuesForAll();
 
+    @Query("SELECT `values`.id, `values`.sensorId, `values`.value, " +
+            "MAX(`values`.dateReceived) AS dateReceived FROM `values` " +
+            "INNER JOIN sensors ON sensors.id=`values`.sensorId " +
+            "WHERE sensors.showInMainDashboard " +
+            "GROUP BY `values`.sensorId")
+    public abstract LiveData<List<DataValue>> getLastValuesForAllInMainDashboard();
+
     @Query("SELECT * FROM `values` WHERE sensorId=:id ORDER BY dateReceived DESC LIMIT 1")
     public abstract LiveData<DataValue> findLastForSensorId(int id);
 

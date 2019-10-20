@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.arejas.dashboardofthings">
-
     <!--
          The ACCESS_COARSE/FINE_LOCATION permissions are not required to use
          Google Maps Android API v2, but you must specify either coarse or fine
@@ -13,20 +12,23 @@
     <uses-permission android:name="android.permission.WAKE_LOCK" />
 
     <application
+        android:name=".DotApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
-        android:label="@string/app_name"
+        android:label="@string/title_activity_maindash"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Dot">
+
         <receiver
             android:name=".domain.services.BootDeviceReceiver"
             android:enabled="true"
             android:exported="true">
             <intent-filter>
-                <action android:name="android.intent.action.BOOT_COMPLETED"/>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
         </receiver>
+
         <service
             android:name="org.eclipse.paho.android.service.MqttService"
             android:enabled="true"
@@ -39,6 +41,34 @@
             android:name=".data.sources.network.http.HttpSensorRequestJobService"
             android:enabled="true"
             android:exported="true" />
+
+        <activity
+            android:name=".presentation.ui.activities.MainDashboardActivity"
+            android:launchMode="singleTop">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <activity
+            android:name=".presentation.ui.activities.MapActivity"
+            android:launchMode="singleTop"
+            android:label="@string/title_activity_map" />
+        <activity
+            android:name=".presentation.ui.activities.SettingsActivity"
+            android:launchMode="singleTop"
+            android:label="@string/title_activity_settings"/>
+        <activity
+            android:name=".presentation.ui.activities.NetworksListActivity"
+            android:launchMode="singleTop" />
+        <activity
+            android:name=".presentation.ui.activities.ActuatorsListActivity"
+            android:launchMode="singleTop" />
+        <activity
+            android:name=".presentation.ui.activities.SensorsListActivity"
+            android:launchMode="singleTop" />
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
              (See the file "res/values/google_maps_api.xml").
@@ -51,16 +81,10 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
 
-        <activity
-            android:name=".presentation.ui.activities.MapActivity"
-            android:label="@string/title_activity_map" />
-        <activity android:name=".presentation.ui.activities.MainDashboardActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
+        <!-- Sample AdMob App ID: ca-app-pub-3940256099942544~3347511713 -->
+        <meta-data
+            android:name="com.google.android.gms.ads.APPLICATION_ID"
+            android:value="ca-app-pub-3940256099942544~3347511713"/>
     </application>
 
 </manifest>

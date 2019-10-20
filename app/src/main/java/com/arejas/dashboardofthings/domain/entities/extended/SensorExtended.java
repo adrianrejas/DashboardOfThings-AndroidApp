@@ -13,10 +13,6 @@ public class SensorExtended extends Sensor {
 
     private Enumerators.NetworkType networkType;
 
-    private String lastValue;
-
-    private Date dateReceivedLastValue;
-
     private Integer recentErrorLogs;
 
     public SensorExtended() {}
@@ -25,8 +21,6 @@ public class SensorExtended extends Sensor {
         super(in);
         networkName = in.readString();
         networkType = Enumerators.NetworkType.valueOf(in.readInt());
-        lastValue = in.readString();
-        dateReceivedLastValue = new Date(in.readLong());
         if (in.readByte() == 0) {
             recentErrorLogs = null;
         } else {
@@ -50,22 +44,6 @@ public class SensorExtended extends Sensor {
         this.networkType = networkType;
     }
 
-    public String getLastValue() {
-        return lastValue;
-    }
-
-    public void setLastValue(String lastValue) {
-        this.lastValue = lastValue;
-    }
-
-    public Date getDateReceivedLastValue() {
-        return dateReceivedLastValue;
-    }
-
-    public void setDateReceivedLastValue(Date dateReceivedLastValue) {
-        this.dateReceivedLastValue = dateReceivedLastValue;
-    }
-
     public Integer getRecentErrorLogs() {
         return recentErrorLogs;
     }
@@ -79,8 +57,6 @@ public class SensorExtended extends Sensor {
         super.writeToParcel(parcel, i);
         parcel.writeString(networkName);
         parcel.writeInt(networkType.ordinal());
-        parcel.writeString(lastValue);
-        parcel.writeLong(dateReceivedLastValue.getTime());
         if (recentErrorLogs == null) {
             parcel.writeByte((byte) 0);
         } else {

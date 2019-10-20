@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools" >
+
+    <data>
+        <import type="android.view.View"/>
+        <variable
+            name="sensor"
+            type="com.arejas.dashboardofthings.domain.entities.extended.SensorExtended" />
+        <variable
+            name="lastValue"
+            type="String" />
+        <variable
+            name="presenter"
+            type="com.arejas.dashboardofthings.presentation.ui.fragments.MainSensorsFragment.SensorMainDashboardListener" />
+    </data>
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cv_sensor_card"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_margin="@dimen/list_element_magin"
+        android:background="@drawable/card_border_background"
+        app:cardCornerRadius="@dimen/card_corner_radius"
+        tools:layout_width="300dp">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@android:color/white">
+
+            <ImageView
+                android:id="@+id/iv_sensor_card"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:adjustViewBounds="true"
+                android:contentDescription="@string/content_description_sensor_image"
+                android:scaleType="centerCrop"
+                app:imageUrl="@{sensor.imageUri}"
+                app:errorResource="@{@drawable/error}"
+                app:loadingResource="@{@drawable/loading}"
+                android:background="@color/secondaryTextColor"
+                app:layout_constraintDimensionRatio="@string/card_image_proportion"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:src="@drawable/error" />
+
+            <TextView
+                android:id="@+id/tv_sensor_problems_card"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/detail_inner_margin_big"
+                android:layout_marginStart="@dimen/detail_inner_margin_small"
+                android:layout_marginEnd="@dimen/detail_inner_margin_small"
+                android:contentDescription="@string/content_description_sensor_title"
+                app:elementName="@{sensor.name}"
+                app:elementType="@{sensor.type}"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/iv_sensor_card"
+                style="@style/Theme.Dot.TextTitleAlert"
+                android:visibility="@{ ((sensor.recentErrorLogs != null) &amp;&amp; (sensor.recentErrorLogs > 0)) ? View.VISIBLE : View.GONE }"
+                android:text="@{@plurals/error_log_number(sensor.recentErrorLogs)}"
+                tools:text="There are problems"/>
+
+            <TextView
+                android:id="@+id/tv_sensor_title_card"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/detail_inner_margin_big"
+                android:layout_marginStart="@dimen/detail_inner_margin_small"
+                android:layout_marginEnd="@dimen/detail_inner_margin_small"
+                android:contentDescription="@string/content_description_sensor_title"
+                app:elementName="@{sensor.name}"
+                app:elementType="@{sensor.type}"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tv_sensor_problems_card"
+                style="@style/Theme.Dot.TextTitle"
+                tools:text="Termometer - Temperature"/>
+
+            <TextView
+                android:id="@+id/tv_sensor_value_card"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/detail_inner_margin_small"
+                android:layout_marginStart="@dimen/detail_inner_margin_small"
+                android:layout_marginEnd="@dimen/detail_inner_margin_small"
+                android:contentDescription="@string/content_description_sensor_title"
+                app:sensorValue="@{lastValue}"
+                app:sensorDataType="@{sensor.dataType}"
+                app:sensorUnit="@{sensor.dataUnit}"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tv_sensor_title_card"
+                style="@style/Theme.Dot.TextData"
+                tools:text="38 ºC"/>
+
+            <TextView
+                android:id="@+id/tv_sensor_state_card"
+                style="@style/Theme.Dot.TextData"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/detail_inner_margin_small"
+                android:layout_marginTop="@dimen/detail_inner_margin_small"
+                android:layout_marginEnd="@dimen/detail_inner_margin_small"
+                android:layout_marginBottom="@dimen/detail_inner_margin_big"
+                android:contentDescription="@string/content_description_sensor_title"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/ib_sensor_refresh_card"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tv_sensor_value_card"
+                tools:text="NORMAL" />
+
+            <ImageButton
+                android:id="@+id/ib_sensor_refresh_card"
+                android:layout_width="@dimen/card_icon_size"
+                android:layout_height="@dimen/card_icon_size"
+                android:background="@android:color/transparent"
+                android:onClick="@{(v) -> presenter.requestReload()}"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/tv_sensor_state_card"
+                app:layout_constraintTop_toBottomOf="@id/tv_sensor_value_card"
+                app:srcCompat="@drawable/refresh" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.cardview.widget.CardView>
+
+</layout>

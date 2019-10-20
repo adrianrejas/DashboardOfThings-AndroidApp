@@ -26,4 +26,12 @@
     <color name="secondaryDarkColor">#0088c1</color>
     <color name="primaryTextColor">#000000</color>
     <color name="secondaryTextColor">#ffffff</color>
+    <color name="logErrorColorText">#f45320</color>
+
+    <color name="logInfoColor">#40ffffff</color>
+    <color name="logWarnColor">#40ffe010</color>
+    <color name="logErrorColor">#40f45320</color>
+    <color name="logNotificationNoneColor">#40ffffff</color>
+    <color name="logNotificationWarningColor">#40fffe10</color>
+    <color name="logNotificationCriticalColor">#40f42320</color>
 </resources>

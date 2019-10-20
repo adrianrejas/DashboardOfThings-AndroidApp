@@ -1,27 +1,147 @@
 package com.arejas.dashboardofthings.presentation.ui.activities;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.view.GravityCompat;
+import androidx.databinding.DataBindingUtil;
+import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
+import androidx.lifecycle.ViewModelProviders;
 
 import com.arejas.dashboardofthings.R;
+import com.arejas.dashboardofthings.databinding.ActivityMaindashboardBinding;
+import com.arejas.dashboardofthings.presentation.interfaces.viewmodels.MainDashboardViewModel;
+import com.arejas.dashboardofthings.presentation.interfaces.viewmodels.factories.ViewModelFactory;
 import com.arejas.dashboardofthings.presentation.ui.fragments.MainActuatorsFragment;
 import com.arejas.dashboardofthings.presentation.ui.fragments.MainHistoryFragment;
 import com.arejas.dashboardofthings.presentation.ui.fragments.MainLogsFragment;
 import com.arejas.dashboardofthings.presentation.ui.fragments.MainSensorsFragment;
 import com.arejas.dashboardofthings.presentation.ui.fragments.MainStatusFragment;
+import com.google.android.material.navigation.NavigationView;
+
+import javax.inject.Inject;
+
+import dagger.android.AndroidInjection;
 
 public class MainDashboardActivity extends AppCompatActivity {
+
+    private MainDashboardViewModel mainDashboardViewModel;
+
+    @Inject
+    ViewModelFactory viewModelFactory;
+
+    private Menu menu;
+
+    private NavigationView navView;
+    private DrawerLayout drawerLayout;
+
+    ActivityMaindashboardBinding uiBinding;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_maindashboard);
+
+        /* Inflate main layout and get UI element references */
+        uiBinding = DataBindingUtil.setContentView(this, R.layout.activity_maindashboard);
+
+        /* Inject dependencies*/
+        AndroidInjection.inject(this);
+
+        setSupportActionBar(uiBinding.toolbar);
+        getSupportActionBar().setHomeAsUpIndicator(R.drawable.navigation);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        /* Get view model*/
+        mainDashboardViewModel = ViewModelProviders.of(this, this.viewModelFactory).get(MainDashboardViewModel.class);
+
+        drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        navView = (NavigationView)findViewById(R.id.navigation_view);
+        navView.setNavigationItemSelectedListener(
+                new NavigationView.OnNavigationItemSelectedListener() {
+                    @Override
+                    public boolean onNavigationItemSelected(MenuItem menuItem) {
+
+                        boolean fragmentTransaction = false;
+                        Fragment fragment = null;
+
+                        Intent intent = null;
+                        switch (menuItem.getItemId()) {
+                            case R.id.main_navigation_dashboard:
+                                break;
+                            case R.id.main_navigation_sensors:
+                                intent = new Intent(getApplicationContext(),
+                                        SensorsListActivity.class);
+                                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                                startActivity(intent);
+                                finish();
+                                break;
+                            case R.id.main_navigation_actuators:
+                                intent = new Intent(getApplicationContext(),
+                                        ActuatorsListActivity.class);
+                                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                                startActivity(intent);
+                                finish();
+                                break;
+                            case R.id.main_navigation_networks:
+                                intent = new Intent(getApplicationContext(),
+                                        NetworksListActivity.class);
+                                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                                startActivity(intent);
+                                finish();
+                                break;
+                            case R.id.main_navigation_map:
+                                intent = new Intent(getApplicationContext(),
+                                        MapActivity.class);
+                                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                                startActivity(intent);
+                                finish();
+                                break;
+                        }
+                        drawerLayout.closeDrawers();
+                        return true;
+                    }
+                });
+
+        // Init the view pager with a fragment adapter for showing the fragments with different info
+        // of the movie in a tab system
+        MainDashboardFragmentAdapter fragmentAdapter = new MainDashboardFragmentAdapter(getSupportFragmentManager(), this);
+        uiBinding.vpTabViewerMaindashboard.setAdapter(fragmentAdapter);
+        uiBinding.tlTabsMaindashboard.setupWithViewPager(uiBinding.vpTabViewerMaindashboard);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_maindashboard, menu);
+        this.menu = menu;
+        return true;
+    }
+
+    /**
+     * Function called when a menu item is selected.
+     *
+     * @param item
+     * @return
+     */
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                drawerLayout.openDrawer(GravityCompat.START);
+                return true;
+            case R.id.menu_options:
+                startActivity(new Intent(getApplicationContext(),
+                        SettingsActivity.class));
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     /**
@@ -35,7 +155,7 @@ public class MainDashboardActivity extends AppCompatActivity {
         private final Context mContext;
 
         MainDashboardFragmentAdapter(FragmentManager fragmentManager, Context context) {
-            super(fragmentManager);
+            super(fragmentManager, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT);
             this.mContext = context;
         }
 
@@ -78,7 +198,7 @@ public class MainDashboardActivity extends AppCompatActivity {
                     case 3: // Reviews
                         return mContext.getString(R.string.main_dashboard_tab_status);
                     case 4: // Videos
-                        return mContext.getString(R.string.main_dashboard_tab_history);
+                        return mContext.getString(R.string.main_dashboard_tab_logs);
                     default:
                         return null;
                 }

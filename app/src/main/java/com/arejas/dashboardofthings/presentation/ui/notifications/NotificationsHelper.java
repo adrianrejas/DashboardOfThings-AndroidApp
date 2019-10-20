@@ -41,7 +41,7 @@ public class NotificationsHelper {
                             context.getString(R.string.log_notification_sensor_normal));
                     cancelNotification(context, sensor.getId());
                     break;
-                case WARN:
+                case WARNING:
                     RxHelper.publishLog(sensor.getId(), Enumerators.ElementType.SENSOR,
                             sensor.getName(), Enumerators.LogLevel.NOTIF_WARN,
                             context.getString(R.string.log_notification_sensor_warning));

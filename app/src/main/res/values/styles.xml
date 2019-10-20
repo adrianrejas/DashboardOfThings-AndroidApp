@@ -41,15 +41,26 @@
     <style name="Theme.Dot.TextTitle" parent="Theme.Dot">
         <item name="android:textSize">@dimen/font_size_list_title</item>
         <item name="android:textStyle">bold</item>
-        <item name="android:textColor">@color/secondaryTextColor</item>
+        <item name="android:textColor">@color/primaryTextColor</item>
         <item name="android:alpha">0.87</item>
+    </style>
+
+    <style name="Theme.Dot.TextTitleAlert" parent="Theme.Dot.TextTitle">
+        <item name="android:textColor">@color/logErrorColorText</item>
     </style>
 
     <style name="Theme.Dot.TextByline" parent="Theme.Dot">
         <item name="android:fontFamily">sans-serif-light</item>
         <item name="android:textSize">@dimen/font_size_list_byline</item>
-        <item name="android:textColor">@color/secondaryTextColor</item>
+        <item name="android:textColor">@color/primaryTextColor</item>
         <item name="android:alpha">0.60</item>
+    </style>
+
+    <style name="Theme.Dot.NavDrawer" parent="Theme.Dot">
+        <item name="android:background">@color/primaryColor</item>
+        <item name="android:textColor">@color/secondaryTextColor</item>
+        <item name="android:actionMenuTextColor">@color/secondaryTextColor</item>
+        <item name="colorControlNormal">@color/secondaryTextColor</item>
     </style>
 
     <style name="Theme.Dot.ActionBar" parent="Theme.Dot">

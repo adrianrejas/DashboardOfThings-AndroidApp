@@ -47,6 +47,10 @@ public class Actuator implements Parcelable {
 
     private Enumerators.DataType dataType;
 
+    private Float dataNumberMinimum;
+
+    private Float dataNumberMaximum;
+
     private String dataFormatMessageToSend;
 
     private String mimeType;
@@ -85,6 +89,16 @@ public class Actuator implements Parcelable {
         }
         mqttTopicToPublish = in.readString();
         dataType = Enumerators.DataType.valueOf(in.readInt());
+        if (in.readByte() == 0) {
+            dataNumberMinimum = null;
+        } else {
+            dataNumberMinimum = in.readFloat();
+        }
+        if (in.readByte() == 0) {
+            dataNumberMaximum = null;
+        } else {
+            dataNumberMaximum = in.readFloat();
+        }
         dataFormatMessageToSend = in.readString();
         mimeType = in.readString();
         dataUnit = in.readString();
@@ -201,6 +215,22 @@ public class Actuator implements Parcelable {
         this.dataType = eDataType;
     }
 
+    public Float getDataNumberMinimum() {
+        return dataNumberMinimum;
+    }
+
+    public void setDataNumberMinimum(Float dataNumberMinimum) {
+        this.dataNumberMinimum = dataNumberMinimum;
+    }
+
+    public Float getDataNumberMaximum() {
+        return dataNumberMaximum;
+    }
+
+    public void setDataNumberMaximum(Float dataNumberMaximum) {
+        this.dataNumberMaximum = dataNumberMaximum;
+    }
+
     public String getDataFormatMessageToSend() {
         return dataFormatMessageToSend;
     }
@@ -280,6 +310,19 @@ public class Actuator implements Parcelable {
         }
         parcel.writeString(mqttTopicToPublish);
         parcel.writeInt(mqttQosLevel.ordinal());
+        parcel.writeInt(dataType.ordinal());
+        if (dataNumberMinimum == null) {
+            parcel.writeByte((byte) 0);
+        } else {
+            parcel.writeByte((byte) 1);
+            parcel.writeFloat(dataNumberMinimum);
+        }
+        if (dataNumberMaximum == null) {
+            parcel.writeByte((byte) 0);
+        } else {
+            parcel.writeByte((byte) 1);
+            parcel.writeFloat(dataNumberMaximum);
+        }
         parcel.writeString(dataFormatMessageToSend);
         parcel.writeString(mimeType);
         parcel.writeString(dataUnit);

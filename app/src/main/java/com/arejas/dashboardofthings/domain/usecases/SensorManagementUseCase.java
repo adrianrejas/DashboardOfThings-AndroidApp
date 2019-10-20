@@ -12,13 +12,13 @@ import java.util.List;
 
 public interface SensorManagementUseCase extends BaseUseCase {
     
-    public LiveData<List<SensorExtended>> getListOfSensors();
+    public LiveData<Resource<List<SensorExtended>>> getListOfSensors();
 
-    public LiveData<List<SensorExtended>> getListOfSensorsMainDashboard();
+    public LiveData<Resource<List<SensorExtended>>> getListOfSensorsMainDashboard();
 
-    public LiveData<List<SensorExtended>> getListOfSensorsLocated();
+    public LiveData<Resource<List<SensorExtended>>> getListOfSensorsLocated();
 
-    public LiveData<SensorExtended> getSensor(@NotNull Integer sensorId);
+    public LiveData<Resource<SensorExtended>> getSensor(@NotNull Integer sensorId);
 
     public LiveData<Resource> createSensor(@NotNull Sensor sensor);
 

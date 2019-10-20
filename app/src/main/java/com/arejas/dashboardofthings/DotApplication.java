@@ -3,6 +3,8 @@ package com.arejas.dashboardofthings;
 import android.app.Activity;
 import android.app.Application;
 import android.app.Service;
+import android.content.Context;
+import android.view.View;
 
 import androidx.appcompat.app.AppCompatDelegate;
 
@@ -28,6 +30,10 @@ public class DotApplication extends Application implements HasActivityInjector, 
 
     @Inject
     public DispatchingAndroidInjector<Service> dispatchingServiceInjector;
+
+    public static Context getContext() {
+        return application.getApplicationContext();
+    }
 
     @Override
     public void onCreate() {

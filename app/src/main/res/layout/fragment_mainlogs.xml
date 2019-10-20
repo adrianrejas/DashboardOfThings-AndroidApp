@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools" >
+
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/srl_refresh_layout">
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <include
+                android:id="@+id/logs_main_list_loading_layout"
+                layout="@layout/layout_loading"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="@dimen/list_side_outer_margin"
+                android:orientation="vertical"/>
+
+            <include
+                android:id="@+id/logs_main_list_error_layout"
+                layout="@layout/layout_error"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="@dimen/list_side_outer_margin"
+                android:orientation="vertical"/>
+
+            <include
+                android:id="@+id/logs_main_list_no_elements_layout"
+                layout="@layout/layout_no_elements"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="@dimen/list_side_outer_margin"
+                android:orientation="vertical"/>
+
+            <include
+                android:id="@+id/logs_main_list_list_layout"
+                layout="@layout/layout_list"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="@dimen/list_side_outer_margin"
+                android:orientation="vertical"/>
+
+        </FrameLayout>
+
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+</layout>

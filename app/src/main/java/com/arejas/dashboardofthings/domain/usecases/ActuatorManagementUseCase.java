@@ -13,13 +13,13 @@ import java.util.List;
 
 public interface ActuatorManagementUseCase extends BaseUseCase {
 
-    public LiveData<List<ActuatorExtended>> getListOfActuators();
+    public LiveData<Resource<List<ActuatorExtended>>> getListOfActuators();
 
-    public LiveData<List<ActuatorExtended>> getListOfActuatorsMainDashboard();
+    public LiveData<Resource<List<ActuatorExtended>>> getListOfActuatorsMainDashboard();
 
-    public LiveData<List<ActuatorExtended>> getListOfActuatorsLocated();
+    public LiveData<Resource<List<ActuatorExtended>>> getListOfActuatorsLocated();
 
-    public LiveData<ActuatorExtended> getActuator(@NotNull Integer actuatorId);
+    public LiveData<Resource<ActuatorExtended>> getActuator(@NotNull Integer actuatorId);
 
     public LiveData<Resource> createActuator(@NotNull Actuator actuator);
 

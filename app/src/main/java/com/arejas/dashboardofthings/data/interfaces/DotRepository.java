@@ -6,10 +6,8 @@ import android.util.Pair;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
+import com.arejas.dashboardofthings.data.helpers.DataHelper;
 import com.arejas.dashboardofthings.data.sources.database.DotDatabase;
-import com.arejas.dashboardofthings.data.sources.network.HttpNetworkInterfaceHelper;
-import com.arejas.dashboardofthings.data.sources.network.MqttNetworkInterfaceHelper;
-import com.arejas.dashboardofthings.data.sources.network.NetworkInterfaceHelper;
 import com.arejas.dashboardofthings.domain.entities.database.Actuator;
 import com.arejas.dashboardofthings.domain.entities.database.DataValue;
 import com.arejas.dashboardofthings.domain.entities.database.Log;
@@ -18,6 +16,7 @@ import com.arejas.dashboardofthings.domain.entities.database.Sensor;
 import com.arejas.dashboardofthings.domain.entities.extended.ActuatorExtended;
 import com.arejas.dashboardofthings.domain.entities.extended.NetworkExtended;
 import com.arejas.dashboardofthings.domain.entities.extended.SensorExtended;
+import com.arejas.dashboardofthings.domain.entities.result.LiveDataResource;
 import com.arejas.dashboardofthings.domain.entities.result.Resource;
 import com.arejas.dashboardofthings.presentation.ui.notifications.NotificationsHelper;
 import com.arejas.dashboardofthings.utils.Enumerators;
@@ -25,10 +24,7 @@ import com.arejas.dashboardofthings.utils.rx.RxHelper;
 
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.concurrent.Executor;
 
 import javax.inject.Inject;
@@ -43,13 +39,14 @@ public class DotRepository {
     Executor dbExecutorManagement;
     Executor dbExecutorDataInsert;
 
-    LiveData<List<NetworkExtended>> networkList;
-    LiveData<List<SensorExtended>> sensorList;
-    LiveData<List<SensorExtended>> sensorListMainDashboard;
-    LiveData<List<SensorExtended>> sensorListLocated;
-    LiveData<List<ActuatorExtended>> actuatorList;
-    LiveData<List<ActuatorExtended>> actuatorListMainDashboard;
-    LiveData<List<ActuatorExtended>> actuatorListLocated;
+    LiveData<Resource<List<NetworkExtended>>> networkList;
+    LiveData<Resource<List<SensorExtended>>> sensorList;
+    LiveData<Resource<List<SensorExtended>>> sensorListMainDashboard;
+    LiveData<Resource<List<SensorExtended>>> sensorListLocated;
+    LiveData<Resource<List<ActuatorExtended>>> actuatorList;
+    LiveData<Resource<List<ActuatorExtended>>> actuatorListMainDashboard;
+    LiveData<Resource<List<ActuatorExtended>>> actuatorListLocated;
+    LiveData<Resource<List<DataValue>>> allSensorsInMainDashboardLastValues;
 
     @Inject
     public DotRepository(DotDatabase dotDatabase,
@@ -102,7 +99,7 @@ public class DotRepository {
         }
     }
 
-    public LiveData<List<NetworkExtended>> getListOfNetworks() {
+    public LiveData<Resource<List<NetworkExtended>>> getListOfNetworks() {
         try {
             if (this.networkList == null) {
                 Enumerators.ElementType[] elementTypes = new Enumerators.ElementType[1];
@@ -110,7 +107,7 @@ public class DotRepository {
                 Enumerators.LogLevel[] logLevels = new Enumerators.LogLevel[2];
                 logLevels[0] = Enumerators.LogLevel.WARN;
                 logLevels[1] = Enumerators.LogLevel.ERROR;
-                this.networkList = this.dotDatabase.networksDao().getAllExtended(elementTypes, logLevels);
+                this.networkList = new LiveDataResource<List<NetworkExtended>>(() -> this.dotDatabase.networksDao().getAllExtended(elementTypes, logLevels));
             }
             return this.networkList;
         } catch (Exception e) {
@@ -118,13 +115,13 @@ public class DotRepository {
         }
     }
 
-    public LiveData<NetworkExtended> getNetwork(@NotNull Integer networkId) {
+    public LiveData<Resource<NetworkExtended>> getNetwork(@NotNull Integer networkId) {
         Enumerators.ElementType[] elementTypes = new Enumerators.ElementType[1];
         elementTypes[0] = Enumerators.ElementType.NETWORK;
         Enumerators.LogLevel[] logLevels = new Enumerators.LogLevel[2];
         logLevels[0] = Enumerators.LogLevel.WARN;
         logLevels[1] = Enumerators.LogLevel.ERROR;
-        return this.dotDatabase.networksDao().findExtendedById(networkId, elementTypes, logLevels);
+        return new LiveDataResource<NetworkExtended>(() -> this.dotDatabase.networksDao().findExtendedById(networkId, elementTypes, logLevels));
     }
 
     public LiveData<Resource> createNetwork(@NotNull Network network) {
@@ -191,7 +188,7 @@ public class DotRepository {
         }
     }
 
-    public LiveData<List<SensorExtended>> getListOfSensors() {
+    public LiveData<Resource<List<SensorExtended>>> getListOfSensors() {
         try {
             if (this.sensorList == null) {
                 Enumerators.ElementType[] elementTypes = new Enumerators.ElementType[1];
@@ -199,7 +196,7 @@ public class DotRepository {
                 Enumerators.LogLevel[] logLevels = new Enumerators.LogLevel[2];
                 logLevels[0] = Enumerators.LogLevel.WARN;
                 logLevels[1] = Enumerators.LogLevel.ERROR;
-                this.sensorList = this.dotDatabase.sensorsDao().getAllExtended(elementTypes, logLevels);
+                this.sensorList = new LiveDataResource<List<SensorExtended>>(() -> this.dotDatabase.sensorsDao().getAllExtended(elementTypes, logLevels));
             }
             return this.sensorList;
         } catch (Exception e) {
@@ -207,15 +204,15 @@ public class DotRepository {
         }
     }
 
-    public LiveData<List<Sensor>> getListOfSensorsFromSameNetwork(int NetworkId) {
+    public LiveData<Resource<List<Sensor>>> getListOfSensorsFromSameNetwork(int networkId) {
         try {
-            return this.dotDatabase.sensorsDao().getAllFromSameNetwork(NetworkId);
+            return new LiveDataResource<List<Sensor>>(() -> this.dotDatabase.sensorsDao().getAllFromSameNetwork(networkId));
         } catch (Exception e) {
             return null;
         }
     }
 
-    public LiveData<List<SensorExtended>> getListOfSensorsMainDashboard() {
+    public LiveData<Resource<List<SensorExtended>>> getListOfSensorsMainDashboard() {
         try {
             if (this.sensorListMainDashboard == null) {
                 Enumerators.ElementType[] elementTypes = new Enumerators.ElementType[1];
@@ -223,7 +220,7 @@ public class DotRepository {
                 Enumerators.LogLevel[] logLevels = new Enumerators.LogLevel[2];
                 logLevels[0] = Enumerators.LogLevel.WARN;
                 logLevels[1] = Enumerators.LogLevel.ERROR;
-                this.sensorListMainDashboard = this.dotDatabase.sensorsDao().getAllExtendedToBeShownInMainDashboard(elementTypes, logLevels);
+                this.sensorListMainDashboard = new LiveDataResource<List<SensorExtended>>(() -> this.dotDatabase.sensorsDao().getAllExtendedToBeShownInMainDashboard(elementTypes, logLevels));
             }
             return this.sensorListMainDashboard;
         } catch (Exception e) {
@@ -231,7 +228,7 @@ public class DotRepository {
         }
     }
 
-    public LiveData<List<SensorExtended>> getListOfSensorsLocated() {
+    public LiveData<Resource<List<SensorExtended>>> getListOfSensorsLocated() {
         try {
             if (this.sensorListLocated == null) {
                 Enumerators.ElementType[] elementTypes = new Enumerators.ElementType[1];
@@ -239,7 +236,7 @@ public class DotRepository {
                 Enumerators.LogLevel[] logLevels = new Enumerators.LogLevel[2];
                 logLevels[0] = Enumerators.LogLevel.WARN;
                 logLevels[1] = Enumerators.LogLevel.ERROR;
-                this.sensorListLocated = this.dotDatabase.sensorsDao().getAllExtendedLocated(elementTypes, logLevels);
+                this.sensorListLocated = new LiveDataResource<List<SensorExtended>>(() -> this.dotDatabase.sensorsDao().getAllExtendedLocated(elementTypes, logLevels));
             }
             return this.sensorListLocated;
         } catch (Exception e) {
@@ -247,14 +244,14 @@ public class DotRepository {
         }
     }
 
-    public LiveData<SensorExtended> getSensor(@NotNull Integer sensorId) {
+    public LiveData<Resource<SensorExtended>> getSensor(@NotNull Integer sensorId) {
         try {
             Enumerators.ElementType[] elementTypes = new Enumerators.ElementType[1];
             elementTypes[0] = Enumerators.ElementType.SENSOR;
             Enumerators.LogLevel[] logLevels = new Enumerators.LogLevel[2];
             logLevels[0] = Enumerators.LogLevel.WARN;
             logLevels[1] = Enumerators.LogLevel.ERROR;
-            return this.dotDatabase.sensorsDao().findByIdExtended(sensorId, elementTypes, logLevels);
+            return new LiveDataResource<SensorExtended>(() -> this.dotDatabase.sensorsDao().findByIdExtended(sensorId, elementTypes, logLevels));
         } catch (Exception e) {
             return null;
         }
@@ -316,7 +313,7 @@ public class DotRepository {
 
     /* Functions for managing the CRUD operations over actuators */
 
-    public LiveData<List<ActuatorExtended>> getListOfActuators() {
+    public LiveData<Resource<List<ActuatorExtended>>> getListOfActuators() {
         try {
             if (this.actuatorList == null) {
                 Enumerators.ElementType[] elementTypes = new Enumerators.ElementType[1];
@@ -324,7 +321,7 @@ public class DotRepository {
                 Enumerators.LogLevel[] logLevels = new Enumerators.LogLevel[2];
                 logLevels[0] = Enumerators.LogLevel.WARN;
                 logLevels[1] = Enumerators.LogLevel.ERROR;
-                this.actuatorList = this.dotDatabase.actuatorsDao().getAllExtended(elementTypes, logLevels);
+                this.actuatorList = new LiveDataResource<List<ActuatorExtended>>(() -> this.dotDatabase.actuatorsDao().getAllExtended(elementTypes, logLevels));
             }
             return this.actuatorList;
         } catch (Exception e) {
@@ -340,7 +337,7 @@ public class DotRepository {
         }
     }
 
-    public LiveData<List<ActuatorExtended>> getListOfActuatorsMainDashboard() {
+    public LiveData<Resource<List<ActuatorExtended>>> getListOfActuatorsMainDashboard() {
         try {
             if (this.actuatorListMainDashboard == null) {
                 Enumerators.ElementType[] elementTypes = new Enumerators.ElementType[1];
@@ -348,7 +345,7 @@ public class DotRepository {
                 Enumerators.LogLevel[] logLevels = new Enumerators.LogLevel[2];
                 logLevels[0] = Enumerators.LogLevel.WARN;
                 logLevels[1] = Enumerators.LogLevel.ERROR;
-                this.actuatorListMainDashboard = this.dotDatabase.actuatorsDao().getAllExtendedToBeShownInMainDashboard(elementTypes, logLevels);
+                this.actuatorListMainDashboard = new LiveDataResource<List<ActuatorExtended>>(() -> this.dotDatabase.actuatorsDao().getAllExtendedToBeShownInMainDashboard(elementTypes, logLevels));
             }
             return this.actuatorListMainDashboard;
         } catch (Exception e) {
@@ -356,7 +353,7 @@ public class DotRepository {
         }
     }
 
-    public LiveData<List<ActuatorExtended>> getListOfActuatorsLocated() {
+    public LiveData<Resource<List<ActuatorExtended>>> getListOfActuatorsLocated() {
         try {
             if (this.actuatorListLocated == null) {
                 Enumerators.ElementType[] elementTypes = new Enumerators.ElementType[1];
@@ -364,7 +361,7 @@ public class DotRepository {
                 Enumerators.LogLevel[] logLevels = new Enumerators.LogLevel[2];
                 logLevels[0] = Enumerators.LogLevel.WARN;
                 logLevels[1] = Enumerators.LogLevel.ERROR;
-                this.actuatorListLocated = this.dotDatabase.actuatorsDao().getAllExtendedLocated(elementTypes, logLevels);
+                this.actuatorListLocated = new LiveDataResource<List<ActuatorExtended>>(() -> this.dotDatabase.actuatorsDao().getAllExtendedLocated(elementTypes, logLevels));
             }
             return this.actuatorListLocated;
         } catch (Exception e) {
@@ -372,14 +369,14 @@ public class DotRepository {
         }
     }
 
-    public LiveData<ActuatorExtended> getActuator(@NotNull Integer actuatorId) {
+    public LiveData<Resource<ActuatorExtended>> getActuator(@NotNull Integer actuatorId) {
         try {
             Enumerators.ElementType[] elementTypes = new Enumerators.ElementType[1];
             elementTypes[0] = Enumerators.ElementType.ACTUATOR;
             Enumerators.LogLevel[] logLevels = new Enumerators.LogLevel[2];
             logLevels[0] = Enumerators.LogLevel.WARN;
             logLevels[1] = Enumerators.LogLevel.ERROR;
-            return this.dotDatabase.actuatorsDao().findByIdExtended(actuatorId, elementTypes, logLevels);
+            return new LiveDataResource<ActuatorExtended>(() -> this.dotDatabase.actuatorsDao().findByIdExtended(actuatorId, elementTypes, logLevels));
         } catch (Exception e) {
             return null;
         }
@@ -467,9 +464,12 @@ public class DotRepository {
 
     /* Functions for managing request operations over data values stored */
 
-    public LiveData<List<DataValue>> getLastValuesFromAll() {
+    public LiveData<Resource<List<DataValue>>> getLastValuesFromAllMainDashboard() {
         try {
-            return this.dotDatabase.dataValuesDao().getLastValuesForAll();
+            if (this.allSensorsInMainDashboardLastValues == null) {
+                this.allSensorsInMainDashboardLastValues = new LiveDataResource<List<DataValue>>(() -> this.dotDatabase.dataValuesDao().getLastValuesForAllInMainDashboard());
+            }
+            return this.allSensorsInMainDashboardLastValues;
         } catch (Exception e) {
             return null;
         }
@@ -491,65 +491,41 @@ public class DotRepository {
         }
     }
 
-    public LiveData<List<DataValue>> getLastValuesForSensorId(int id) {
+    public LiveData<Resource<List<DataValue>>> getLastValuesForSensorId(int id) {
         try {
-            return this.dotDatabase.dataValuesDao().getLastValuesForSensorId(id);
+            return new LiveDataResource<List<DataValue>>(() -> this.dotDatabase.dataValuesDao().getLastValuesForSensorId(id));
         } catch (Exception e) {
             return null;
         }
     }
 
-    public LiveData<List<DataValue>> getAvgLastOneDayValuesForSensorId(int id) {
+    public LiveData<Resource<List<DataValue>>> getAvgLastOneDayValuesForSensorId(int id) {
         try {
-            return this.dotDatabase.dataValuesDao().getAvgLastOneDayValuesForSensorId(id);
+            return new LiveDataResource<List<DataValue>>(() -> this.dotDatabase.dataValuesDao().getAvgLastOneDayValuesForSensorId(id));
         } catch (Exception e) {
             return null;
         }
     }
 
-    public LiveData<List<DataValue>> getAllLastOneDayValuesForSensorId(int id) {
+    public LiveData<Resource<List<DataValue>>> getAvgLastOneWeekValuesForSensorId(int id) {
         try {
-            return this.dotDatabase.dataValuesDao().getAllLastOneDayValuesForSensorId(id);
+            return new LiveDataResource<List<DataValue>>(() -> this.dotDatabase.dataValuesDao().getAvgLastOneWeekValuesForSensorId(id));
         } catch (Exception e) {
             return null;
         }
     }
 
-    public LiveData<List<DataValue>> getAvgLastOneWeekValuesForSensorId(int id) {
+    public LiveData<Resource<List<DataValue>>> getAvgLastOneMonthValuesForSensorId(int id) {
         try {
-            return this.dotDatabase.dataValuesDao().getAvgLastOneWeekValuesForSensorId(id);
+            return new LiveDataResource<List<DataValue>>(() -> this.dotDatabase.dataValuesDao().getAvgLastOneMonthValuesForSensorId(id));
         } catch (Exception e) {
             return null;
         }
     }
 
-    public LiveData<List<DataValue>> getAllLastOneWeekValuesForSensorId(int id) {
+    public LiveData<Resource<List<DataValue>>> getAvgLastOneYearValuesForSensorId(int id) {
         try {
-            return this.dotDatabase.dataValuesDao().getAllLastOneWeekValuesForSensorId(id);
-        } catch (Exception e) {
-            return null;
-        }
-    }
-
-    public LiveData<List<DataValue>> getAvgLastOneMonthValuesForSensorId(int id) {
-        try {
-            return this.dotDatabase.dataValuesDao().getAvgLastOneMonthValuesForSensorId(id);
-        } catch (Exception e) {
-            return null;
-        }
-    }
-
-    public LiveData<List<DataValue>> getAllLastOneMonthValuesForSensorId(int id) {
-        try {
-            return this.dotDatabase.dataValuesDao().getAllLastOneMonthValuesForSensorId(id);
-        } catch (Exception e) {
-            return null;
-        }
-    }
-
-    public LiveData<List<DataValue>> getAvgLastOneYearValuesForSensorId(int id) {
-        try {
-            return this.dotDatabase.dataValuesDao().getAvgLastOneYearValuesForSensorId(id);
+            return new LiveDataResource<List<DataValue>>(() -> this.dotDatabase.dataValuesDao().getAvgLastOneYearValuesForSensorId(id));
         } catch (Exception e) {
             return null;
         }
@@ -557,27 +533,24 @@ public class DotRepository {
 
     /* Functions for managing request operations over logs stored */
 
-    public LiveData<List<Log>> getLastConfigurationLogs() {
+    public LiveData<Resource<List<Log>>> getLastConfigurationLogs() {
         try {
             Enumerators.LogLevel[] logLevels = new Enumerators.LogLevel[3];
             logLevels[0] = Enumerators.LogLevel.INFO;
             logLevels[1] = Enumerators.LogLevel.WARN;
             logLevels[2] = Enumerators.LogLevel.ERROR;
-            return this.dotDatabase.logsDao().getAllLastHundredLogs(logLevels);
+            return new LiveDataResource<List<Log>>(() -> this.dotDatabase.logsDao().getAllLastHundredLogs(logLevels));
         } catch (Exception e) {
             return null;
         }
     }
 
-    public LiveData<List<Log>> getLastNotificationLogs() {
+    public LiveData<Resource<List<Log>>> getLastNotificationLogsInMainDashboard() {
         try {
-            Enumerators.ElementType[] elementTypes = new Enumerators.ElementType[0];
-            elementTypes[0] = Enumerators.ElementType.SENSOR;
-            Enumerators.LogLevel[] logLevels = new Enumerators.LogLevel[3];
-            logLevels[0] = Enumerators.LogLevel.NOTIF_NONE;
-            logLevels[1] = Enumerators.LogLevel.NOTIF_WARN;
-            logLevels[2] = Enumerators.LogLevel.NOTIF_CRITICAL;
-            return this.dotDatabase.logsDao().getLastLogForEachElement(elementTypes, logLevels);
+            Enumerators.LogLevel[] logLevels = new Enumerators.LogLevel[2];
+            logLevels[0] = Enumerators.LogLevel.NOTIF_WARN;
+            logLevels[1] = Enumerators.LogLevel.NOTIF_CRITICAL;
+            return new LiveDataResource<List<Log>>(() -> this.dotDatabase.logsDao().getLastLogForSensorElementsInMainDashboard(logLevels));
         } catch (Exception e) {
             return null;
         }
@@ -609,72 +582,21 @@ public class DotRepository {
 
     public static void checkThresholdsForDataReceived(Context context, Sensor sensor, String dataReceived){
         try {
-            if (sensor != null) {
-                if (sensor.getDataType().equals(Enumerators.DataType.INTEGER)) {
-                    int thresholdAboveWarning = ((sensor.getThresholdAboveWarning() != null) &&
-                            (!sensor.getThresholdAboveWarning().isEmpty())) ?
-                            Integer.valueOf(sensor.getThresholdAboveWarning()) : Integer.MAX_VALUE;
-                    int thresholdAboveCritical = ((sensor.getThresholdAboveCritical() != null) &&
-                            (!sensor.getThresholdAboveCritical().isEmpty())) ?
-                            Integer.valueOf(sensor.getThresholdAboveCritical()) : Integer.MAX_VALUE;
-                    int thresholdBelowWarning = ((sensor.getThresholdBelowWarning() != null) &&
-                            (!sensor.getThresholdBelowWarning().isEmpty())) ?
-                            Integer.valueOf(sensor.getThresholdBelowWarning()) : Integer.MIN_VALUE;
-                    int thresholdBelowCritical = ((sensor.getThresholdBelowCritical() != null) &&
-                            (!sensor.getThresholdBelowCritical().isEmpty())) ?
-                            Integer.valueOf(sensor.getThresholdBelowCritical()) : Integer.MIN_VALUE;
-                    int intValue = Integer.valueOf(dataReceived);
-                    if ((intValue >= thresholdAboveCritical) || (intValue <= thresholdBelowCritical)) {
-                        NotificationsHelper.processStateNotificationForSensor(context, sensor, Enumerators.NotificationType.CRITICAL);
-                    } else if ((intValue >= thresholdAboveWarning) || (intValue <= thresholdBelowWarning)) {
-                        NotificationsHelper.processStateNotificationForSensor(context, sensor, Enumerators.NotificationType.WARN);
-                    } else {
+            Enumerators.NotificationState state = DataHelper.getNotificationStatus(dataReceived,
+                    sensor.getDataType(), sensor.getThresholdAboveWarning(), sensor.getThresholdAboveCritical(),
+                    sensor.getThresholdBelowWarning(), sensor.getThresholdBelowCritical(),
+                    sensor.getThresholdEqualsWarning(), sensor.getThresholdEqualsCritical());
+            if (state != null) {
+                switch (state) {
+                    case NONE:
                         NotificationsHelper.processStateNotificationForSensor(context, sensor, Enumerators.NotificationType.NONE);
-                    }
-                } else if (sensor.getDataType().equals(Enumerators.DataType.DECIMAL)) {
-                    float thresholdAboveWarning = ((sensor.getThresholdAboveWarning() != null) &&
-                            (!sensor.getThresholdAboveWarning().isEmpty())) ?
-                            Float.valueOf(sensor.getThresholdAboveWarning()) : Float.MAX_VALUE;
-                    float thresholdAboveCritical = ((sensor.getThresholdAboveCritical() != null) &&
-                            (!sensor.getThresholdAboveCritical().isEmpty())) ?
-                            Float.valueOf(sensor.getThresholdAboveCritical()) : Float.MAX_VALUE;
-                    float thresholdBelowWarning = ((sensor.getThresholdBelowWarning() != null) &&
-                            (!sensor.getThresholdBelowWarning().isEmpty())) ?
-                            Float.valueOf(sensor.getThresholdBelowWarning()) : Float.MIN_VALUE;
-                    float thresholdBelowCritical = ((sensor.getThresholdBelowCritical() != null) &&
-                            (!sensor.getThresholdBelowCritical().isEmpty())) ?
-                            Float.valueOf(sensor.getThresholdBelowCritical()) : Float.MIN_VALUE;
-                    float floatValue = Float.valueOf(dataReceived);
-                    if ((floatValue >= thresholdAboveCritical) || (floatValue <= thresholdBelowCritical)) {
+                        break;
+                    case WARNING:
+                        NotificationsHelper.processStateNotificationForSensor(context, sensor, Enumerators.NotificationType.WARNING);
+                        break;
+                    case CRITICAL:
                         NotificationsHelper.processStateNotificationForSensor(context, sensor, Enumerators.NotificationType.CRITICAL);
-                    } else if ((floatValue >= thresholdAboveWarning) || (floatValue <= thresholdBelowWarning)) {
-                        NotificationsHelper.processStateNotificationForSensor(context, sensor, Enumerators.NotificationType.WARN);
-                    } else {
-                        NotificationsHelper.processStateNotificationForSensor(context, sensor, Enumerators.NotificationType.NONE);
-                    }
-                } else if (sensor.getDataType().equals(Enumerators.DataType.BOOLEAN)) {
-                    Boolean thresholdEqualsWarning = ((sensor.getThresholdEqualsWarning() != null) &&
-                            (!sensor.getThresholdEqualsWarning().isEmpty())) ?
-                            Boolean.valueOf(sensor.getThresholdEqualsWarning()) : null;
-                    Boolean thresholdEqualsCritical = ((sensor.getThresholdEqualsCritical() != null) &&
-                            (!sensor.getThresholdEqualsCritical().isEmpty())) ?
-                            Boolean.valueOf(sensor.getThresholdEqualsCritical()) : null;
-                    boolean booleanValue = Boolean.valueOf(dataReceived);
-                    if ((thresholdEqualsCritical != null) || (booleanValue == thresholdEqualsCritical.booleanValue())) {
-                        NotificationsHelper.processStateNotificationForSensor(context, sensor, Enumerators.NotificationType.CRITICAL);
-                    } else if ((thresholdEqualsWarning != null) || (booleanValue == thresholdEqualsWarning.booleanValue())) {
-                        NotificationsHelper.processStateNotificationForSensor(context, sensor, Enumerators.NotificationType.WARN);
-                    } else {
-                        NotificationsHelper.processStateNotificationForSensor(context, sensor, Enumerators.NotificationType.NONE);
-                    }
-                } else  {
-                    if ((sensor.getThresholdEqualsCritical() != null) || (dataReceived.equals(sensor.getThresholdEqualsCritical()))) {
-                        NotificationsHelper.processStateNotificationForSensor(context, sensor, Enumerators.NotificationType.CRITICAL);
-                    } else if ((sensor.getThresholdEqualsWarning() != null) || (dataReceived.equals(sensor.getThresholdEqualsWarning()))) {
-                        NotificationsHelper.processStateNotificationForSensor(context, sensor, Enumerators.NotificationType.WARN);
-                    } else {
-                        NotificationsHelper.processStateNotificationForSensor(context, sensor, Enumerators.NotificationType.NONE);
-                    }
+                        break;
                 }
             }
         } catch (Exception e) {

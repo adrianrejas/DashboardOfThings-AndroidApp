@@ -21,20 +21,20 @@ public class ActuatorManagementUseCaseImpl implements ActuatorManagementUseCase 
     }
 
     @Override
-    public LiveData<List<ActuatorExtended>> getListOfActuators() {
+    public LiveData<Resource<List<ActuatorExtended>>> getListOfActuators() {
         return repository.getListOfActuators();
     }
 
-    public LiveData<List<ActuatorExtended>> getListOfActuatorsMainDashboard() {
+    public LiveData<Resource<List<ActuatorExtended>>> getListOfActuatorsMainDashboard() {
         return repository.getListOfActuatorsMainDashboard();
     }
 
-    public LiveData<List<ActuatorExtended>> getListOfActuatorsLocated() {
+    public LiveData<Resource<List<ActuatorExtended>>> getListOfActuatorsLocated() {
         return repository.getListOfActuatorsLocated();
     }
 
     @Override
-    public LiveData<ActuatorExtended> getActuator(@NotNull Integer actuatorId) {
+    public LiveData<Resource<ActuatorExtended>> getActuator(@NotNull Integer actuatorId) {
         return repository.getActuator(actuatorId);
     }
 

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="200dp">
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/primaryColor"
+        android:src="@drawable/nav_header"
+        android:scaleType="centerCrop"
+        android:contentDescription="@string/content_description_nav_header" />
+
+    <View
+        android:id="@+id/photo_protection_dark"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/photo_background_protection" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:text="@string/app_name"
+        android:textAppearance="@style/TextAppearance.AppCompat.Large.Inverse"
+        style="@style/Theme.Dot.ActionBar.TextTitle"
+        android:textSize="@dimen/font_size_list_title_navview"
+        android:layout_marginBottom="@dimen/detail_inner_margin_small"
+        android:layout_marginStart="@dimen/detail_inner_margin_small"
+        android:layout_marginEnd="@dimen/detail_inner_margin_small" />
+</FrameLayout>

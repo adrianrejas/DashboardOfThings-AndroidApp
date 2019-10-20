@@ -1,0 +1,247 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools" >
+
+    <data>
+        <import type="android.view.View"/>
+        <import type="com.arejas.dashboardofthings.utils.Enumerators"/>
+        <variable
+            name="actuator"
+            type="com.arejas.dashboardofthings.domain.entities.extended.ActuatorExtended" />
+        <variable
+            name="presenter"
+            type="com.arejas.dashboardofthings.presentation.ui.fragments.MainActuatorsFragment.ActuatorMainDashboardListener" />
+    </data>
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cv_actuator_card"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_margin="@dimen/list_element_magin"
+        android:background="@drawable/card_border_background"
+        app:cardCornerRadius="@dimen/card_corner_radius"
+        tools:layout_width="300dp">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@android:color/white">
+
+            <ImageView
+                android:id="@+id/iv_actuator_card"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:adjustViewBounds="true"
+                android:contentDescription="@string/content_description_actuator_image"
+                android:scaleType="centerCrop"
+                app:imageUrl="@{actuator.imageUri}"
+                app:errorResource="@{@drawable/error}"
+                app:loadingResource="@{@drawable/loading}"
+                android:background="@color/secondaryTextColor"
+                app:layout_constraintDimensionRatio="@string/card_image_proportion"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:src="@drawable/error" />
+
+            <TextView
+                android:id="@+id/tv_actuator_problems_card"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/detail_inner_margin_big"
+                android:layout_marginStart="@dimen/detail_inner_margin_small"
+                android:layout_marginEnd="@dimen/detail_inner_margin_small"
+                android:contentDescription="@string/content_description_actuator_title"
+                app:elementName="@{actuator.name}"
+                app:elementType="@{actuator.type}"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/iv_actuator_card"
+                style="@style/Theme.Dot.TextTitleAlert"
+                android:visibility="@{ ((actuator.recentErrorLogs != null) &amp;&amp; (actuator.recentErrorLogs > 0)) ? View.VISIBLE : View.GONE }"
+                android:text="@{@plurals/error_log_number(actuator.recentErrorLogs)}"
+                tools:text="There are problems"/>
+
+            <TextView
+                android:id="@+id/tv_actuator_title_card"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/detail_inner_margin_big"
+                android:layout_marginStart="@dimen/detail_inner_margin_small"
+                android:layout_marginEnd="@dimen/detail_inner_margin_small"
+                android:contentDescription="@string/content_description_actuator_title"
+                app:elementName="@{actuator.name}"
+                app:elementType="@{actuator.type}"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tv_actuator_problems_card"
+                style="@style/Theme.Dot.TextTitle"
+                tools:text="Termometer - Temperature"/>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/cl_actuator_integer_setter"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/detail_inner_margin_big"
+                android:layout_marginTop="@dimen/detail_inner_margin_small"
+                android:layout_marginEnd="@dimen/detail_inner_margin_small"
+                android:layout_marginBottom="@dimen/detail_inner_margin_big"
+                android:visibility="@{ ((actuator.dataType != null) &amp;&amp; (actuator.dataType.equals(Enumerators.DataType.INTEGER))) ? View.VISIBLE : View.GONE }"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tv_actuator_title_card"
+                tools:visibility="gone">
+
+                <EditText
+                    android:id="@+id/et_actuator_integer_value"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:ems="10"
+                    android:hint="@string/actuator_integer_hint"
+                    android:importantForAutofill="no"
+                    android:inputType="number"
+                    app:minValue="@{actuator.dataNumberMinimum}"
+                    app:maxValue="@{actuator.dataNumberMaximum}"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toStartOf="@id/ib_actuator_integer_set"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <ImageButton
+                    android:id="@+id/ib_actuator_integer_set"
+                    android:layout_width="@dimen/card_icon_size"
+                    android:layout_height="@dimen/card_icon_size"
+                    android:background="@android:color/transparent"
+                    android:onClick="@{(v) -> presenter.sendInteger()}"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/et_actuator_integer_value"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:srcCompat="@drawable/send"
+                    android:contentDescription="@string/content_description_actuator_send" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/cl_actuator_decimal_setter"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/detail_inner_margin_big"
+                android:layout_marginTop="@dimen/detail_inner_margin_small"
+                android:layout_marginEnd="@dimen/detail_inner_margin_small"
+                android:layout_marginBottom="@dimen/detail_inner_margin_big"
+                android:visibility="@{ ((actuator.dataType != null) &amp;&amp; (actuator.dataType.equals(Enumerators.DataType.DECIMAL))) ? View.VISIBLE : View.GONE }"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tv_actuator_title_card"
+                tools:visibility="gone">
+
+                <EditText
+                    android:id="@+id/et_actuator_decimal_value"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:ems="10"
+                    android:hint="@string/actuator_integer_hint"
+                    android:importantForAutofill="no"
+                    android:inputType="numberDecimal"
+                    app:minValue="@{actuator.dataNumberMinimum}"
+                    app:maxValue="@{actuator.dataNumberMaximum}"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toStartOf="@id/ib_actuator_decimal_set"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <ImageButton
+                    android:id="@+id/ib_actuator_decimal_set"
+                    android:layout_width="@dimen/card_icon_size"
+                    android:layout_height="@dimen/card_icon_size"
+                    android:background="@android:color/transparent"
+                    android:onClick="@{(v) -> presenter.sendFloat()}"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/et_actuator_decimal_value"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:srcCompat="@drawable/send"
+                    android:contentDescription="@string/content_description_actuator_send" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/cl_actuator_boolean_setter"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/detail_inner_margin_big"
+                android:layout_marginTop="@dimen/detail_inner_margin_small"
+                android:layout_marginEnd="@dimen/detail_inner_margin_small"
+                android:layout_marginBottom="@dimen/detail_inner_margin_big"
+                android:visibility="@{ ((actuator.dataType != null) &amp;&amp; (actuator.dataType.equals(Enumerators.DataType.BOOLEAN))) ? View.VISIBLE : View.GONE }"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tv_actuator_title_card">
+
+                <ToggleButton
+                    android:id="@+id/tb_actuator_boolean_set"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    android:onCheckedChanged="@{(v, i) -> presenter.sendBoolean()}"
+                    android:contentDescription="@string/content_description_actuator_toggle" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/cl_actuator_string_setter"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/detail_inner_margin_big"
+                android:layout_marginTop="@dimen/detail_inner_margin_small"
+                android:layout_marginEnd="@dimen/detail_inner_margin_small"
+                android:layout_marginBottom="@dimen/detail_inner_margin_big"
+                android:visibility="@{ ((actuator.dataType != null) &amp;&amp; (actuator.dataType.equals(Enumerators.DataType.STRING))) ? View.VISIBLE : View.GONE }"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tv_actuator_title_card"
+                tools:visibility="gone">
+
+                <EditText
+                    android:id="@+id/et_actuator_string_value"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:ems="10"
+                    android:hint="@string/actuator_integer_hint"
+                    android:importantForAutofill="no"
+                    android:inputType="textNoSuggestions"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toStartOf="@id/ib_actuator_string_set"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <ImageButton
+                    android:id="@+id/ib_actuator_string_set"
+                    android:layout_width="@dimen/card_icon_size"
+                    android:layout_height="@dimen/card_icon_size"
+                    android:background="@android:color/transparent"
+                    android:onClick="@{(v) -> presenter.sendString()}"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/et_actuator_string_value"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:srcCompat="@drawable/send"
+                    android:contentDescription="@string/content_description_actuator_send" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.cardview.widget.CardView>
+
+</layout>

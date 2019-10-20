@@ -180,7 +180,7 @@ public class Enumerators {
                 case 0:
                     return "INFO";
                 case 1:
-                    return "WARN";
+                    return "WARNING";
                 case 2:
                     return "ERROR";
                 case 3:
@@ -195,7 +195,7 @@ public class Enumerators {
 
     public enum NotificationType {
         NONE,
-        WARN,
+        WARNING,
         CRITICAL;
 
         public static NotificationType valueOf(int ordinal) {
@@ -203,7 +203,7 @@ public class Enumerators {
                 case 0:
                     return NONE;
                 case 1:
-                    return WARN;
+                    return WARNING;
                 default:
                     return CRITICAL;
             }
@@ -247,6 +247,35 @@ public class Enumerators {
                     return "UPDATE";
                 default:
                     return "DELETE";
+            }
+        }
+    }
+
+    public enum NotificationState {
+        NONE,
+        WARNING,
+        CRITICAL;
+
+        public static NotificationState valueOf(int ordinal) {
+            switch (ordinal) {
+                case 0:
+                    return NONE;
+                case 1:
+                    return WARNING;
+                default:
+                    return CRITICAL;
+            }
+        }
+
+        @Override
+        public String toString() {
+            switch (ordinal()) {
+                case 0:
+                    return "NONE";
+                case 1:
+                    return "WARNING";
+                default:
+                    return "CRITICAL";
             }
         }
     }

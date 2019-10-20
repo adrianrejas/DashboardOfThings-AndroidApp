@@ -21,12 +21,12 @@ public class NetworkManagementUseCaseImpl implements NetworkManagementUseCase {
     }
 
     @Override
-    public LiveData<List<NetworkExtended>> getListOfNetworks() {
+    public LiveData<Resource<List<NetworkExtended>>> getListOfNetworks() {
         return repository.getListOfNetworks();
     }
 
     @Override
-    public LiveData<NetworkExtended> getNetwork(@NotNull Integer networkId) {
+    public LiveData<Resource<NetworkExtended>> getNetwork(@NotNull Integer networkId) {
         return repository.getNetwork(networkId);
     }
 

@@ -1,5 +1,6 @@
 <resources>
     <string name="app_name">Dashboard of Things</string>
+    <string name="title_activity_maindash">Main dashboard</string>
     <string name="title_activity_map">Map</string>
 
     <string name="main_navigation_dashboard">Main dashboard</string>
@@ -7,6 +8,8 @@
     <string name="main_navigation_sensors">Sensors</string>
     <string name="main_navigation_actuators">Acuators</string>
     <string name="main_navigation_map">Map</string>
+
+    <string name="menu_options">Options</string>
 
     <string name="main_dashboard_tab_sensors">Sensors</string>
     <string name="main_dashboard_tab_actuators">Actuators</string>
@@ -16,6 +19,35 @@
 
     <string name="loading">Loading ...</string>
     <string name="no_elements_in_list">There are no elements in the list shown.</string>
+    <string name="error_in_list">There has been an error while loading the list. Check the logs for more info.</string>
+    <string name="date_format_today">HH:mm</string>
+    <string name="date_format_anotherday">dd/MM/yyyy</string>
+    <string name="actuator_send_data">Send</string>
+    <string name="actuator_integer_hint">Enter not decimal number here.</string>
+    <string name="actuator_decimal_hint">Enter decimal number here.</string>
+    <string name="actuator_string_hint">Enter string here.</string>
+    <string name="error_logs_number">%i warning or error logs applied to this element.</string>
+    <plurals name="error_log_number" >
+        <item quantity="one">%s warning or error log applied to this element.</item>
+        <item quantity="other">%s warning or error logs applied to this element.</item>
+    </plurals>
+
+    <string name="maindash_status_warning_message">This sensor, with %s as its last value, is in warning state.</string>
+    <string name="maindash_status_critical_message">This sensor, with %s as its last value, is in critical state.</string>
+    <string-array name="history_options_aray">
+        <item>Last values</item>
+        <item>Last day</item>
+        <item>Last week</item>
+        <item>Last month</item>
+        <item>Last year</item>
+    </string-array>
+
+    <string name="boolean_active">Active</string>
+    <string name="boolean_not_active">Not active</string>
+
+    <string name="sensor_state_normal">NORMAL</string>
+    <string name="sensor_state_warning">WARNING</string>
+    <string name="sensor_state_critical">CRITICAL</string>
 
     <string name="dashboard_of_things_channel_name">Dashboard of Things notification channel</string>
     <string name="dashboard_of_things_channel_desc">Notification channel about the state of Dashboard of Things app</string>
@@ -56,4 +88,31 @@
 
     <string name="no_elements_content_description">There are no elements in the list shown.</string>
     <string name="error_content_description">Error</string>
+    <string name="title_activity_settings">Settings</string>
+
+    <string name="content_description_sensor_image">Image representing the sensor</string>
+    <string name="content_description_sensor_title">Name and type of the sensor</string>
+    <string name="content_description_sensor_value">Current value of the sensor</string>
+    <string name="content_description_sensor_state">Current state of the sensor</string>
+    <string name="content_description_nav_header">Main navigation menu</string>
+    <string name="content_description_status_icon">Image representing the status of the sensor</string>
+    <string name="content_description_actuator_image">Image representing the actuator</string>
+    <string name="content_description_actuator_title">Name and type of the actuator</string>
+    <string name="content_description_actuator_send">Send data to server</string>
+    <string name="content_description_actuator_toggle">Toggle value between active and not and send data to server</string>
+
+    <!-- Preference Titles -->
+    <string name="messages_header">Messages</string>
+    <string name="sync_header">Sync</string>
+
+    <!-- Messages Preferences -->
+    <string name="signature_title">Your signature</string>
+    <string name="reply_title">Default reply action</string>
+
+    <!-- Sync Preferences -->
+    <string name="sync_title">Sync email periodically</string>
+    <string name="attachment_title">Download incoming attachments</string>
+    <string name="attachment_summary_on">Automatically download attachments for incoming emails
+    </string>
+    <string name="attachment_summary_off">Only download attachments when manually requested</string>
 </resources>

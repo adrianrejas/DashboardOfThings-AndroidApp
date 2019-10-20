@@ -12,9 +12,9 @@ import java.util.List;
 
 public interface NetworkManagementUseCase extends BaseUseCase {
 
-    public LiveData<List<NetworkExtended>> getListOfNetworks();
+    public LiveData<Resource<List<NetworkExtended>>> getListOfNetworks();
 
-    public LiveData<NetworkExtended> getNetwork(@NotNull Integer networkId);
+    public LiveData<Resource<NetworkExtended>> getNetwork(@NotNull Integer networkId);
 
     public LiveData<Resource> createNetwork(@NotNull Network network);
 
