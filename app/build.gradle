@@ -57,6 +57,7 @@ dependencies {
     // Room components
     implementation "androidx.room:room-runtime:2.1.0"
     implementation 'androidx.preference:preference:1.1.0-alpha05'
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     annotationProcessor "androidx.room:room-compiler:2.1.0"
     implementation "androidx.room:room-rxjava2:2.1.0"
     implementation "androidx.room:room-guava:2.1.0"

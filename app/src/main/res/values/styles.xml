@@ -35,7 +35,8 @@
     <style name="Theme.Dot.TextData" parent="Theme.Dot">
         <item name="android:textSize">@dimen/font_size_list_text</item>
         <item name="android:alpha">0.87</item>
-        <item name="android:lineSpacingMultiplier">@fraction/detail_body_line_spacing_multiplier</item>
+        <item name="android:lineSpacingMultiplier">@fraction/detail_body_line_spacing_multiplier
+        </item>
     </style>
 
     <style name="Theme.Dot.TextTitle" parent="Theme.Dot">
@@ -86,5 +87,14 @@
         <item name="android:textSize">@dimen/font_size_list_byline_actionbar</item>
         <item name="android:alpha">0.60</item>
     </style>
+
+    <style name="Theme.Dot.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="Theme.Dot.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <style name="Theme.Dot.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
 </resources>

@@ -22,11 +22,13 @@ import androidx.databinding.BindingAdapter;
 import com.arejas.dashboardofthings.DotApplication;
 import com.arejas.dashboardofthings.R;
 import com.arejas.dashboardofthings.data.helpers.DataHelper;
+import com.arejas.dashboardofthings.domain.entities.database.Actuator;
 import com.arejas.dashboardofthings.domain.entities.database.DataValue;
 import com.arejas.dashboardofthings.domain.entities.database.Sensor;
 import com.arejas.dashboardofthings.presentation.ui.helpers.HistoryChartHelper;
 import com.arejas.dashboardofthings.presentation.ui.notifications.NotificationsHelper;
 import com.arejas.dashboardofthings.utils.Enumerators;
+import com.arejas.dashboardofthings.utils.Utils;
 import com.bumptech.glide.Glide;
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.components.AxisBase;
@@ -156,15 +158,110 @@ public class DataBindingConverters {
 
     @BindingAdapter({"elementName", "elementType"})
     public static void setTitle(TextView view, String name, String type) {
-        // If not null, set release date, with the format specified at the strings XML.
-        if (name != null) {
-            if (type != null) {
-                view.setText(name + " - " + type);
+        try {
+            if (name != null) {
+                if (type != null) {
+                    view.setText(name + " - " + type);
+                } else {
+                    view.setText(name);
+                }
             } else {
-                view.setText(name);
+                view.setText("-");
             }
-        } else {
-            view.setText("-");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @BindingAdapter({"elementName", "elementProblems"})
+    public static void setElementName(TextView view, String name, Integer elementProblems) {
+        try {
+            if (name != null) {
+                if ((elementProblems != null) && (elementProblems > 0)) {
+                    view.setText(name + " - " + DotApplication.getContext().getResources().
+                            getQuantityString(R.plurals.error_log_number, elementProblems));
+                    view.setTextColor(ContextCompat.getColor(DotApplication.getContext(), R.color.logErrorColorText));
+                } else {
+                    view.setText(name);
+                    view.setTextColor(ContextCompat.getColor(DotApplication.getContext(), R.color.primaryTextColor));
+                }
+            } else {
+                view.setText("-");
+                view.setTextColor(ContextCompat.getColor(DotApplication.getContext(), R.color.primaryTextColor));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @BindingAdapter({"elementType", "elementProblems"})
+    public static void setElementType(TextView view, String elementType, Integer elementProblems) {
+        try {
+            if (elementType != null) {
+                view.setText(elementType);
+                if ((elementProblems != null) && (elementProblems > 0)) {
+                    view.setTextColor(ContextCompat.getColor(DotApplication.getContext(), R.color.logErrorColorText));
+                } else {
+                    view.setTextColor(ContextCompat.getColor(DotApplication.getContext(), R.color.primaryTextColor));
+                }
+            } else {
+                view.setText("-");
+                view.setTextColor(ContextCompat.getColor(DotApplication.getContext(), R.color.primaryTextColor));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @BindingAdapter({"networkType", "elementProblems"})
+    public static void setNetworkType(TextView view, Enumerators.NetworkType networkType, Integer elementProblems) {
+        try {
+            if (networkType != null) {
+                switch (networkType) {
+                    case MQTT:
+                        view.setText(DotApplication.getContext().getString(R.string.network_type_mqtt));
+                        break;
+                    case HTTP:
+                        view.setText(DotApplication.getContext().getString(R.string.network_type_http));
+                        break;
+                    default:
+                        view.setText("-");
+                        break;
+                }
+                if ((elementProblems != null) && (elementProblems > 0)) {
+                    view.setTextColor(ContextCompat.getColor(DotApplication.getContext(), R.color.logErrorColorText));
+                } else {
+                    view.setTextColor(ContextCompat.getColor(DotApplication.getContext(), R.color.primaryTextColor));
+                }
+            } else {
+                view.setText("-");
+                view.setTextColor(ContextCompat.getColor(DotApplication.getContext(), R.color.primaryTextColor));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @BindingAdapter({"networkType"})
+    public static void setNetworkType(TextView view, Enumerators.NetworkType networkType) {
+        try {
+            if (networkType != null) {
+                switch (networkType) {
+                    case MQTT:
+                        view.setText(DotApplication.getContext().getString(R.string.network_type_mqtt));
+                        break;
+                    case HTTP:
+                        view.setText(DotApplication.getContext().getString(R.string.network_type_http));
+                        break;
+                    default:
+                        view.setText("-");
+                        break;
+                }
+            } else {
+                view.setText("-");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
@@ -303,4 +400,39 @@ public class DataBindingConverters {
             e.printStackTrace();
         }
     }
+
+    @BindingAdapter({"sensorList"})
+    public static void loadListOfSensors(TextView view, List<Sensor> dataList, String textIntro) {
+        // If not null, compose the list and set it.
+        if ((dataList != null) && (dataList.size() != 0)) {
+            List<String> elementNames = new ArrayList<>();
+            for (Sensor dataUnit : dataList) {
+                elementNames.add(dataUnit.getName());
+            }
+            String dataString = DotApplication.getContext().getString(R.string.network_list_sensors).
+                    concat(TextUtils.join(", ", elementNames));
+            view.setText(Utils.fromHtml(String.format(textIntro, dataString)));
+        } else {
+            view.setText(Utils.fromHtml(String.format(textIntro,
+                    DotApplication.getContext().getString(R.string.network_no_sensors))));
+        }
+    }
+
+    @BindingAdapter({"actuatorList"})
+    public static void loadListOfActuators(TextView view, List<Actuator> dataList, String textIntro) {
+        // If not null, compose the list and set it.
+        if ((dataList != null) && (dataList.size() != 0)) {
+            List<String> elementNames = new ArrayList<>();
+            for (Actuator dataUnit : dataList) {
+                elementNames.add(dataUnit.getName());
+            }
+            String dataString = DotApplication.getContext().getString(R.string.network_list_actuators).
+                    concat(TextUtils.join(", ", elementNames));
+            view.setText(Utils.fromHtml(String.format(textIntro, dataString)));
+        } else {
+            view.setText(Utils.fromHtml(String.format(textIntro,
+                    DotApplication.getContext().getString(R.string.network_no_actuators))));
+        }
+    }
+
 }

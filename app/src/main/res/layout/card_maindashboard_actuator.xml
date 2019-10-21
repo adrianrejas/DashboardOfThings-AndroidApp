@@ -54,7 +54,7 @@
                 android:layout_marginTop="@dimen/detail_inner_margin_big"
                 android:layout_marginStart="@dimen/detail_inner_margin_small"
                 android:layout_marginEnd="@dimen/detail_inner_margin_small"
-                android:contentDescription="@string/content_description_actuator_title"
+                android:contentDescription="@string/content_description_element_problems"
                 app:elementName="@{actuator.name}"
                 app:elementType="@{actuator.type}"
                 app:layout_constraintEnd_toEndOf="parent"

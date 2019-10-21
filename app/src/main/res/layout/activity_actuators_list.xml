@@ -4,6 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.arejas.dashboardofthings.presentation.ui.activities.ActuatorsListActivity">
+    tools:context="com.arejas.dashboardofthings.presentation.ui.activities.ActuatorListActivity">
 
 </androidx.constraintlayout.widget.ConstraintLayout>

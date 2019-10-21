@@ -6,11 +6,11 @@ import android.os.Bundle;
 
 import com.arejas.dashboardofthings.R;
 
-public class SensorsListActivity extends AppCompatActivity {
+public class ActuatorListActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_sensors_list);
+        setContentView(R.layout.activity_actuators_list);
     }
 }

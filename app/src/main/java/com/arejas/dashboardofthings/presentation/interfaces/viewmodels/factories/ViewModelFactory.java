@@ -12,6 +12,7 @@ import com.arejas.dashboardofthings.domain.usecases.LogsManagementUseCase;
 import com.arejas.dashboardofthings.domain.usecases.NetworkManagementUseCase;
 import com.arejas.dashboardofthings.domain.usecases.SensorManagementUseCase;
 import com.arejas.dashboardofthings.presentation.interfaces.viewmodels.MainDashboardViewModel;
+import com.arejas.dashboardofthings.presentation.interfaces.viewmodels.NetworkListViewModel;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -28,6 +29,7 @@ public class ViewModelFactory extends ViewModelProvider.NewInstanceFactory {
     private final LogsManagementUseCase logsManagementUseCase;
 
     private MainDashboardViewModel mainDashboardViewModel;
+    private NetworkListViewModel networkListViewModel;
 
     @Inject
     public ViewModelFactory(@NonNull Application application,
@@ -43,6 +45,7 @@ public class ViewModelFactory extends ViewModelProvider.NewInstanceFactory {
         this.dataManagementUseCase = dataManagementUseCase;
         this.logsManagementUseCase = logsManagementUseCase;
         mainDashboardViewModelSingleton();
+        networkListViewModelSingleton();
     }
 
     @Override
@@ -50,6 +53,8 @@ public class ViewModelFactory extends ViewModelProvider.NewInstanceFactory {
         //noinspection unchecked
         if (modelClass.isAssignableFrom(MainDashboardViewModel.class)) {
             return (T) mainDashboardViewModelSingleton();
+        } else if (modelClass.isAssignableFrom(NetworkListViewModel.class)) {
+            return (T) networkListViewModelSingleton();
         } else {
             throw new ClassCastException("No view model class recognized");
         }
@@ -61,6 +66,13 @@ public class ViewModelFactory extends ViewModelProvider.NewInstanceFactory {
                     sensorManagementUseCase, actuatorManagementUseCase,
                     dataManagementUseCase, logsManagementUseCase);
         return mainDashboardViewModel;
+    }
+
+    private NetworkListViewModel networkListViewModelSingleton() {
+        if (networkListViewModel == null)
+            networkListViewModel = new NetworkListViewModel(application,
+                    networkManagementUseCase);
+        return networkListViewModel;
     }
 
 }

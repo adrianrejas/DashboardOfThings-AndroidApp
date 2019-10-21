@@ -78,21 +78,21 @@ public class MainDashboardActivity extends AppCompatActivity {
                                 break;
                             case R.id.main_navigation_sensors:
                                 intent = new Intent(getApplicationContext(),
-                                        SensorsListActivity.class);
+                                        SensorListActivity.class);
                                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                                 startActivity(intent);
                                 finish();
                                 break;
                             case R.id.main_navigation_actuators:
                                 intent = new Intent(getApplicationContext(),
-                                        ActuatorsListActivity.class);
+                                        ActuatorListActivity.class);
                                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                                 startActivity(intent);
                                 finish();
                                 break;
                             case R.id.main_navigation_networks:
                                 intent = new Intent(getApplicationContext(),
-                                        NetworksListActivity.class);
+                                        NetworkListActivity.class);
                                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                                 startActivity(intent);
                                 finish();
@@ -119,7 +119,7 @@ public class MainDashboardActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_maindashboard, menu);
+        getMenuInflater().inflate(R.menu.menu_mainactivites, menu);
         this.menu = menu;
         return true;
     }

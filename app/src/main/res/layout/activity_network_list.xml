@@ -5,6 +5,13 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <data>
+        <import type="android.view.View"/>
+        <variable
+            name="listener"
+            type="com.arejas.dashboardofthings.generated.callback.OnClickListener" />
+    </data>
+
     <androidx.drawerlayout.widget.DrawerLayout
         android:id="@+id/drawer_layout"
         android:layout_width="match_parent"
@@ -39,44 +46,32 @@
 
                 </androidx.appcompat.widget.Toolbar>
 
-                <com.google.android.material.tabs.TabLayout
-                    android:id="@+id/tl_tabs_maindashboard"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@color/primaryColor"
-                    app:tabGravity="fill"
-                    app:tabMaxWidth="0dp"
-                    app:tabMode="scrollable"
-                    app:tabTextColor="@color/secondaryTextColor">
-
-                </com.google.android.material.tabs.TabLayout>
-
             </com.google.android.material.appbar.AppBarLayout>
-
-            <androidx.viewpager.widget.ViewPager
-                android:id="@+id/vp_tabViewer_maindashboard"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/appbar"
-                app:layout_constraintBottom_toBottomOf="parent">
-
-            </androidx.viewpager.widget.ViewPager>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-        <com.google.android.material.navigation.NavigationView
-            android:id="@+id/navigation_view"
-            android:layout_width="wrap_content"
+        <FrameLayout
+            android:id="@+id/frameLayout"
+            android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_gravity="start"
-            style="@style/Theme.Dot.NavDrawer"
-            app:itemIconTint="@color/secondaryTextColor"
-            app:itemTextColor="@color/secondaryTextColor"
-            app:headerLayout="@layout/header_navdrawer"
-            app:menu="@menu/main_navigation_drawer"
-            android:fitsSystemWindows="true" />
+            app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+            <include
+                android:id="@+id/network_container"
+                layout="@layout/network_list"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"/>
+
+        </FrameLayout>
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fab_network_create"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|end"
+            android:layout_margin="@dimen/fab_margin"
+            android:onClick="@{(v) -> listener.onClick(v)}"
+            app:srcCompat="@android:drawable/ic_dialog_email" />
 
     </androidx.drawerlayout.widget.DrawerLayout>
 

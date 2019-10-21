@@ -16,8 +16,11 @@
     <dimen name="list_element_magin">4dp</dimen>
     <dimen name="list_toolbar_side_margin">0dp</dimen>
     <integer name="list_maindash_column_count">1</integer>
+    <dimen name="list_width_masterdetail">200dp</dimen>
+    <dimen name="listitem_image_size">50dp</dimen>
 
     <!-- detail -->
+    <dimen name="detail_inner_margin_extra_small">4dp</dimen>
     <dimen name="detail_inner_margin_small">8dp</dimen>
     <dimen name="detail_inner_margin_big">16dp</dimen>
     <dimen name="detail_item_padding">4dp</dimen>
@@ -43,5 +46,6 @@
 
     <!-- Proportions -->
     <string name="card_image_proportion">H,1.5:1</string>
+    <dimen name="app_bar_height">200dp</dimen>
 
 </resources>
