@@ -79,6 +79,9 @@ public abstract class ActuatorsDao {
     @Delete
     public abstract void deteleAll(Actuator... actuators);
 
+    @Query("DELETE FROM networks WHERE id=:id")
+    protected abstract void deleteById(Integer id);
+
     @Update
     public abstract void update(Actuator actuator);
 
@@ -98,6 +101,12 @@ public abstract class ActuatorsDao {
     public void deleteExtended(Actuator actuator) {
         delete(actuator);
         deleteLogsForElement(actuator.getId(), Enumerators.ElementType.ACTUATOR);
+    }
+
+    @Transaction
+    public void deleteExtended(Integer id) {
+        deleteById(id);
+        deleteLogsForElement(id, Enumerators.ElementType.ACTUATOR);
     }
 
 }

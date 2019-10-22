@@ -92,6 +92,9 @@ public abstract class SensorsDao {
     @Delete
     public abstract void deteleAll(Sensor... sensors);
 
+    @Query("DELETE FROM networks WHERE id=:id")
+    protected abstract void deleteById(Integer id);
+
     @Update
     public abstract void update(Sensor sensor);
 
@@ -111,6 +114,12 @@ public abstract class SensorsDao {
     public void deleteExtended(Sensor sensor) {
         delete(sensor);
         deleteLogsForElement(sensor.getId(), Enumerators.ElementType.SENSOR);
+    }
+
+    @Transaction
+    public void deleteExtended(Integer id) {
+        deleteById(id);
+        deleteLogsForElement(id, Enumerators.ElementType.SENSOR);
     }
 
 }

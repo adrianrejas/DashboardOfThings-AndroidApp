@@ -3,7 +3,9 @@ package com.arejas.dashboardofthings.domain.usecases.implementations;
 import androidx.lifecycle.LiveData;
 
 import com.arejas.dashboardofthings.data.interfaces.DotRepository;
+import com.arejas.dashboardofthings.domain.entities.database.Actuator;
 import com.arejas.dashboardofthings.domain.entities.database.Network;
+import com.arejas.dashboardofthings.domain.entities.database.Sensor;
 import com.arejas.dashboardofthings.domain.entities.extended.NetworkExtended;
 import com.arejas.dashboardofthings.domain.entities.result.Resource;
 import com.arejas.dashboardofthings.domain.usecases.NetworkManagementUseCase;
@@ -28,6 +30,16 @@ public class NetworkManagementUseCaseImpl implements NetworkManagementUseCase {
     @Override
     public LiveData<Resource<NetworkExtended>> getNetwork(@NotNull Integer networkId) {
         return repository.getNetwork(networkId);
+    }
+
+    @Override
+    public LiveData<Resource<List<Sensor>>> getListOfRelatedSensors(@NotNull Integer networkId) {
+        return repository.getListOfSensorsFromSameNetwork(networkId);
+    }
+
+    @Override
+    public LiveData<Resource<List<Actuator>>> getListOfRelatedActuators(@NotNull Integer networkId) {
+        return repository.getListOfActuatorsFromSameNetwork(networkId);
     }
 
     @Override

@@ -55,6 +55,9 @@ public abstract class NetworksDao {
     @Delete
     public abstract void deteleAll(Network... networks);
 
+    @Query("DELETE FROM networks WHERE id=:id")
+    protected abstract void deleteById(Integer id);
+
     @Update
     public abstract void update(Network network);
 
@@ -74,6 +77,12 @@ public abstract class NetworksDao {
     public void deleteExtended(Network network) {
         delete(network);
         deleteLogsForElement(network.getId(), Enumerators.ElementType.NETWORK);
+    }
+
+    @Transaction
+    public void deleteExtended(Integer id) {
+        deleteById(id);
+        deleteLogsForElement(id, Enumerators.ElementType.NETWORK);
     }
 
 }

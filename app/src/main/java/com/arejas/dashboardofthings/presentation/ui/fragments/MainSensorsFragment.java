@@ -48,7 +48,7 @@ public class MainSensorsFragment extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        // Get the movie activity view model and observe the changes in the details
+        // Get the main dashboard activity view model and observe the changes in the details
         mainDashoardViewModel = ViewModelProviders.of(Objects.requireNonNull(getActivity()), viewModelFactory).get(MainDashboardViewModel.class);
         setList(true, false);
     }
@@ -105,16 +105,18 @@ public class MainSensorsFragment extends Fragment {
             dataValuesReceivedManaged = null;
         }
         dataValuesReceivedManaged = mainDashoardViewModel.getListOfSensorsInDashboardLastValues(refreshData);
-        dataValuesReceivedManaged.observe(this, listResource -> {
-            if (listResource == null) {
-                showError();
-            } else {
-                if ((listResource.getStatus() == Resource.Status.SUCCESS) &&
-                        (listResource.getData() != null)) {
-                    updateDataValues(listResource.getData());
+        if (dataValuesReceivedManaged != null) {
+            dataValuesReceivedManaged.observe(this, listResource -> {
+                if (listResource == null) {
+                    showError();
+                } else {
+                    if ((listResource.getStatus() == Resource.Status.SUCCESS) &&
+                            (listResource.getData() != null)) {
+                        updateDataValues(listResource.getData());
+                    }
                 }
-            }
-        });
+            });
+        }
     }
 
     private void updateList(List<SensorExtended> newList) {

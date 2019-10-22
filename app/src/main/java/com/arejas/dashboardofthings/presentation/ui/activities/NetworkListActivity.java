@@ -320,6 +320,7 @@ public class NetworkListActivity extends AppCompatActivity implements View.OnCli
                 if (mTwoPane) {
                     Bundle arguments = new Bundle();
                     arguments.putInt(NetworkDetailFragment.NETWORK_ID, item.getId());
+                    arguments.putBoolean(NetworkDetailFragment.TWO_PANE, true);
                     NetworkDetailFragment fragment = new NetworkDetailFragment();
                     fragment.setArguments(arguments);
                     mParentActivity.getSupportFragmentManager().beginTransaction()

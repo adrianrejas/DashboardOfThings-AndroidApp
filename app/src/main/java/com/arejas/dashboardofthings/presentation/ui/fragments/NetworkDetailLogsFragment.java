@@ -11,43 +11,57 @@ import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModelProviders;
-import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.arejas.dashboardofthings.R;
 import com.arejas.dashboardofthings.databinding.CardMaindashboardLogBinding;
 import com.arejas.dashboardofthings.databinding.FragmentMainlogsBinding;
+import com.arejas.dashboardofthings.databinding.FragmentNetworkDetailsLogsBinding;
 import com.arejas.dashboardofthings.domain.entities.database.Log;
 import com.arejas.dashboardofthings.domain.entities.result.Resource;
-import com.arejas.dashboardofthings.presentation.interfaces.viewmodels.MainDashboardViewModel;
+import com.arejas.dashboardofthings.presentation.interfaces.viewmodels.NetworkDetailsViewModel;
 import com.arejas.dashboardofthings.presentation.interfaces.viewmodels.factories.ViewModelFactory;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
 import javax.inject.Inject;
 
-public class MainLogsFragment extends Fragment {
+public class NetworkDetailLogsFragment extends Fragment {
+    /**
+     * The fragment argument representing the item ID that this fragment
+     * represents.
+     */
+    public static final String NETWORK_ID = "network_id";
 
-    FragmentMainlogsBinding uiBinding;
+    FragmentNetworkDetailsLogsBinding uiBinding;
 
     @Inject
     ViewModelFactory viewModelFactory;
 
-    private MainDashboardViewModel mainDashoardViewModel;
+    private NetworkDetailsViewModel networkDetailsViewModel;
 
+    public Integer networkId;
+    
     private LiveData<Resource<List<Log>>> currentListShown;
     private LinearLayoutManager llm_linear;
-    private MainLogsFragment.LogsListAdapter mAdapter;
+    private NetworkDetailLogsFragment.LogsListAdapter mAdapter;
 
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
 
+        if (getArguments().containsKey(NETWORK_ID)) {
+            networkId = getArguments().getInt(NETWORK_ID);
+        }
+    }
+    
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         // Get the movie activity view model and observe the changes in the details
-        mainDashoardViewModel = ViewModelProviders.of(Objects.requireNonNull(getActivity()), viewModelFactory).get(MainDashboardViewModel.class);
+        networkDetailsViewModel = ViewModelProviders.of(Objects.requireNonNull(getActivity()), viewModelFactory).get(NetworkDetailsViewModel.class);
         setList(true, false);
     }
 
@@ -55,7 +69,7 @@ public class MainLogsFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater,
                              @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        uiBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_mainlogs, container, false);
+        uiBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_network_details_logs, container, false);
         // Configure adapter for recycler view
         configureListAdapter();
         // Set action of refreshing list when refreshing gesture detected
@@ -79,7 +93,7 @@ public class MainLogsFragment extends Fragment {
             currentListShown.removeObservers(this);
             currentListShown = null;
         }
-        currentListShown = mainDashoardViewModel.getLastSensorNotificationLogsInMainDashboard(refreshData);
+        currentListShown = networkDetailsViewModel.getLogsForNetwork(refreshData);
         if (currentListShown != null) {
             currentListShown.observe(this, listResource -> {
                 if (listResource == null) {
@@ -113,11 +127,11 @@ public class MainLogsFragment extends Fragment {
     private void configureListAdapter() {
         // Configure recycler view with a grid layout
         llm_linear = new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false);
-        uiBinding.logsMainListListLayout.mainList.setLayoutManager(llm_linear);
+        uiBinding.logsNetworkDetailsListLayout.mainList.setLayoutManager(llm_linear);
 
         // Configure adapter for recycler view
-        mAdapter = new MainLogsFragment.LogsListAdapter();
-        uiBinding.logsMainListListLayout.mainList.setAdapter(mAdapter);
+        mAdapter = new NetworkDetailLogsFragment.LogsListAdapter();
+        uiBinding.logsNetworkDetailsListLayout.mainList.setAdapter(mAdapter);
     }
 
     /**
@@ -125,11 +139,11 @@ public class MainLogsFragment extends Fragment {
      */
     private void showError() {
         if (uiBinding != null) {
-            uiBinding.logsMainListListLayout.listLayout.setVisibility(View.GONE);
-            uiBinding.logsMainListLoadingLayout.loadingLayout.setVisibility(View.GONE);
-            uiBinding.logsMainListErrorLayout.errorLayout.setVisibility(View.VISIBLE);
-            uiBinding.logsMainListNoElementsLayout.noElementsLayout.setVisibility(View.GONE);
-            uiBinding.logsMainListErrorLayout.tvError.setText(getString(R.string.error_in_list));
+            uiBinding.logsNetworkDetailsListLayout.listLayout.setVisibility(View.GONE);
+            uiBinding.logsNetworkDetailsLoadingLayout.loadingLayout.setVisibility(View.GONE);
+            uiBinding.logsNetworkDetailsErrorLayout.errorLayout.setVisibility(View.VISIBLE);
+            uiBinding.logsNetworkDetailsNoElementsLayout.noElementsLayout.setVisibility(View.GONE);
+            uiBinding.logsNetworkDetailsErrorLayout.tvError.setText(getString(R.string.error_in_list));
         }
     }
 
@@ -138,10 +152,10 @@ public class MainLogsFragment extends Fragment {
      */
     private void showLoading() {
         if (uiBinding != null) {
-            uiBinding.logsMainListListLayout.listLayout.setVisibility(View.GONE);
-            uiBinding.logsMainListLoadingLayout.loadingLayout.setVisibility(View.VISIBLE);
-            uiBinding.logsMainListErrorLayout.errorLayout.setVisibility(View.GONE);
-            uiBinding.logsMainListNoElementsLayout.noElementsLayout.setVisibility(View.GONE);
+            uiBinding.logsNetworkDetailsListLayout.listLayout.setVisibility(View.GONE);
+            uiBinding.logsNetworkDetailsLoadingLayout.loadingLayout.setVisibility(View.VISIBLE);
+            uiBinding.logsNetworkDetailsErrorLayout.errorLayout.setVisibility(View.GONE);
+            uiBinding.logsNetworkDetailsNoElementsLayout.noElementsLayout.setVisibility(View.GONE);
         }
     }
 
@@ -150,10 +164,10 @@ public class MainLogsFragment extends Fragment {
      */
     private void showNoElements() {
         if (uiBinding != null) {
-            uiBinding.logsMainListListLayout.listLayout.setVisibility(View.GONE);
-            uiBinding.logsMainListLoadingLayout.loadingLayout.setVisibility(View.GONE);
-            uiBinding.logsMainListErrorLayout.errorLayout.setVisibility(View.GONE);
-            uiBinding.logsMainListNoElementsLayout.noElementsLayout.setVisibility(View.VISIBLE);
+            uiBinding.logsNetworkDetailsListLayout.listLayout.setVisibility(View.GONE);
+            uiBinding.logsNetworkDetailsLoadingLayout.loadingLayout.setVisibility(View.GONE);
+            uiBinding.logsNetworkDetailsErrorLayout.errorLayout.setVisibility(View.GONE);
+            uiBinding.logsNetworkDetailsNoElementsLayout.noElementsLayout.setVisibility(View.VISIBLE);
         }
     }
 
@@ -162,14 +176,14 @@ public class MainLogsFragment extends Fragment {
      */
     private void showList() {
         if (uiBinding != null) {
-            uiBinding.logsMainListListLayout.listLayout.setVisibility(View.VISIBLE);
-            uiBinding.logsMainListLoadingLayout.loadingLayout.setVisibility(View.GONE);
-            uiBinding.logsMainListErrorLayout.errorLayout.setVisibility(View.GONE);
-            uiBinding.logsMainListNoElementsLayout.noElementsLayout.setVisibility(View.GONE);
+            uiBinding.logsNetworkDetailsListLayout.listLayout.setVisibility(View.VISIBLE);
+            uiBinding.logsNetworkDetailsLoadingLayout.loadingLayout.setVisibility(View.GONE);
+            uiBinding.logsNetworkDetailsErrorLayout.errorLayout.setVisibility(View.GONE);
+            uiBinding.logsNetworkDetailsNoElementsLayout.noElementsLayout.setVisibility(View.GONE);
         }
     }
 
-    class LogsListAdapter extends RecyclerView.Adapter<MainLogsFragment.LogsListAdapter.LogListViewHolder> {
+    class LogsListAdapter extends RecyclerView.Adapter<NetworkDetailLogsFragment.LogsListAdapter.LogListViewHolder> {
 
         private List<Log> mData;
 
@@ -182,15 +196,15 @@ public class MainLogsFragment extends Fragment {
         }
 
         @Override
-        public MainLogsFragment.LogsListAdapter.LogListViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        public NetworkDetailLogsFragment.LogsListAdapter.LogListViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             LayoutInflater inflater = LayoutInflater.from(parent.getContext());
             CardMaindashboardLogBinding binding = DataBindingUtil.inflate(inflater, R.layout.card_maindashboard_log,
                     parent, false);
-            return new MainLogsFragment.LogsListAdapter.LogListViewHolder(binding);
+            return new NetworkDetailLogsFragment.LogsListAdapter.LogListViewHolder(binding);
         }
 
         @Override
-        public void onBindViewHolder(final MainLogsFragment.LogsListAdapter.LogListViewHolder holder, int position) {
+        public void onBindViewHolder(final NetworkDetailLogsFragment.LogsListAdapter.LogListViewHolder holder, int position) {
             if ((mData != null) && (mData.size() > position)) {
                 holder.itemView.setTag(position);
                 holder.binding.setLog(mData.get(position));

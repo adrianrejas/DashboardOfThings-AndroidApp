@@ -1,20 +1,40 @@
 package com.arejas.dashboardofthings.presentation.ui.fragments;
 
-import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 
+import com.arejas.dashboardofthings.DotApplication;
 import com.arejas.dashboardofthings.R;
+import com.arejas.dashboardofthings.databinding.FragmentNetworkDetailBinding;
+import com.arejas.dashboardofthings.domain.entities.database.Network;
 import com.arejas.dashboardofthings.domain.entities.extended.NetworkExtended;
+import com.arejas.dashboardofthings.domain.entities.result.Resource;
+import com.arejas.dashboardofthings.presentation.interfaces.viewmodels.MainDashboardViewModel;
+import com.arejas.dashboardofthings.presentation.interfaces.viewmodels.NetworkDetailsViewModel;
+import com.arejas.dashboardofthings.presentation.interfaces.viewmodels.factories.ViewModelFactory;
+import com.arejas.dashboardofthings.presentation.ui.activities.NetworkAddEditActivity;
 import com.arejas.dashboardofthings.presentation.ui.activities.NetworkDetailActivity;
 import com.arejas.dashboardofthings.presentation.ui.activities.NetworkListActivity;
-import com.google.android.material.appbar.CollapsingToolbarLayout;
+import com.arejas.dashboardofthings.presentation.ui.notifications.RemoveNetworkDialogFragment;
+import com.arejas.dashboardofthings.presentation.ui.notifications.ToastHelper;
 
+import androidx.annotation.Nullable;
+import androidx.appcompat.widget.Toolbar;
+import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentPagerAdapter;
+import androidx.lifecycle.ViewModelProviders;
 
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
+
+import java.util.Objects;
+
+import javax.inject.Inject;
 
 /**
  * A fragment representing a single Network detail screen.
@@ -28,33 +48,191 @@ public class NetworkDetailFragment extends Fragment {
      * represents.
      */
     public static final String NETWORK_ID = "network_id";
+    public static final String TWO_PANE = "two_pane";
 
-    /**
-     * The dummy content this fragment is presenting.
-     */
-    private NetworkExtended mItem;
+    @Inject
+    ViewModelFactory viewModelFactory;
+
+    FragmentNetworkDetailBinding uiBinding;
+
+    public Integer networkId;
+    public boolean bTwoPane;
+    public NetworkExtended networkObject;
+
+    private NetworkDetailsViewModel networkDetailsViewModel;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
      * fragment (e.g. upon screen orientation changes).
      */
-    public NetworkDetailFragment() {
-    }
+    public NetworkDetailFragment() {}
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         if (getArguments().containsKey(NETWORK_ID)) {
-            //TODO
-            getArguments().getInt(NETWORK_ID);
+            networkId = getArguments().getInt(NETWORK_ID);
+        } else {
+            networkId = null;
+        }
+
+        if (getArguments().containsKey(TWO_PANE)) {
+            bTwoPane = getArguments().getBoolean(TWO_PANE);
+        } else {
+            bTwoPane = false;
         }
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_network_detail, container, false);
-        return rootView;
+        uiBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_network_detail, container, false);
+        // Init the view pager with a fragment adapter for showing the fragments with different info
+        // of the movie in a tab system
+        NetworkDetailsFragmentPagerAdapter fragmentAdapter = new NetworkDetailsFragmentPagerAdapter(getActivity().getSupportFragmentManager(), getContext(), networkId);
+        uiBinding.vpNetworkdetailsMaindashboard.setAdapter(fragmentAdapter);
+        uiBinding.tlTabsNetworkdetails.setupWithViewPager(uiBinding.vpNetworkdetailsMaindashboard);
+
+        if (!bTwoPane) {
+            uiBinding.toolbar.setNavigationIcon(getResources().getDrawable(R.drawable.action_back));
+            uiBinding.toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    getActivity().finish();
+                }
+            });
+        }
+
+        uiBinding.toolbar.inflateMenu(R.menu.menu_element_management);
+        uiBinding.toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
+
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+
+                switch (item.getItemId()) {
+                    case R.id.menu_edit:
+                        Intent intent = new Intent(DotApplication.getContext(),
+                                NetworkAddEditActivity.class);
+                        intent.putExtra(NetworkAddEditActivity.NETWORK_ID, networkId);
+                        DotApplication.getContext().startActivity(intent);
+                        break;
+                    case R.id.menu_remove:
+                        if (networkObject != null) {
+                            RemoveNetworkDialogFragment dialog =
+                                    new RemoveNetworkDialogFragment(networkObject, networkDetailsViewModel);
+                            dialog.show(getActivity().getSupportFragmentManager(), "removeNetwork");
+                        } else {
+                            ToastHelper.showToast(getString(R.string.toast_remove_failed));
+                        }
+                        break;
+                }
+
+                return false;
+            }
+        });
+
+        return uiBinding.getRoot();
     }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        // If the recipe ID is defined load the suitable viewmodel.
+        if (networkId != null) {
+            // Configure the viewmodel provider
+            this.viewModelFactory.setNetworkIdToLoad(networkId);
+            // Get the viewmodel
+            networkDetailsViewModel = ViewModelProviders.of(this, this.viewModelFactory).get(NetworkDetailsViewModel.class);
+
+            networkDetailsViewModel.getNetwork(false).observe(this, networkExtendedResource -> {
+                if (networkExtendedResource == null) {
+                    uiBinding.toolbar.setTitle(R.string.toolbar_title_network_unrecognized);
+                } else {
+                    if (networkExtendedResource.getStatus() == Resource.Status.ERROR) {
+                        uiBinding.toolbar.setTitle(R.string.toolbar_title_network_unrecognized);
+                    } else if (networkExtendedResource.getStatus() == Resource.Status.LOADING) {
+                        uiBinding.toolbar.setTitle(R.string.toolbar_title_network_loading);
+                    } else {
+                        NetworkExtended network = networkExtendedResource.getData();
+                        if (network != null) {
+                            networkObject = network;
+                            uiBinding.setNetwork(network);
+                            uiBinding.toolbar.setTitle(network.getName());
+                        } else {
+                            uiBinding.toolbar.setTitle(R.string.toolbar_title_network_unrecognized);
+                        }
+                    }
+                }
+            });
+        }
+    }
+
+
+    /**
+     * This adapter is used for defining the tab system of the movie activity, providing the
+     * fragments it will used, so as the tab configuration.
+     */
+    static class NetworkDetailsFragmentPagerAdapter extends FragmentPagerAdapter {
+
+        private static final int NUM_ITEMS = 2;
+
+        private final Context mContext;
+
+        private final int networkId;
+
+        NetworkDetailsFragmentPagerAdapter(FragmentManager fragmentManager, Context context, int networkId) {
+            super(fragmentManager, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT);
+            this.mContext = context;
+            this.networkId = networkId;
+        }
+
+        // Returns total number of pages
+        @Override
+        public int getCount() {
+            return NUM_ITEMS;
+        }
+
+        // Returns the fragment to display for that page
+        @Override
+        public Fragment getItem(int position) {
+            Bundle arguments;
+            Fragment fragment;
+            switch (position) {
+                case 0: // Details
+                    arguments = new Bundle();
+                    arguments.putInt(NetworkDetailDetailsFragment.NETWORK_ID, networkId);
+                    fragment = new NetworkDetailDetailsFragment();
+                    fragment.setArguments(arguments);
+                    return fragment;
+                case 1: // Cast
+                    arguments = new Bundle();
+                    arguments.putInt(NetworkDetailLogsFragment.NETWORK_ID, networkId);
+                    fragment = new NetworkDetailLogsFragment();
+                    fragment.setArguments(arguments);
+                    return fragment;
+                default:
+                    return null;
+            }
+        }
+
+        // Returns the page title for the top indicator
+        @Override
+        public CharSequence getPageTitle(int position) {
+            if (mContext != null) {
+                switch (position) {
+                    case 0: // Details
+                        return mContext.getString(R.string.network_details_tab_details);
+                    case 1: // Cast
+                        return mContext.getString(R.string.network_details_tab_logs);
+                    default:
+                        return null;
+                }
+            } else {
+                return "";
+            }
+        }
+
+    }
+
 }

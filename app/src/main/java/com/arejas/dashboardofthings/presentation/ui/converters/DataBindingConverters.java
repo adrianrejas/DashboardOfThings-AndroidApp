@@ -402,7 +402,7 @@ public class DataBindingConverters {
     }
 
     @BindingAdapter({"sensorList"})
-    public static void loadListOfSensors(TextView view, List<Sensor> dataList, String textIntro) {
+    public static void loadListOfSensors(TextView view, List<Sensor> dataList) {
         // If not null, compose the list and set it.
         if ((dataList != null) && (dataList.size() != 0)) {
             List<String> elementNames = new ArrayList<>();
@@ -411,15 +411,14 @@ public class DataBindingConverters {
             }
             String dataString = DotApplication.getContext().getString(R.string.network_list_sensors).
                     concat(TextUtils.join(", ", elementNames));
-            view.setText(Utils.fromHtml(String.format(textIntro, dataString)));
+            view.setText(Utils.fromHtml(dataString));
         } else {
-            view.setText(Utils.fromHtml(String.format(textIntro,
-                    DotApplication.getContext().getString(R.string.network_no_sensors))));
+            view.setText(Utils.fromHtml(DotApplication.getContext().getString(R.string.network_no_sensors)));
         }
     }
 
     @BindingAdapter({"actuatorList"})
-    public static void loadListOfActuators(TextView view, List<Actuator> dataList, String textIntro) {
+    public static void loadListOfActuators(TextView view, List<Actuator> dataList) {
         // If not null, compose the list and set it.
         if ((dataList != null) && (dataList.size() != 0)) {
             List<String> elementNames = new ArrayList<>();
@@ -428,10 +427,9 @@ public class DataBindingConverters {
             }
             String dataString = DotApplication.getContext().getString(R.string.network_list_actuators).
                     concat(TextUtils.join(", ", elementNames));
-            view.setText(Utils.fromHtml(String.format(textIntro, dataString)));
+            view.setText(Utils.fromHtml(dataString));
         } else {
-            view.setText(Utils.fromHtml(String.format(textIntro,
-                    DotApplication.getContext().getString(R.string.network_no_actuators))));
+            view.setText(Utils.fromHtml(DotApplication.getContext().getString(R.string.network_no_actuators)));
         }
     }
 

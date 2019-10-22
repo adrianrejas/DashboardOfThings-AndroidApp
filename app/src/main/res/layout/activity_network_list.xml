@@ -9,7 +9,7 @@
         <import type="android.view.View"/>
         <variable
             name="listener"
-            type="com.arejas.dashboardofthings.generated.callback.OnClickListener" />
+            type="android.view.View.OnClickListener" />
     </data>
 
     <androidx.drawerlayout.widget.DrawerLayout

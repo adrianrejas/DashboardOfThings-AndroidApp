@@ -19,17 +19,17 @@ public class LogsManagementUseCaseImpl implements LogsManagementUseCase {
     }
 
     @Override
-    public LiveData<List<Log>> getLastLogsForNetwork(int networkId) {
+    public LiveData<Resource<List<Log>>> getLastLogsForNetwork(int networkId) {
         return repository.getLastLogsForElement(networkId, Enumerators.ElementType.NETWORK);
     }
 
     @Override
-    public LiveData<List<Log>> getLastLogsForSensor(int sensorId) {
+    public LiveData<Resource<List<Log>>> getLastLogsForSensor(int sensorId) {
         return repository.getLastLogsForElement(sensorId, Enumerators.ElementType.SENSOR);
     }
 
     @Override
-    public LiveData<List<Log>> getLastLogsForActuator(int actuatorId) {
+    public LiveData<Resource<List<Log>>> getLastLogsForActuator(int actuatorId) {
         return repository.getLastLogsForElement(actuatorId, Enumerators.ElementType.ACTUATOR);
     }
 

@@ -329,9 +329,9 @@ public class DotRepository {
         }
     }
 
-    public LiveData<List<Actuator>> getListOfActuatorsFromSameNetwork(int NetworkId) {
+    public LiveData<Resource<List<Actuator>>> getListOfActuatorsFromSameNetwork(int NetworkId) {
         try {
-            return this.dotDatabase.actuatorsDao().getAllFromSameNetwork(NetworkId);
+            return new LiveDataResource<List<Actuator>>(() -> this.dotDatabase.actuatorsDao().getAllFromSameNetwork(NetworkId));
         } catch (Exception e) {
             return null;
         }
@@ -570,9 +570,9 @@ public class DotRepository {
         }
     }
 
-    public LiveData<List<Log>> getLastLogsForElement(int id, Enumerators.ElementType elementType) {
+    public LiveData<Resource<List<Log>>> getLastLogsForElement(int id, Enumerators.ElementType elementType) {
         try {
-            return this.dotDatabase.logsDao().getLastHundredLogsForElementId(id, elementType);
+            return new LiveDataResource<List<Log>>(() -> this.dotDatabase.logsDao().getLastHundredLogsForElementId(id, elementType));
         } catch (Exception e) {
             return null;
         }

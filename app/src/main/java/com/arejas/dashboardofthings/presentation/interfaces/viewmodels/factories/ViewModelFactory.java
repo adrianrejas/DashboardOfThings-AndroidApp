@@ -12,6 +12,7 @@ import com.arejas.dashboardofthings.domain.usecases.LogsManagementUseCase;
 import com.arejas.dashboardofthings.domain.usecases.NetworkManagementUseCase;
 import com.arejas.dashboardofthings.domain.usecases.SensorManagementUseCase;
 import com.arejas.dashboardofthings.presentation.interfaces.viewmodels.MainDashboardViewModel;
+import com.arejas.dashboardofthings.presentation.interfaces.viewmodels.NetworkDetailsViewModel;
 import com.arejas.dashboardofthings.presentation.interfaces.viewmodels.NetworkListViewModel;
 
 import javax.inject.Inject;
@@ -30,6 +31,11 @@ public class ViewModelFactory extends ViewModelProvider.NewInstanceFactory {
 
     private MainDashboardViewModel mainDashboardViewModel;
     private NetworkListViewModel networkListViewModel;
+    private NetworkDetailsViewModel networkDetailsViewModel;
+
+    private Integer networkIdToLoad;
+    private Integer sensorIdToLoad;
+    private Integer actuatorIdToLoad;
 
     @Inject
     public ViewModelFactory(@NonNull Application application,
@@ -46,6 +52,16 @@ public class ViewModelFactory extends ViewModelProvider.NewInstanceFactory {
         this.logsManagementUseCase = logsManagementUseCase;
         mainDashboardViewModelSingleton();
         networkListViewModelSingleton();
+        this.networkIdToLoad = null;
+        this.networkDetailsViewModel = null;
+    }
+
+    public void setNetworkIdToLoad (Integer networkId) {
+        if ((networkId != networkIdToLoad)) {
+            networkIdToLoad = networkId;
+            this.networkDetailsViewModel = new NetworkDetailsViewModel(application, networkIdToLoad,
+                    networkManagementUseCase, logsManagementUseCase);
+        }
     }
 
     @Override
@@ -55,6 +71,8 @@ public class ViewModelFactory extends ViewModelProvider.NewInstanceFactory {
             return (T) mainDashboardViewModelSingleton();
         } else if (modelClass.isAssignableFrom(NetworkListViewModel.class)) {
             return (T) networkListViewModelSingleton();
+        } else if (modelClass.isAssignableFrom(NetworkDetailsViewModel.class)) {
+            return (T) networkDetailsViewModelSingleton();
         } else {
             throw new ClassCastException("No view model class recognized");
         }
@@ -73,6 +91,13 @@ public class ViewModelFactory extends ViewModelProvider.NewInstanceFactory {
             networkListViewModel = new NetworkListViewModel(application,
                     networkManagementUseCase);
         return networkListViewModel;
+    }
+
+    private NetworkDetailsViewModel networkDetailsViewModelSingleton() {
+        if (networkDetailsViewModel == null)
+            networkDetailsViewModel = new NetworkDetailsViewModel(application, networkIdToLoad,
+                    networkManagementUseCase, logsManagementUseCase);
+        return networkDetailsViewModel;
     }
 
 }

@@ -48,7 +48,7 @@
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintDimensionRatio="@string/detail_photo_aspect_ratio"
                         android:contentDescription="@string/content_description_network_image"
-                        app:imageUrl="@{actuator.imageUri}"
+                        app:imageUrl="@{network.imageUri}"
                         app:errorResource="@{@drawable/error}"
                         app:loadingResource="@{@drawable/loading}"
                         android:scaleType="centerCrop" />

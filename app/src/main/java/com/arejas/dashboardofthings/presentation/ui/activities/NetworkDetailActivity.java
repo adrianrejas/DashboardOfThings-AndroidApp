@@ -4,18 +4,23 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import com.arejas.dashboardofthings.R;
+import com.arejas.dashboardofthings.presentation.interfaces.viewmodels.factories.ViewModelFactory;
 import com.arejas.dashboardofthings.presentation.ui.fragments.NetworkDetailFragment;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 
 import androidx.appcompat.widget.Toolbar;
 
+import android.view.Menu;
 import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.ActionBar;
 
 import android.view.MenuItem;
+
+import javax.inject.Inject;
+
 /**
  * An activity representing a single Network detail screen. This
  * activity is only used on narrow width devices. On tablet-size devices,
@@ -28,14 +33,6 @@ public class NetworkDetailActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_network_detail);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.detail_toolbar);
-        setSupportActionBar(toolbar);
-
-        // Show the Up button in the action bar.
-        ActionBar actionBar = getSupportActionBar();
-        if (actionBar != null) {
-            actionBar.setDisplayHomeAsUpEnabled(true);
-        }
 
         // savedInstanceState is non-null when there is fragment state
         // saved from previous configurations of this activity
@@ -52,6 +49,7 @@ public class NetworkDetailActivity extends AppCompatActivity {
             Bundle arguments = new Bundle();
             arguments.putInt(NetworkDetailFragment.NETWORK_ID,
                     getIntent().getIntExtra(NetworkDetailFragment.NETWORK_ID, -1));
+            arguments.putBoolean(NetworkDetailFragment.TWO_PANE, false);
             NetworkDetailFragment fragment = new NetworkDetailFragment();
             fragment.setArguments(arguments);
             getSupportFragmentManager().beginTransaction()

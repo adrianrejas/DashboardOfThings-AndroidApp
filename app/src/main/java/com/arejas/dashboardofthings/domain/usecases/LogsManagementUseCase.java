@@ -11,11 +11,11 @@ import java.util.List;
 
 public interface LogsManagementUseCase extends BaseUseCase {
 
-    public LiveData<List<Log>> getLastLogsForNetwork(int networkId);
+    public LiveData<Resource<List<Log>>> getLastLogsForNetwork(int networkId);
 
-    public LiveData<List<Log>> getLastLogsForSensor(int sensorId);
+    public LiveData<Resource<List<Log>>> getLastLogsForSensor(int sensorId);
 
-    public LiveData<List<Log>> getLastLogsForActuator(int actuatorId);
+    public LiveData<Resource<List<Log>>> getLastLogsForActuator(int actuatorId);
 
     public LiveData<Resource<List<Log>>> getLastConfigurationLogs();
 

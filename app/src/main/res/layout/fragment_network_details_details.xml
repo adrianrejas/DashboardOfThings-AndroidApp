@@ -8,7 +8,7 @@
         <import type="android.view.View"/>
         <variable
             name="network"
-            type="com.arejas.dashboardofthings.domain.entities.extended.SensorExtended" />
+            type="com.arejas.dashboardofthings.domain.entities.extended.NetworkExtended" />
         <variable
             name="sensorList"
             type="java.util.List&lt;com.arejas.dashboardofthings.domain.entities.database.Sensor>" />
@@ -17,73 +17,110 @@
             type="java.util.List&lt;com.arejas.dashboardofthings.domain.entities.database.Actuator>" />
     </data>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-        
-        <TextView
-            android:id="@+id/tv_network_problems_details"
+        android:layout_height="match_parent"
+        android:id="@+id/srl_refresh_layout">
+
+        <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/detail_inner_margin_big"
-            android:layout_marginStart="@dimen/detail_inner_margin_small"
-            android:layout_marginEnd="@dimen/detail_inner_margin_small"
-            android:contentDescription="@string/content_description_element_problems"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            style="@style/Theme.Dot.TextTitleAlert"
-            android:visibility="@{ ((network.recentErrorLogs != null) &amp;&amp; (network.recentErrorLogs > 0)) ? View.VISIBLE : View.GONE }"
-            android:text="@{@plurals/error_log_number(network.recentErrorLogs)}"
-            tools:text="There are problems"/>
+            app:layout_behavior="@string/appbar_scrolling_view_behavior" >
 
-        <TextView
-            android:id="@+id/tv_network_type_details"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/detail_inner_margin_small"
-            android:layout_marginStart="@dimen/detail_inner_margin_small"
-            android:layout_marginEnd="@dimen/detail_inner_margin_small"
-            android:contentDescription="@string/content_description_network_type"
-            app:networkType="@{network.networkType}"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tv_network_problems_details"
-            style="@style/Theme.Dot.TextData"
-            tools:text="MQTT network"/>
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
 
-        <TextView
-            android:id="@+id/tv_network_sensors_details"
-            style="@style/Theme.Dot.TextData"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/detail_inner_margin_small"
-            android:layout_marginTop="@dimen/detail_inner_margin_small"
-            android:layout_marginEnd="@dimen/detail_inner_margin_small"
-            android:contentDescription="@string/content_description_network_sensors"
-            app:sensorList="@{sensorList}"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tv_network_type_details"
-            tools:text="NORMAL" />
+                <include
+                    android:id="@+id/network_details_loading_layout"
+                    layout="@layout/layout_loading"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_margin="@dimen/list_side_outer_margin"
+                    android:orientation="vertical"/>
 
-        <TextView
-            android:id="@+id/tv_network_actuators_details"
-            style="@style/Theme.Dot.TextData"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/detail_inner_margin_small"
-            android:layout_marginTop="@dimen/detail_inner_margin_small"
-            android:layout_marginEnd="@dimen/detail_inner_margin_small"
-            android:layout_marginBottom="@dimen/detail_inner_margin_big"
-            android:contentDescription="@string/content_description_network_actuators"
-            app:actuatorList="@{actuatorList}"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tv_network_sensors_details"
-            tools:text="NORMAL" />
+                <include
+                    android:id="@+id/network_details_error_layout"
+                    layout="@layout/layout_error"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_margin="@dimen/list_side_outer_margin"
+                    android:orientation="vertical"/>
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/network_details_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:id="@+id/tv_network_problems_details"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/detail_inner_margin_big"
+                        android:layout_marginStart="@dimen/detail_inner_margin_small"
+                        android:layout_marginEnd="@dimen/detail_inner_margin_small"
+                        android:contentDescription="@string/content_description_element_problems"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        style="@style/Theme.Dot.TextTitleAlert"
+                        android:visibility="@{ ((network.recentErrorLogs != null) &amp;&amp; (network.recentErrorLogs > 0)) ? View.VISIBLE : View.GONE }"
+                        android:text="@{@plurals/error_log_number(network.recentErrorLogs)}"
+                        tools:text="There are problems"/>
+
+                    <TextView
+                        android:id="@+id/tv_network_type_details"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/detail_inner_margin_small"
+                        android:layout_marginStart="@dimen/detail_inner_margin_small"
+                        android:layout_marginEnd="@dimen/detail_inner_margin_small"
+                        android:contentDescription="@string/content_description_network_type"
+                        app:networkType="@{network.networkType}"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/tv_network_problems_details"
+                        style="@style/Theme.Dot.TextData"
+                        tools:text="MQTT network"/>
+
+                    <TextView
+                        android:id="@+id/tv_network_sensors_details"
+                        style="@style/Theme.Dot.TextData"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/detail_inner_margin_small"
+                        android:layout_marginTop="@dimen/detail_inner_margin_small"
+                        android:layout_marginEnd="@dimen/detail_inner_margin_small"
+                        android:contentDescription="@string/content_description_network_sensors"
+                        app:sensorList="@{sensorList}"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/tv_network_type_details"
+                        tools:text="NORMAL" />
+
+                    <TextView
+                        android:id="@+id/tv_network_actuators_details"
+                        style="@style/Theme.Dot.TextData"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/detail_inner_margin_small"
+                        android:layout_marginTop="@dimen/detail_inner_margin_small"
+                        android:layout_marginEnd="@dimen/detail_inner_margin_small"
+                        android:layout_marginBottom="@dimen/detail_inner_margin_big"
+                        android:contentDescription="@string/content_description_network_actuators"
+                        app:actuatorList="@{actuatorList}"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/tv_network_sensors_details"
+                        tools:text="NORMAL" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+            </FrameLayout>
+
+        </androidx.core.widget.NestedScrollView>
+
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
 </layout>
