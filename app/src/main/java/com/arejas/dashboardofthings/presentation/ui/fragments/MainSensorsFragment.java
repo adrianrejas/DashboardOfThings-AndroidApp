@@ -38,7 +38,7 @@ public class MainSensorsFragment extends Fragment {
     @Inject
     ViewModelFactory viewModelFactory;
 
-    private MainDashboardViewModel mainDashoardViewModel;
+    private MainDashboardViewModel mainnetwork_addeditViewModel;
 
     private LiveData<Resource<List<SensorExtended>>> currentListShown;
     private LiveData<Resource<List<DataValue>>> dataValuesReceivedManaged;
@@ -49,7 +49,7 @@ public class MainSensorsFragment extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         // Get the main dashboard activity view model and observe the changes in the details
-        mainDashoardViewModel = ViewModelProviders.of(Objects.requireNonNull(getActivity()), viewModelFactory).get(MainDashboardViewModel.class);
+        mainnetwork_addeditViewModel = ViewModelProviders.of(Objects.requireNonNull(getActivity()), viewModelFactory).get(MainDashboardViewModel.class);
         setList(true, false);
     }
 
@@ -81,7 +81,7 @@ public class MainSensorsFragment extends Fragment {
             currentListShown.removeObservers(this);
             currentListShown = null;
         }
-        currentListShown = mainDashoardViewModel.getListOfSensorsMainDashboard(refreshData);
+        currentListShown = mainnetwork_addeditViewModel.getListOfSensorsMainDashboard(refreshData);
         if (currentListShown != null) {
             currentListShown.observe(this, listResource -> {
                 if (listResource == null) {
@@ -104,7 +104,7 @@ public class MainSensorsFragment extends Fragment {
             dataValuesReceivedManaged.removeObservers(this);
             dataValuesReceivedManaged = null;
         }
-        dataValuesReceivedManaged = mainDashoardViewModel.getListOfSensorsInDashboardLastValues(refreshData);
+        dataValuesReceivedManaged = mainnetwork_addeditViewModel.getListOfSensorsInDashboardLastValues(refreshData);
         if (dataValuesReceivedManaged != null) {
             dataValuesReceivedManaged.observe(this, listResource -> {
                 if (listResource == null) {
@@ -283,7 +283,7 @@ public class MainSensorsFragment extends Fragment {
             @Override
             public void requestReload() {
                 if (sensor != null) {
-                    mainDashoardViewModel.requestSensorReload(sensor);
+                    mainnetwork_addeditViewModel.requestSensorReload(sensor);
                 }
             }
         }

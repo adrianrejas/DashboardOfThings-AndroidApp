@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <import type="android.view.View"/>
+        <variable
+            name="editionMode"
+            type="Boolean" />
+        <variable
+            name="network"
+            type="com.arejas.dashboardofthings.domain.entities.database.Network" />
+        <variable
+            name="presenter"
+            type="com.arejas.dashboardofthings.presentation.ui.helpers.AddEditElementPresenter" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context="com.arejas.dashboardofthings.presentation.ui.activities.NetworkListActivity">
+
+        <com.google.android.material.appbar.AppBarLayout
+            android:id="@+id/appbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:theme="@style/Theme.Dot.ActionBar"
+            android:elevation="@dimen/toolbar_elevation">
+
+            <androidx.appcompat.widget.Toolbar
+                android:id="@+id/toolbar"
+                app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+                android:layout_marginLeft="@dimen/list_toolbar_side_margin"
+                android:layout_marginRight="@dimen/list_toolbar_side_margin"
+                android:layout_width="match_parent"
+                android:layout_height="?actionBarSize"
+                android:layout_gravity="top"
+                android:background="?colorPrimary">
+
+            </androidx.appcompat.widget.Toolbar>
+
+        </com.google.android.material.appbar.AppBarLayout>
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="?actionBarSize">
+
+            <include
+                android:id="@+id/network_addedit_loading_layout"
+                layout="@layout/layout_loading"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="@dimen/list_side_outer_margin"
+                android:orientation="vertical"/>
+
+            <ScrollView
+                android:id="@+id/network_addedit_editarea_layout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:visibility="gone"
+                tools:visibility="visible">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:id="@+id/tv_network_addedit_general_variables_label"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/detail_inner_margin_big"
+                        android:layout_marginStart="@dimen/detail_inner_margin_big"
+                        android:layout_marginEnd="@dimen/detail_inner_margin_big"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        android:text="@string/edit_label_general_variables"
+                        style="@style/Theme.Dot.TextTitle"/>
+
+                    <TextView
+                        android:id="@+id/tv_network_addedit_name_label"
+                        style="@style/Theme.Dot.TextDataBold"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/detail_inner_margin_big"
+                        android:layout_marginTop="@dimen/detail_inner_margin_big"
+                        android:layout_marginEnd="@dimen/detail_inner_margin_small"
+                        android:text="@string/edit_label_name"
+                        app:layout_constraintEnd_toStartOf="@id/ed_network_addedit_name"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/tv_network_addedit_general_variables_label" />
+
+                    <EditText
+                        android:id="@+id/ed_network_addedit_name"
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        android:layout_marginEnd="@dimen/detail_inner_margin_big"
+                        style="@style/Theme.Dot.Edittext"
+                        android:inputType="textNoSuggestions"
+                        android:hint="@string/edit_hint_name_network"
+                        android:text="@{network.name}"
+                        app:layout_constraintTop_toTopOf="@id/tv_network_addedit_name_label"
+                        app:layout_constraintBottom_toBottomOf="@id/tv_network_addedit_name_label"
+                        app:layout_constraintStart_toEndOf="@id/tv_network_addedit_name_label"
+                        app:layout_constraintEnd_toEndOf="parent" />
+
+                    <TextView
+                        android:id="@+id/tv_network_addedit_type_label"
+                        style="@style/Theme.Dot.TextDataBold"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/detail_inner_margin_big"
+                        android:layout_marginTop="@dimen/detail_inner_margin_big"
+                        android:layout_marginEnd="@dimen/detail_inner_margin_small"
+                        android:text="@string/edit_label_type"
+                        app:layout_constraintEnd_toStartOf="@id/tv_network_addedit_name_label"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/tv_network_addedit_general_variables_label" />
+
+                    <EditText
+                        android:id="@+id/ed_network_addedit_type"
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        android:layout_marginEnd="@dimen/detail_inner_margin_big"
+                        style="@style/Theme.Dot.Edittext"
+                        android:inputType="textNoSuggestions"
+                        android:hint="@string/edit_hint_type_network"
+                        android:text="@{network.networkType}"
+                        app:layout_constraintTop_toTopOf="@id/tv_network_addedit_name_label"
+                        app:layout_constraintBottom_toBottomOf="@id/tv_network_addedit_name_label"
+                        app:layout_constraintStart_toEndOf="@id/tv_network_addedit_name_label"
+                        app:layout_constraintEnd_toEndOf="parent" />
+
+                    <FrameLayout
+                        android:layout_width="0dp"
+                        android:layout_height="1dp"
+                        android:layout_marginTop="@dimen/detail_inner_margin_big"
+                        android:layout_marginBottom="@dimen/detail_inner_margin_big"
+                        android:layout_margintart="@dimen/detail_inner_margin_big"
+                        android:layout_marginEnd="@dimen/detail_inner_margin_big"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/tv_network_addedit_name_label"
+                        android:background="@color/primaryTextColor">
+
+                    </FrameLayout>
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+            </ScrollView>
+
+        </FrameLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>

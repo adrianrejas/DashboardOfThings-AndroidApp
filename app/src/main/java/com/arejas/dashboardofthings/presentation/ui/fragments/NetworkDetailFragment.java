@@ -143,6 +143,7 @@ public class NetworkDetailFragment extends Fragment {
             // Configure the viewmodel provider
             this.viewModelFactory.setNetworkIdToLoad(networkId);
             // Get the viewmodel
+            viewModelFactory.setNetworkIdToLoad(networkId);
             networkDetailsViewModel = ViewModelProviders.of(this, this.viewModelFactory).get(NetworkDetailsViewModel.class);
 
             networkDetailsViewModel.getNetwork(false).observe(this, networkExtendedResource -> {

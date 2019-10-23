@@ -11,30 +11,43 @@
         android:visibility="gone"
         tools:visibility="gone">
 
-        <ImageView
-            android:id="@+id/iv_no_elements"
-            android:layout_width="120dp"
-            android:layout_height="120dp"
-            android:layout_gravity="center_horizontal"
-            android:scaleType="fitXY"
-            android:contentDescription="@string/no_elements_content_description"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            android:src="@drawable/no_elements" />
-
-        <TextView
+        <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/tv_no_elements"
-            android:layout_marginTop="@dimen/list_side_margin"
-            android:textAlignment="center"
-            android:textSize="@dimen/font_size_list_text"
-            android:fontFamily="monospace"
-            android:singleLine="false"
-            android:text="@string/no_elements_in_list"
-            app:layout_constraintTop_toBottomOf="@id/iv_no_elements"
-            tools:text="There are no elements on this list" />
+            android:layout_height="match_parent"
+            tools:context=".MainActivity">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    android:id="@+id/iv_no_elements"
+                    android:layout_width="120dp"
+                    android:layout_height="120dp"
+                    android:layout_gravity="center_horizontal"
+                    android:scaleType="fitXY"
+                    android:contentDescription="@string/no_elements_content_description"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    android:src="@drawable/no_elements" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/tv_no_elements"
+                    android:layout_marginTop="@dimen/list_side_margin"
+                    android:textAlignment="center"
+                    android:textSize="@dimen/font_size_list_text"
+                    android:fontFamily="monospace"
+                    android:singleLine="false"
+                    android:text="@string/no_elements_in_list"
+                    app:layout_constraintTop_toBottomOf="@id/iv_no_elements"
+                    tools:text="There are no elements on this list" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </ScrollView>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

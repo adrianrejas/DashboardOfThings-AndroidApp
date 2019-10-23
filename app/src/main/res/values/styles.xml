@@ -39,6 +39,10 @@
         </item>
     </style>
 
+    <style name="Theme.Dot.TextDataBold" parent="Theme.Dot.TextData">
+        <item name="android:textStyle">bold</item>
+    </style>
+
     <style name="Theme.Dot.TextTitle" parent="Theme.Dot">
         <item name="android:textSize">@dimen/font_size_list_title</item>
         <item name="android:textStyle">bold</item>
@@ -55,6 +59,10 @@
         <item name="android:textSize">@dimen/font_size_list_byline</item>
         <item name="android:textColor">@color/primaryTextColor</item>
         <item name="android:alpha">0.60</item>
+    </style>
+
+    <style name="Theme.Dot.Edittext" parent="Theme.Dot">
+        <item name="android:ems">10</item>
     </style>
 
     <style name="Theme.Dot.NavDrawer" parent="Theme.Dot">

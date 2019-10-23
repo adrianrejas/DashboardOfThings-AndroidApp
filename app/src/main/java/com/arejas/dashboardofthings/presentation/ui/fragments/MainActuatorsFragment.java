@@ -38,7 +38,7 @@ public class MainActuatorsFragment extends Fragment {
     @Inject
     ViewModelFactory viewModelFactory;
 
-    private MainDashboardViewModel mainDashoardViewModel;
+    private MainDashboardViewModel mainnetwork_addeditViewModel;
 
     private LiveData<Resource<List<ActuatorExtended>>> currentListShown;
     private LiveData<Resource<List<DataValue>>> dataValuesReceivedManaged;
@@ -49,7 +49,7 @@ public class MainActuatorsFragment extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         // Get the movie activity view model and observe the changes in the details
-        mainDashoardViewModel = ViewModelProviders.of(Objects.requireNonNull(getActivity()), viewModelFactory).get(MainDashboardViewModel.class);
+        mainnetwork_addeditViewModel = ViewModelProviders.of(Objects.requireNonNull(getActivity()), viewModelFactory).get(MainDashboardViewModel.class);
         setList(true, false);
     }
 
@@ -81,7 +81,7 @@ public class MainActuatorsFragment extends Fragment {
             currentListShown.removeObservers(this);
             currentListShown = null;
         }
-        currentListShown = mainDashoardViewModel.getListOfActuatorsMainDashboard(refreshData);
+        currentListShown = mainnetwork_addeditViewModel.getListOfActuatorsMainDashboard(refreshData);
         if (currentListShown != null) {
             currentListShown.observe(this, listResource -> {
                 if (listResource == null) {
@@ -245,7 +245,7 @@ public class MainActuatorsFragment extends Fragment {
                 if (actuator != null) {
                     String data = binding.etActuatorIntegerValue.getText().toString();
                     if (data != null)
-                    mainDashoardViewModel.sendActuatorData(actuator, data);
+                    mainnetwork_addeditViewModel.sendActuatorData(actuator, data);
                 }
             }
 
@@ -254,7 +254,7 @@ public class MainActuatorsFragment extends Fragment {
                 if (actuator != null) {
                     String data = binding.etActuatorDecimalValue.getText().toString();
                     if (data != null)
-                        mainDashoardViewModel.sendActuatorData(actuator, data);
+                        mainnetwork_addeditViewModel.sendActuatorData(actuator, data);
                 }
             }
 
@@ -263,7 +263,7 @@ public class MainActuatorsFragment extends Fragment {
                 if (actuator != null) {
                     String data = Boolean.toString(binding.tbActuatorBooleanSet.isActivated());
                     if (data != null)
-                        mainDashoardViewModel.sendActuatorData(actuator, data);
+                        mainnetwork_addeditViewModel.sendActuatorData(actuator, data);
                 }
             }
 
@@ -272,7 +272,7 @@ public class MainActuatorsFragment extends Fragment {
                 if (actuator != null) {
                     String data = binding.etActuatorStringValue.getText().toString();
                     if (data != null)
-                        mainDashoardViewModel.sendActuatorData(actuator, data);
+                        mainnetwork_addeditViewModel.sendActuatorData(actuator, data);
                 }
             }
         }

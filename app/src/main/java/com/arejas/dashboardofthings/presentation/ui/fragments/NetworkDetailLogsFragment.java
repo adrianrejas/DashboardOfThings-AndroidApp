@@ -61,6 +61,7 @@ public class NetworkDetailLogsFragment extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         // Get the movie activity view model and observe the changes in the details
+        viewModelFactory.setNetworkIdToLoad(networkId);
         networkDetailsViewModel = ViewModelProviders.of(Objects.requireNonNull(getActivity()), viewModelFactory).get(NetworkDetailsViewModel.class);
         setList(true, false);
     }

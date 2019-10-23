@@ -9,6 +9,7 @@
 
     <item
         android:id="@+id/menu_remove"
+
         android:title="@string/menu_remove"
         app:showAsAction="never"/>
 

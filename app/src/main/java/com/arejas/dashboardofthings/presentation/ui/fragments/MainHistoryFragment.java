@@ -42,7 +42,7 @@ public class MainHistoryFragment extends Fragment {
     @Inject
     ViewModelFactory viewModelFactory;
 
-    private MainDashboardViewModel mainDashoardViewModel;
+    private MainDashboardViewModel mainnetwork_addeditViewModel;
 
     private LiveData<Resource<List<SensorExtended>>> currentListShown;
     private GridLayoutManager glm_grid;
@@ -52,7 +52,7 @@ public class MainHistoryFragment extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         // Get the movie activity view model and observe the changes in the details
-        mainDashoardViewModel = ViewModelProviders.of(Objects.requireNonNull(getActivity()), viewModelFactory).get(MainDashboardViewModel.class);
+        mainnetwork_addeditViewModel = ViewModelProviders.of(Objects.requireNonNull(getActivity()), viewModelFactory).get(MainDashboardViewModel.class);
         setList(true, false);
     }
 
@@ -84,7 +84,7 @@ public class MainHistoryFragment extends Fragment {
             currentListShown.removeObservers(this);
             currentListShown = null;
         }
-        currentListShown = mainDashoardViewModel.getListOfSensorsMainDashboard(refreshData);
+        currentListShown = mainnetwork_addeditViewModel.getListOfSensorsMainDashboard(refreshData);
         if (currentListShown != null) {
             currentListShown.observe(this, listResource -> {
                 if (listResource == null) {
@@ -278,7 +278,7 @@ public class MainHistoryFragment extends Fragment {
                 if (sensor != null) {
                     mSpinnerOptionSelectedPerSensor.put(sensor.getId(), position);
                     if (dataToObserve != null) dataToObserve.removeObservers(MainHistoryFragment.this);
-                    dataToObserve = mainDashoardViewModel.getLastValuesForSensorId(sensor.getId());
+                    dataToObserve = mainnetwork_addeditViewModel.getLastValuesForSensorId(sensor.getId());
                     dataToObserve.observe(MainHistoryFragment.this, listResource -> {
                         if (listResource == null) {
                             showErrorCard();

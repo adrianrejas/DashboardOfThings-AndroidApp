@@ -11,26 +11,39 @@
         android:visibility="visible"
         tools:visibility="gone">
 
-        <ProgressBar
-            android:id="@+id/pg_loading"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            style="@style/Base.Widget.AppCompat.ProgressBar"
-            android:layout_gravity="center_horizontal"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"/>
-
-        <TextView
+        <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/list_side_margin"
-            android:textAlignment="center"
-            android:textSize="@dimen/font_size_list_text"
-            android:fontFamily="monospace"
-            android:singleLine="true"
-            app:layout_constraintTop_toBottomOf="@id/pg_loading"
-            android:text="@string/loading" />
+            android:layout_height="match_parent"
+            tools:context=".MainActivity">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <ProgressBar
+                    android:id="@+id/pg_loading"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    style="@style/Base.Widget.AppCompat.ProgressBar"
+                    android:layout_gravity="center_horizontal"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"/>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/list_side_margin"
+                    android:textAlignment="center"
+                    android:textSize="@dimen/font_size_list_text"
+                    android:fontFamily="monospace"
+                    android:singleLine="true"
+                    app:layout_constraintTop_toBottomOf="@id/pg_loading"
+                    android:text="@string/loading" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </ScrollView>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

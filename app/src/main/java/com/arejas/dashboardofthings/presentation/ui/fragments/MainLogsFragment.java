@@ -36,7 +36,7 @@ public class MainLogsFragment extends Fragment {
     @Inject
     ViewModelFactory viewModelFactory;
 
-    private MainDashboardViewModel mainDashoardViewModel;
+    private MainDashboardViewModel mainnetwork_addeditViewModel;
 
     private LiveData<Resource<List<Log>>> currentListShown;
     private LinearLayoutManager llm_linear;
@@ -47,7 +47,7 @@ public class MainLogsFragment extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         // Get the movie activity view model and observe the changes in the details
-        mainDashoardViewModel = ViewModelProviders.of(Objects.requireNonNull(getActivity()), viewModelFactory).get(MainDashboardViewModel.class);
+        mainnetwork_addeditViewModel = ViewModelProviders.of(Objects.requireNonNull(getActivity()), viewModelFactory).get(MainDashboardViewModel.class);
         setList(true, false);
     }
 
@@ -79,7 +79,7 @@ public class MainLogsFragment extends Fragment {
             currentListShown.removeObservers(this);
             currentListShown = null;
         }
-        currentListShown = mainDashoardViewModel.getLastSensorNotificationLogsInMainDashboard(refreshData);
+        currentListShown = mainnetwork_addeditViewModel.getLastSensorNotificationLogsInMainDashboard(refreshData);
         if (currentListShown != null) {
             currentListShown.observe(this, listResource -> {
                 if (listResource == null) {
