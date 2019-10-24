@@ -19,6 +19,7 @@ import com.arejas.dashboardofthings.R;
 import com.arejas.dashboardofthings.databinding.CardMaindashboardLogBinding;
 import com.arejas.dashboardofthings.databinding.CardMaindashboardStatusBinding;
 import com.arejas.dashboardofthings.databinding.FragmentMainlogsBinding;
+import com.arejas.dashboardofthings.databinding.FragmentMainstatusBinding;
 import com.arejas.dashboardofthings.domain.entities.database.Log;
 import com.arejas.dashboardofthings.domain.entities.result.Resource;
 import com.arejas.dashboardofthings.presentation.interfaces.viewmodels.MainDashboardViewModel;
@@ -32,7 +33,7 @@ import javax.inject.Inject;
 
 public class MainStatusFragment extends Fragment {
 
-    FragmentMainlogsBinding uiBinding;
+    FragmentMainstatusBinding uiBinding;
 
     @Inject
     ViewModelFactory viewModelFactory;
@@ -118,11 +119,11 @@ public class MainStatusFragment extends Fragment {
 
         // Configure recycler view with a grid layout
         llm_linear = new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false);
-        uiBinding.logsMainListListLayout.mainList.setLayoutManager(llm_linear);
+        uiBinding.statusMainListListLayout.mainList.setLayoutManager(llm_linear);
 
         // Configure adapter for recycler view
         mAdapter = new StatusListAdapter();
-        uiBinding.logsMainListListLayout.mainList.setAdapter(mAdapter);
+        uiBinding.statusMainListListLayout.mainList.setAdapter(mAdapter);
     }
 
     /**
@@ -130,11 +131,11 @@ public class MainStatusFragment extends Fragment {
      */
     private void showError() {
         if (uiBinding != null) {
-            uiBinding.logsMainListListLayout.listLayout.setVisibility(View.GONE);
-            uiBinding.logsMainListLoadingLayout.loadingLayout.setVisibility(View.GONE);
-            uiBinding.logsMainListErrorLayout.errorLayout.setVisibility(View.VISIBLE);
-            uiBinding.logsMainListNoElementsLayout.noElementsLayout.setVisibility(View.GONE);
-            uiBinding.logsMainListErrorLayout.tvError.setText(getString(R.string.error_in_list));
+            uiBinding.statusMainListListLayout.listLayout.setVisibility(View.GONE);
+            uiBinding.statusMainListLoadingLayout.loadingLayout.setVisibility(View.GONE);
+            uiBinding.statusMainListErrorLayout.errorLayout.setVisibility(View.VISIBLE);
+            uiBinding.statusMainListNoElementsLayout.noElementsLayout.setVisibility(View.GONE);
+            uiBinding.statusMainListErrorLayout.tvError.setText(getString(R.string.error_in_list));
         }
     }
 
@@ -143,10 +144,10 @@ public class MainStatusFragment extends Fragment {
      */
     private void showLoading() {
         if (uiBinding != null) {
-            uiBinding.logsMainListListLayout.listLayout.setVisibility(View.GONE);
-            uiBinding.logsMainListLoadingLayout.loadingLayout.setVisibility(View.VISIBLE);
-            uiBinding.logsMainListErrorLayout.errorLayout.setVisibility(View.GONE);
-            uiBinding.logsMainListNoElementsLayout.noElementsLayout.setVisibility(View.GONE);
+            uiBinding.statusMainListListLayout.listLayout.setVisibility(View.GONE);
+            uiBinding.statusMainListLoadingLayout.loadingLayout.setVisibility(View.VISIBLE);
+            uiBinding.statusMainListErrorLayout.errorLayout.setVisibility(View.GONE);
+            uiBinding.statusMainListNoElementsLayout.noElementsLayout.setVisibility(View.GONE);
         }
     }
 
@@ -155,10 +156,10 @@ public class MainStatusFragment extends Fragment {
      */
     private void showNoElements() {
         if (uiBinding != null) {
-            uiBinding.logsMainListListLayout.listLayout.setVisibility(View.GONE);
-            uiBinding.logsMainListLoadingLayout.loadingLayout.setVisibility(View.GONE);
-            uiBinding.logsMainListErrorLayout.errorLayout.setVisibility(View.GONE);
-            uiBinding.logsMainListNoElementsLayout.noElementsLayout.setVisibility(View.VISIBLE);
+            uiBinding.statusMainListListLayout.listLayout.setVisibility(View.GONE);
+            uiBinding.statusMainListLoadingLayout.loadingLayout.setVisibility(View.GONE);
+            uiBinding.statusMainListErrorLayout.errorLayout.setVisibility(View.GONE);
+            uiBinding.statusMainListNoElementsLayout.noElementsLayout.setVisibility(View.VISIBLE);
         }
     }
 
@@ -167,10 +168,10 @@ public class MainStatusFragment extends Fragment {
      */
     private void showList() {
         if (uiBinding != null) {
-            uiBinding.logsMainListListLayout.listLayout.setVisibility(View.VISIBLE);
-            uiBinding.logsMainListLoadingLayout.loadingLayout.setVisibility(View.GONE);
-            uiBinding.logsMainListErrorLayout.errorLayout.setVisibility(View.GONE);
-            uiBinding.logsMainListNoElementsLayout.noElementsLayout.setVisibility(View.GONE);
+            uiBinding.statusMainListListLayout.listLayout.setVisibility(View.VISIBLE);
+            uiBinding.statusMainListLoadingLayout.loadingLayout.setVisibility(View.GONE);
+            uiBinding.statusMainListErrorLayout.errorLayout.setVisibility(View.GONE);
+            uiBinding.statusMainListNoElementsLayout.noElementsLayout.setVisibility(View.GONE);
         }
     }
 

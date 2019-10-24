@@ -1,0 +1,269 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <import type="android.view.View"/>
+        <import type="com.arejas.dashboardofthings.utils.Enumerators.HttpAuthenticationType"/>
+        <variable
+            name="editionMode"
+            type="Boolean" />
+        <variable
+            name="sensor"
+            type="com.arejas.dashboardofthings.domain.entities.database.Sensor" />
+        <variable
+            name="imagePicked"
+            type="String" />
+        <variable
+            name="networks"
+            type="java.util.List&lt;com.arejas.dashboardofthings.domain.entities.database.Network>" />
+        <variable
+            name="networkTypeSelected"
+            type="Integer" />
+        <variable
+            name="httpAuthTypeSelected"
+            type="Integer" />
+        <variable
+            name="useSslInHttp"
+            type="Boolean" />
+        <variable
+            name="useSslInMqtt"
+            type="Boolean" />
+        <variable
+            name="httpCertPicked"
+            type="String" />
+        <variable
+            name="mqttCertPicked"
+            type="String" />
+        <variable
+            name="presenter"
+            type="com.arejas.dashboardofthings.presentation.ui.helpers.AddEditElementPresenter" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context="com.arejas.dashboardofthings.presentation.ui.activities.SensorListActivity">
+
+        <com.google.android.material.appbar.AppBarLayout
+            android:id="@+id/appbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:theme="@style/Theme.Dot.ActionBar"
+            android:elevation="@dimen/toolbar_elevation">
+
+            <androidx.appcompat.widget.Toolbar
+                android:id="@+id/toolbar"
+                app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+                android:layout_marginLeft="@dimen/list_toolbar_side_margin"
+                android:layout_marginRight="@dimen/list_toolbar_side_margin"
+                android:layout_width="match_parent"
+                android:layout_height="?actionBarSize"
+                android:layout_gravity="top"
+                android:background="?colorPrimary">
+
+            </androidx.appcompat.widget.Toolbar>
+
+        </com.google.android.material.appbar.AppBarLayout>
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="?actionBarSize">
+
+            <include
+                android:id="@+id/sensor_addedit_loading_layout"
+                layout="@layout/layout_loading"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="@dimen/list_side_outer_margin"
+                android:orientation="vertical"/>
+
+            <ScrollView
+                android:id="@+id/sensor_addedit_editarea_layout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:visibility="gone"
+                tools:visibility="visible">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:id="@+id/tv_sensor_addedit_general_variables_label"
+                        style="@style/Theme.Dot.TextTitle"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/detail_inner_margin_big"
+                        android:layout_marginTop="@dimen/detail_inner_margin_big"
+                        android:layout_marginEnd="@dimen/detail_inner_margin_big"
+                        android:text="@string/edit_label_general_variables"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <TextView
+                        android:id="@+id/tv_sensor_addedit_name_label"
+                        style="@style/Theme.Dot.TextDataBold"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/detail_inner_margin_big"
+                        android:layout_marginEnd="@dimen/detail_inner_margin_big"
+                        android:layout_marginTop="@dimen/detail_inner_margin_big"
+                        android:text="@string/edit_label_name"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/tv_sensor_addedit_general_variables_label" />
+
+                    <EditText
+                        android:id="@+id/ed_sensor_addedit_name"
+                        style="@style/Theme.Dot.Edittext"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_marginTop="@dimen/detail_inner_margin_small"
+                        android:layout_marginStart="@dimen/detail_inner_margin_big"
+                        android:layout_marginEnd="@dimen/detail_inner_margin_big"
+                        android:hint="@string/edit_hint_name_sensor"
+                        android:inputType="textNoSuggestions"
+                        android:text='@{sensor.name ?? ""}'
+                        app:layout_constraintTop_toBottomOf="@id/tv_sensor_addedit_name_label"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent" />
+
+                    <TextView
+                        android:id="@+id/tv_sensor_addedit_type_label"
+                        style="@style/Theme.Dot.TextDataBold"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_marginTop="@dimen/detail_inner_margin_small"
+                        android:layout_marginStart="@dimen/detail_inner_margin_big"
+                        android:layout_marginEnd="@dimen/detail_inner_margin_big"
+                        android:text="@string/edit_label_type"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/ed_sensor_addedit_name" />
+
+                    <EditText
+                        android:id="@+id/ed_sensor_addedit_type"
+                        style="@style/Theme.Dot.Edittext"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_marginTop="@dimen/detail_inner_margin_small"
+                        android:layout_marginStart="@dimen/detail_inner_margin_big"
+                        android:layout_marginEnd="@dimen/detail_inner_margin_big"
+                        android:hint="@string/edit_hint_name_sensor"
+                        android:inputType="textNoSuggestions"
+                        android:text='@{sensor.type ?? ""}'
+                        app:layout_constraintTop_toBottomOf="@id/tv_sensor_addedit_type_label"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent" />
+
+                    <ImageButton
+                        android:id="@+id/ib_sensor_addedit_image_picker"
+                        android:layout_width="@dimen/edit_icon_size"
+                        android:layout_height="@dimen/edit_icon_size"
+                        android:layout_marginStart="@dimen/detail_inner_margin_big"
+                        android:layout_marginTop="@dimen/detail_inner_margin_small"
+                        android:layout_marginEnd="@dimen/detail_inner_margin_small"
+                        android:adjustViewBounds="true"
+                        android:background="@android:color/transparent"
+                        android:contentDescription="@string/content_description_pick_image"
+                        android:onClick="@{(v) -> presenter.pickImage()}"
+                        android:scaleType="fitXY"
+                        app:errorResource="@{@drawable/error}"
+                        app:imageUrl="@{imagePicked}"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/ed_sensor_addedit_type"
+                        app:loadingResource="@{@drawable/loading}"
+                        app:pickResource="@{@drawable/pick_picture}"
+                        tools:srcCompat="@drawable/pick_picture" />
+
+                    <TextView
+                        android:id="@+id/tv_sensor_addedit_pick_image_label"
+                        style="@style/Theme.Dot.TextDataBold"
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        android:layout_marginStart="@dimen/detail_inner_margin_big"
+                        android:layout_marginEnd="@dimen/detail_inner_margin_small"
+                        android:gravity="center_vertical"
+                        android:text="@{((imagePicked != null) &amp;&amp; (!imagePicked.isEmpty())) ? @string/edit_hint_image_picked : @string/edit_hint_image_pick}"
+                        android:textAlignment="gravity"
+                        app:layout_constraintBottom_toBottomOf="@id/ib_sensor_addedit_image_picker"
+                        app:layout_constraintEnd_toStartOf="@id/ib_sensor_addedit_image_clear"
+                        app:layout_constraintStart_toEndOf="@id/ib_sensor_addedit_image_picker"
+                        app:layout_constraintTop_toTopOf="@id/ib_sensor_addedit_image_picker"
+                        tools:text="@string/edit_hint_image_picked" />
+
+                    <ImageButton
+                        android:id="@+id/ib_sensor_addedit_image_clear"
+                        android:layout_width="@dimen/edit_icon_size"
+                        android:layout_height="@dimen/edit_icon_size"
+                        android:layout_marginStart="@dimen/detail_inner_margin_small"
+                        android:layout_marginEnd="@dimen/detail_inner_margin_big"
+                        android:adjustViewBounds="true"
+                        android:background="@android:color/transparent"
+                        android:contentDescription="@string/content_description_clear_image"
+                        android:onClick="@{(v) -> presenter.cancelImagePicked()}"
+                        android:scaleType="fitXY"
+                        android:tint="@color/primaryTextColor"
+                        android:visibility="@{((imagePicked != null) &amp;&amp; (!imagePicked.isEmpty())) ? View.VISIBLE : View.GONE }"
+                        app:layout_constraintBottom_toBottomOf="@id/ib_sensor_addedit_image_picker"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toEndOf="@id/tv_sensor_addedit_pick_image_label"
+                        app:layout_constraintTop_toTopOf="@id/ib_sensor_addedit_image_picker"
+                        app:srcCompat="@drawable/cancel" />
+
+                    <TextView
+                        android:id="@+id/tv_sensor_addedit_network_label"
+                        style="@style/Theme.Dot.TextDataBold"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_marginTop="@dimen/detail_inner_margin_small"
+                        android:layout_marginStart="@dimen/detail_inner_margin_big"
+                        android:layout_marginEnd="@dimen/detail_inner_margin_big"
+                        android:text="@string/edit_label_http_authentication"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/ib_sensor_addedit_image_clear" />
+
+                    <Spinner
+                        android:id="@+id/sp_sensor_addedit_network"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_marginTop="@dimen/detail_inner_margin_small"
+                        android:layout_marginStart="@dimen/detail_inner_margin_big"
+                        android:layout_marginEnd="@dimen/detail_inner_margin_big"
+                        android:entries="@{networks}"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/tv_sensor_addedit_network_label"
+                        android:selectedItemPosition="@{networkTypeSelected}"/>
+
+                    <FrameLayout
+                        android:id="@+id/fl_sensor_addedit_general_options_separator"
+                        android:layout_width="0dp"
+                        android:layout_height="1dp"
+                        android:layout_marginStart="@dimen/detail_inner_margin_big"
+                        android:layout_marginTop="@dimen/detail_inner_margin_big"
+                        android:layout_marginEnd="@dimen/detail_inner_margin_big"
+                        android:layout_marginBottom="@dimen/detail_inner_margin_big"
+                        android:background="@color/primaryTextColor"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/sp_sensor_addedit_network" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+            </ScrollView>
+
+        </FrameLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>

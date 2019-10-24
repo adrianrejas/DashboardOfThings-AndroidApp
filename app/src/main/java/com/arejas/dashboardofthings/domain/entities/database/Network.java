@@ -5,7 +5,6 @@ import android.os.Parcelable;
 
 import androidx.room.Embedded;
 import androidx.room.Entity;
-import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
 import com.arejas.dashboardofthings.utils.Enumerators;
@@ -126,7 +125,7 @@ public class Network implements Parcelable {
 
         private Boolean httpUseSsl;
 
-        private String certAuthorityUrl;
+        private String certAuthorityUri;
 
         public HttpNetworkParameters() {}
 
@@ -137,7 +136,7 @@ public class Network implements Parcelable {
             httpPassword = in.readString();
             byte tmpBUsesSsl = in.readByte();
             httpUseSsl = tmpBUsesSsl == 0 ? null : tmpBUsesSsl == 1;
-            certAuthorityUrl = in.readString();
+            certAuthorityUri = in.readString();
         }
 
         public static final Creator<HttpNetworkParameters> CREATOR = new Creator<HttpNetworkParameters>() {
@@ -164,7 +163,7 @@ public class Network implements Parcelable {
             parcel.writeString(httpUsername);
             parcel.writeString(httpPassword);
             parcel.writeByte((byte) (httpUseSsl == null ? 0 : httpUseSsl ? 1 : 2));
-            parcel.writeString(certAuthorityUrl);
+            parcel.writeString(certAuthorityUri);
         }
 
         public String getHttpBaseUrl() {
@@ -207,19 +206,19 @@ public class Network implements Parcelable {
             this.httpUseSsl = bUsesSsl;
         }
 
-        public String getCertAuthorityUrl() {
-            return certAuthorityUrl;
+        public String getCertAuthorityUri() {
+            return certAuthorityUri;
         }
 
-        public void setCertAuthorityUrl(String sCertAuthorityUrl) {
-            this.certAuthorityUrl = sCertAuthorityUrl;
+        public void setCertAuthorityUri(String sCertAuthorityUrl) {
+            this.certAuthorityUri = sCertAuthorityUrl;
         }
         
     }
 
     public static class MqttNetworkParameters implements Parcelable {
 
-        private String mttBrokerUrl;
+        private String mqttBrokerUrl;
 
         private String mqttClientId;
 
@@ -235,12 +234,12 @@ public class Network implements Parcelable {
 
         private Boolean mqttUseSsl;
 
-        private String mqttCertAuthorityUrl;
+        private String mqttCertAuthorityUri;
 
         public MqttNetworkParameters() {}
 
         protected MqttNetworkParameters(Parcel in) {
-            mttBrokerUrl = in.readString();
+            mqttBrokerUrl = in.readString();
             mqttClientId = in.readString();
             mqttUsername = in.readString();
             mqttPassword = in.readString();
@@ -258,7 +257,7 @@ public class Network implements Parcelable {
             }
             byte tmpBUsesSsl = in.readByte();
             mqttUseSsl = tmpBUsesSsl == 0 ? null : tmpBUsesSsl == 1;
-            mqttCertAuthorityUrl = in.readString();
+            mqttCertAuthorityUri = in.readString();
         }
 
         public static final Creator<MqttNetworkParameters> CREATOR = new Creator<MqttNetworkParameters>() {
@@ -280,7 +279,7 @@ public class Network implements Parcelable {
 
         @Override
         public void writeToParcel(Parcel parcel, int i) {
-            parcel.writeString(mttBrokerUrl);
+            parcel.writeString(mqttBrokerUrl);
             parcel.writeString(mqttClientId);
             parcel.writeString(mqttUsername);
             parcel.writeString(mqttPassword);
@@ -298,15 +297,15 @@ public class Network implements Parcelable {
                 parcel.writeInt(mqttKeepaliveInterval);
             }
             parcel.writeByte((byte) (mqttUseSsl == null ? 0 : mqttUseSsl ? 1 : 2));
-            parcel.writeString(mqttCertAuthorityUrl);
+            parcel.writeString(mqttCertAuthorityUri);
         }
 
-        public String getMttBrokerUrl() {
-            return mttBrokerUrl;
+        public String getMqttBrokerUrl() {
+            return mqttBrokerUrl;
         }
 
-        public void setMttBrokerUrl(String sBrokerUrl) {
-            this.mttBrokerUrl = sBrokerUrl;
+        public void setMqttBrokerUrl(String sBrokerUrl) {
+            this.mqttBrokerUrl = sBrokerUrl;
         }
 
         public String getMqttClientId() {
@@ -365,12 +364,12 @@ public class Network implements Parcelable {
             this.mqttUseSsl = bUsesSsl;
         }
 
-        public String getMqttCertAuthorityUrl() {
-            return mqttCertAuthorityUrl;
+        public String getMqttCertAuthorityUri() {
+            return mqttCertAuthorityUri;
         }
 
-        public void setMqttCertAuthorityUrl(String sCertAuthorityUrl) {
-            this.mqttCertAuthorityUrl = sCertAuthorityUrl;
+        public void setMqttCertAuthorityUri(String sCertAuthorityUrl) {
+            this.mqttCertAuthorityUri = sCertAuthorityUrl;
         }
         
     }

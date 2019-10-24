@@ -36,7 +36,7 @@ public class MqttNetworkInterfaceHelper extends NetworkInterfaceHelper {
     public boolean initNetworkInterface(Context context, Sensor[] sensors) {
         try {
             mqttAndroidClient = new MqttAndroidClient(context,
-                    getNetwork().getMqttConfiguration().getMttBrokerUrl(),
+                    getNetwork().getMqttConfiguration().getMqttBrokerUrl(),
                     getNetwork().getMqttConfiguration().getMqttClientId());
             mqttAndroidClient.setCallback(new MqttCallbackExtended() {
                 @Override
@@ -109,7 +109,7 @@ public class MqttNetworkInterfaceHelper extends NetworkInterfaceHelper {
             mqttConnectOptions.setConnectionTimeout(getNetwork().getMqttConfiguration().getMqttConnTimeout());
             if (getNetwork().getMqttConfiguration().getMqttUseSsl()) {
                 SslUtility.getInstance().createSocketFactoryAndTrustManager(getNetwork().getId(),
-                        getNetwork().getMqttConfiguration().getMqttCertAuthorityUrl());
+                        getNetwork().getMqttConfiguration().getMqttCertAuthorityUri());
                 mqttConnectOptions.setSocketFactory(SslUtility.getInstance().getSocketFactory(getNetwork().getId()));
             }
             try {

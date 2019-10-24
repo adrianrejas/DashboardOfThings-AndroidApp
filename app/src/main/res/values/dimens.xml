@@ -28,6 +28,7 @@
     <dimen name="detail_body_bottom_margin">148dp</dimen>
     <string name="detail_photo_aspect_ratio">H,1.5:1</string>
     <dimen name="fab_margin">24dp</dimen>
+    <dimen name="edit_icon_size">50dp</dimen>
 
     <!-- elevations -->
     <dimen name="toolbar_elevation">8dp</dimen>

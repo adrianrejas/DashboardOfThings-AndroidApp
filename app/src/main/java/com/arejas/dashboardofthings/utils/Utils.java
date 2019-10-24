@@ -1,8 +1,13 @@
 package com.arejas.dashboardofthings.utils;
 
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.Build;
+import android.provider.MediaStore;
 import android.text.Html;
 import android.text.Spanned;
+
+import com.arejas.dashboardofthings.DotApplication;
 
 public class Utils {
 

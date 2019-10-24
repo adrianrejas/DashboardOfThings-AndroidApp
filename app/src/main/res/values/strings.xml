@@ -1,6 +1,9 @@
 <resources>
     <string name="app_name">Dashboard of Things</string>
     <string name="title_activity_maindash">Main dashboard</string>
+    <string name="title_network_list">Networks</string>
+    <string name="title_network_detail">Network Detail</string>
+    <string name="title_network_addedit">Add/edit Network</string>
     <string name="title_activity_map">Map</string>
 
     <string name="main_navigation_dashboard">Main dashboard</string>
@@ -85,8 +88,60 @@
     <string name="edit_label_general_variables">General options</string>
     <string name="edit_label_name">Name:</string>
     <string name="edit_hint_name_network">Name of the network</string>
+    <string name="edit_hint_name_sensor">Name of the sensor</string>
+    <string name="edit_hint_name_actuator">Name of the actuator</string>
     <string name="edit_label_type">Type:</string>
     <string name="edit_hint_type_network">Type of network</string>
+    <string name="edit_hint_type_sensor">Type of sensor</string>
+    <string name="edit_hint_type_actuator">Type of actuator</string>
+    <string-array name="edit_array_network_type">
+        <item>HTTP network</item>
+        <item>MQTT network</item>
+    </string-array>
+    <string name="edit_hint_image_pick">Pick an image</string>
+    <string name="edit_hint_image_picked">Image picked</string>
+    <string name="edit_label_http_variables">HTTP options</string>
+    <string name="edit_label_http_baseurl">HTTP base URL:</string>
+    <string name="edit_hint_http_baseurl">HTTP base URL of the network</string>
+    <string name="edit_label_http_authentication">HTTP authentication type:</string>
+    <string-array name="edit_array_network_http_authentication">
+        <item>None</item>
+        <item>HTTP basic authentication</item>
+    </string-array>
+    <string name="edit_label_http_auth_username">HTTP authentication username:</string>
+    <string name="edit_hint_http_auth_username">Username to be used for authentication</string>
+    <string name="edit_label_http_auth_password">HTTP authentication password:</string>
+    <string name="edit_hint_http_auth_password">Password to be used for authentication</string>
+    <string name="edit_label_http_use_ssl">Use TLS/SSL</string>
+    <string name="edit_hint_http_cert_pick">Pick an HTTP SSL certificate</string>
+    <string name="edit_hint_http_cert_picked">HTTP SSL certificate picked</string>
+    <string name="edit_hint_mqtt_cert_pick">Pick an MQTT SSL certificate</string>
+    <string name="edit_hint_mqtt_cert_picked">MQTT SSL certificate picked</string>
+    <string name="edit_label_mqtt_variables">MQTT options</string>
+    <string name="edit_label_mqtt_brokerurl">MQTT broker URL:</string>
+    <string name="edit_hint_mqtt_brokerurl">MQTT broker URL of the network</string>
+    <string name="edit_label_mqtt_clientid">MQTT client ID:</string>
+    <string name="edit_hint_mqtt_clientid">MQTT client ID to be used</string>
+    <string name="edit_label_mqtt_username">MQTT username:</string>
+    <string name="edit_hint_mqtt_username">Username to be used in MQTT connection</string>
+    <string name="edit_label_mqtt_password">MQTT password:</string>
+    <string name="edit_hint_mqtt_password">Password to be used in MQTT connection</string>
+    <string name="edit_label_mqtt_use_ssl">Use TLS/SSL</string>
+    <string name="edit_label_mqtt_conn_timeout">Connection timeout (milliseconds):</string>
+    <string name="edit_hint_mqtt_conn_timeout">Timeout in milliseconds to wait until consider the connection lost</string>
+    <string name="edit_label_mqtt_keepalive_interval">Keppalive interval (milliseconds):</string>
+    <string name="edit_hint_mqtt_keepalive_interval">Time in milliseconds to wait between keepalives</string>
+    <string name="edit_label_sensor_network">Network to use:</string>
+
+    <string name="edit_toast_check_name">Check name ...</string>
+    <string name="edit_toast_check_network_type">Select type ...</string>
+    <string name="edit_toast_check_http_baseurl">Check HTTP base URL ...</string>
+    <string name="edit_toast_check_http_auth_type">Select HTTP authentication type ...</string>
+    <string name="edit_toast_check_http_username">Select HTTP authentication username ...</string>
+    <string name="edit_toast_check_http_password">Select HTTP authentication password ...</string>
+    <string name="edit_toast_check_mqtt_username">Select MQTT username ...</string>
+    <string name="edit_toast_check_mqtt_password">Select MQTT password ...</string>
+    <string name="edit_toast_check_mqtt_brokerurl">Check MQTT broker URL ...</string>
 
     <string name="dashboard_of_things_channel_name">Dashboard of Things notification channel</string>
     <string name="dashboard_of_things_channel_desc">Notification channel about the state of Dashboard of Things app</string>
@@ -145,6 +200,8 @@
     <string name="content_description_network_type">Type of the network</string>
     <string name="content_description_network_sensors">List of sensors related to the network</string>
     <string name="content_description_network_actuators">List of actuators related to the network</string>
+    <string name="content_description_pick_image">Pick an image for using it with the element</string>
+    <string name="content_description_clear_image">Clear the image picked for using with the element</string>
 
     <!-- Preference Titles -->
     <string name="messages_header">Messages</string>
@@ -160,7 +217,5 @@
     <string name="attachment_summary_on">Automatically download attachments for incoming emails
     </string>
     <string name="attachment_summary_off">Only download attachments when manually requested</string>
-    <string name="title_network_list">Networks</string>
-    <string name="title_network_detail">Network Detail</string>
     <string name="options_icon">⋮</string>
 </resources>

@@ -55,13 +55,13 @@ public class Sensor implements Parcelable {
 
     private String dataUnit;
 
-    private String thresholdAboveCritical;
+    private Float thresholdAboveCritical;
 
-    private String thresholdAboveWarning;
+    private Float thresholdAboveWarning;
 
-    private String thresholdBelowCritical;
+    private Float thresholdBelowCritical;
 
-    private String thresholdBelowWarning;
+    private Float thresholdBelowWarning;
 
     private String thresholdEqualsWarning;
 
@@ -108,11 +108,26 @@ public class Sensor implements Parcelable {
         xmlOrJsonNode = in.readString();
         rawRegularExpression = in.readString();
         dataUnit = in.readString();
-        thresholdAboveCritical = in.readString();
-        thresholdAboveWarning = in.readString();
-        thresholdBelowCritical = in.readString();
-        thresholdBelowWarning = in.readString();
-        thresholdEqualsWarning = in.readString();
+        if (in.readByte() == 0) {
+            thresholdAboveWarning = null;
+        } else {
+            thresholdAboveWarning = in.readFloat();
+        }
+        if (in.readByte() == 0) {
+            thresholdAboveCritical = null;
+        } else {
+            thresholdAboveCritical = in.readFloat();
+        }
+        if (in.readByte() == 0) {
+            thresholdBelowWarning = null;
+        } else {
+            thresholdBelowWarning = in.readFloat();
+        }
+        if (in.readByte() == 0) {
+            thresholdBelowCritical = null;
+        } else {
+            thresholdBelowCritical = in.readFloat();
+        }
         thresholdEqualsCritical = in.readString();
         if (in.readByte() == 0) {
             locationLat = null;
@@ -260,35 +275,35 @@ public class Sensor implements Parcelable {
         this.dataUnit = sDataUnit;
     }
 
-    public String getThresholdAboveCritical() {
+    public Float getThresholdAboveCritical() {
         return thresholdAboveCritical;
     }
 
-    public void setThresholdAboveCritical(String sThresholdAboveCritical) {
+    public void setThresholdAboveCritical(Float sThresholdAboveCritical) {
         this.thresholdAboveCritical = sThresholdAboveCritical;
     }
 
-    public String getThresholdAboveWarning() {
+    public Float getThresholdAboveWarning() {
         return thresholdAboveWarning;
     }
 
-    public void setThresholdAboveWarning(String sThresholdAboveWarning) {
+    public void setThresholdAboveWarning(Float sThresholdAboveWarning) {
         this.thresholdAboveWarning = sThresholdAboveWarning;
     }
 
-    public String getThresholdBelowCritical() {
+    public Float getThresholdBelowCritical() {
         return thresholdBelowCritical;
     }
 
-    public void setThresholdBelowCritical(String sThresholdBelowCritical) {
+    public void setThresholdBelowCritical(Float sThresholdBelowCritical) {
         this.thresholdBelowCritical = sThresholdBelowCritical;
     }
 
-    public String getThresholdBelowWarning() {
+    public Float getThresholdBelowWarning() {
         return thresholdBelowWarning;
     }
 
-    public void setThresholdBelowWarning(String sThresholdBelowWarning) {
+    public void setThresholdBelowWarning(Float sThresholdBelowWarning) {
         this.thresholdBelowWarning = sThresholdBelowWarning;
     }
 
@@ -373,10 +388,30 @@ public class Sensor implements Parcelable {
         parcel.writeString(xmlOrJsonNode);
         parcel.writeString(rawRegularExpression);
         parcel.writeString(dataUnit);
-        parcel.writeString(thresholdAboveCritical);
-        parcel.writeString(thresholdAboveWarning);
-        parcel.writeString(thresholdBelowCritical);
-        parcel.writeString(thresholdBelowWarning);
+        if (thresholdAboveWarning == null) {
+            parcel.writeByte((byte) 0);
+        } else {
+            parcel.writeByte((byte) 1);
+            parcel.writeFloat(thresholdAboveWarning);
+        }
+        if (thresholdAboveCritical == null) {
+            parcel.writeByte((byte) 0);
+        } else {
+            parcel.writeByte((byte) 1);
+            parcel.writeFloat(thresholdAboveCritical);
+        }
+        if (thresholdBelowWarning == null) {
+            parcel.writeByte((byte) 0);
+        } else {
+            parcel.writeByte((byte) 1);
+            parcel.writeFloat(thresholdBelowWarning);
+        }
+        if (thresholdBelowCritical == null) {
+            parcel.writeByte((byte) 0);
+        } else {
+            parcel.writeByte((byte) 1);
+            parcel.writeFloat(thresholdBelowCritical);
+        }
         parcel.writeString(thresholdEqualsWarning);
         parcel.writeString(thresholdEqualsCritical);
         if (locationLat == null) {

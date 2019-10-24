@@ -1,16 +1,16 @@
 package com.arejas.dashboardofthings.presentation.ui.converters;
 
-import android.annotation.SuppressLint;
-import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
-import android.os.Build;
 import android.text.InputFilter;
 import android.text.Spanned;
 import android.text.TextUtils;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -24,23 +24,21 @@ import com.arejas.dashboardofthings.R;
 import com.arejas.dashboardofthings.data.helpers.DataHelper;
 import com.arejas.dashboardofthings.domain.entities.database.Actuator;
 import com.arejas.dashboardofthings.domain.entities.database.DataValue;
+import com.arejas.dashboardofthings.domain.entities.database.Network;
 import com.arejas.dashboardofthings.domain.entities.database.Sensor;
 import com.arejas.dashboardofthings.presentation.ui.helpers.HistoryChartHelper;
-import com.arejas.dashboardofthings.presentation.ui.notifications.NotificationsHelper;
 import com.arejas.dashboardofthings.utils.Enumerators;
 import com.arejas.dashboardofthings.utils.Utils;
+import com.arejas.dashboardofthings.utils.functional.ConsumerBoolean;
+import com.arejas.dashboardofthings.utils.functional.ConsumerInt;
 import com.bumptech.glide.Glide;
 import com.github.mikephil.charting.charts.LineChart;
-import com.github.mikephil.charting.components.AxisBase;
 import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
-import com.github.mikephil.charting.formatter.ValueFormatter;
-import com.google.android.gms.maps.model.Dot;
 
-import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -321,17 +319,17 @@ public class DataBindingConverters {
             "thresholdBelowWarning", "thresholdBelowCritical", "thresholdEqualsWarning", "thresholdEqualsCritical"})
     public static void setSensorState(TextView view, String dataReceived,
                                       Enumerators.DataType dataType,
-                                      String thresholdAboveWarningString,
-                                      String thresholdAboveCriticalString,
-                                      String thresholdBelowWarningString,
-                                      String thresholdBelowCriticalString,
-                                      String thresholdEqualsWarningString,
-                                      String thresholdEqualsCriticalString){
+                                      Float thresholdAboveWarning,
+                                      Float thresholdAboveCritical,
+                                      Float thresholdBelowWarning,
+                                      Float thresholdBelowCritical,
+                                      String thresholdEqualsWarning,
+                                      String thresholdEqualsCritical){
         try {
             Enumerators.NotificationState state = DataHelper.getNotificationStatus(dataReceived,
-                    dataType, thresholdAboveWarningString, thresholdAboveCriticalString,
-                    thresholdBelowWarningString, thresholdBelowCriticalString,
-                    thresholdEqualsWarningString, thresholdEqualsCriticalString);
+                    dataType, thresholdAboveWarning, thresholdAboveCritical,
+                    thresholdBelowWarning, thresholdBelowCritical,
+                    thresholdEqualsWarning, thresholdEqualsCritical);
             if (state != null) {
                 switch (state) {
                     case NONE:
@@ -430,6 +428,67 @@ public class DataBindingConverters {
             view.setText(Utils.fromHtml(dataString));
         } else {
             view.setText(Utils.fromHtml(DotApplication.getContext().getString(R.string.network_no_actuators)));
+        }
+    }
+
+    @BindingAdapter("entryList")
+    public static void setNetworkTypeSpinnerValue(Spinner spinner, List<Network> entryList) {
+        if (entryList != null) {
+            List<CharSequence> networkNames = new ArrayList<>();
+            for (Network network : entryList) {
+                networkNames.add(network.getName());
+            }
+            ArrayAdapter<CharSequence> adapter = new ArrayAdapter (DotApplication.getContext(),
+                    android.R.layout.simple_spinner_dropdown_item, networkNames);
+            spinner.setAdapter(adapter);
+        }
+    }
+
+    @BindingAdapter("selectionListener")
+    public static void setSpinnerSelectionListener(Spinner spinner, ConsumerInt selectionListener) {
+        if (selectionListener != null) {
+            spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                    selectionListener.accept(position);
+                }
+
+                @Override
+                public void onNothingSelected(AdapterView<?> parent) {
+                    selectionListener.accept(null);
+                }
+            });
+        }
+    }
+
+    @BindingAdapter("checkingListener")
+    public static void setCheckboxCheckingListener(CheckBox checkBox, ConsumerBoolean checkingListener) {
+        if (checkingListener != null) {
+            checkBox.setOnCheckedChangeListener((buttonView, isChecked) -> {
+                checkingListener.accept(isChecked);
+            });
+        }
+    }
+
+    @BindingAdapter({"imageUrl", "pickResource", "errorResource", "loadingResource"})
+    public static void loadImageToBePicked (ImageButton view, String url, Drawable pickResource,
+                                            Drawable errorResource, Drawable loadingResource) {
+        if (url != null) {
+            view.setVisibility(View.VISIBLE);
+            Glide.with(DotApplication.getContext())
+                    .load(url)
+                    .error(errorResource)
+                    .placeholder(loadingResource)
+                    .into(view);
+        } else if (pickResource != null) {
+            view.setVisibility(View.VISIBLE);
+            Glide.with(DotApplication.getContext())
+                    .load(pickResource)
+                    .error(errorResource)
+                    .placeholder(loadingResource)
+                    .into(view);
+        } else {
+            view.setVisibility(View.GONE);
         }
     }
 

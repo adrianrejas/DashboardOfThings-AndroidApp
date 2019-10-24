@@ -27,9 +27,9 @@ public class DataMessageHelper {
     public static final int XML_JSON_NODE_ARRAY_REGEX_GROUP_NAME = 1;
     public static final int XML_JSON_NODE_ARRAY_REGEX_GROUP_INDEX = 2;
 
-    public static final String ACTUATOR_MESSAGE_DATA_INDICATOR = "${DATA}";
     public static final String ACTUATOR_MESSAGE_DATA_REGEX = "\\$\\{DATA\\(([^\\);]+)\\)\\}";
     public static final String ACTUATOR_MESSAGE_DATE_REGEX = "\\$\\{DATE\\(([^\\);]+)\\)\\}";
+    public static final String ACTUATOR_MESSAGE_DATA_INDICATOR = "${DATA}";
     public static final String ACTUATOR_MESSAGE_TIMESTAMP_INDICATOR = "${TIMESTAMP}";
     
     public static String extractDataFromSensorResponse(String messageBody, Sensor sensor) {
@@ -162,7 +162,7 @@ public class DataMessageHelper {
                 formattedMessage = patternMatcherDate.replaceFirst(dateFormat.format(current));
                 patternMatcherDate = pattertToDetectDate.matcher(formattedMessage);
             }
-            Pattern pattertToDetectData = Pattern.compile(ACTUATOR_MESSAGE_DATE_REGEX);
+            Pattern pattertToDetectData = Pattern.compile(ACTUATOR_MESSAGE_DATA_REGEX);
             Matcher patternMatcherData = pattertToDetectData.matcher(formattedMessage);
             while ((patternMatcherData.matches()) && (patternMatcherData.groupCount() >= 1)) {
                 String dataFormatStr = patternMatcherData.group(0);

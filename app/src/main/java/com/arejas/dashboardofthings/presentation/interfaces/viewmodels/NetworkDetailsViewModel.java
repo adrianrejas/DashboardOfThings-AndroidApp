@@ -29,6 +29,8 @@ public class NetworkDetailsViewModel extends AndroidViewModel {
 
     private Integer networkId;
 
+    private Network networkBeingEdited;
+
     private LiveData<Resource<NetworkExtended>> network;
     private LiveData<Resource<List<Sensor>>> sensorsRelated;
     private LiveData<Resource<List<Actuator>>> actuatorsRelated;
@@ -41,6 +43,18 @@ public class NetworkDetailsViewModel extends AndroidViewModel {
         this.networkManagementUseCase = networkManagementUseCase;
         this.networkId = networkIdToLoad;
         this.logsManagementUseCase = logsManagementUseCase;
+    }
+
+    public Integer getNetworkId() {
+        return networkId;
+    }
+
+    public Network getNetworkBeingEdited() {
+        return networkBeingEdited;
+    }
+
+    public void setNetworkBeingEdited(Network networkBeingEdited) {
+        this.networkBeingEdited = networkBeingEdited;
     }
 
     public LiveData<Resource<NetworkExtended>> getNetwork(boolean refreshData) {

@@ -6,27 +6,23 @@ public class DataHelper {
 
     public static Enumerators.NotificationState getNotificationStatus(String dataReceived,
                                                                       Enumerators.DataType dataType,
-                                                                      String thresholdAboveWarningString,
-                                                                      String thresholdAboveCriticalString,
-                                                                      String thresholdBelowWarningString,
-                                                                      String thresholdBelowCriticalString,
+                                                                      Float thresholdAboveWarningRaw,
+                                                                      Float thresholdAboveCriticalRaw,
+                                                                      Float thresholdBelowWarningRaw,
+                                                                      Float thresholdBelowCriticalRaw,
                                                                       String thresholdEqualsWarningString,
                                                                       String thresholdEqualsCriticalString) {
         try {
             if (dataType != null) {
                 if (dataType.equals(Enumerators.DataType.INTEGER)) {
-                    int thresholdAboveWarning = ((thresholdAboveWarningString != null) &&
-                            (!thresholdAboveWarningString.isEmpty())) ?
-                            Integer.valueOf(thresholdAboveWarningString) : Integer.MAX_VALUE;
-                    int thresholdAboveCritical = ((thresholdAboveCriticalString != null) &&
-                            (!thresholdAboveCriticalString.isEmpty())) ?
-                            Integer.valueOf(thresholdAboveCriticalString) : Integer.MAX_VALUE;
-                    int thresholdBelowWarning = ((thresholdBelowWarningString != null) &&
-                            (!thresholdBelowWarningString.isEmpty())) ?
-                            Integer.valueOf(thresholdBelowWarningString) : Integer.MIN_VALUE;
-                    int thresholdBelowCritical = ((thresholdBelowCriticalString != null) &&
-                            (!thresholdBelowCriticalString.isEmpty())) ?
-                            Integer.valueOf(thresholdBelowCriticalString) : Integer.MIN_VALUE;
+                    int thresholdAboveWarning = (thresholdAboveWarningRaw != null) ?
+                            thresholdAboveWarningRaw.intValue() : Integer.MAX_VALUE;
+                    int thresholdAboveCritical = (thresholdAboveCriticalRaw != null) ?
+                            thresholdAboveCriticalRaw.intValue() : Integer.MAX_VALUE;
+                    int thresholdBelowWarning = (thresholdBelowWarningRaw != null) ?
+                            thresholdBelowWarningRaw.intValue() : Integer.MIN_VALUE;
+                    int thresholdBelowCritical = (thresholdBelowCriticalRaw != null) ?
+                            thresholdBelowCriticalRaw.intValue() : Integer.MIN_VALUE;
                     int intValue = Integer.valueOf(dataReceived);
                     if ((intValue >= thresholdAboveCritical) || (intValue <= thresholdBelowCritical)) {
                         return Enumerators.NotificationState.CRITICAL;
@@ -36,18 +32,14 @@ public class DataHelper {
                         return Enumerators.NotificationState.NONE;
                     }
                 } else if (dataType.equals(Enumerators.DataType.DECIMAL)) {
-                    float thresholdAboveWarning = ((thresholdAboveWarningString != null) &&
-                            (!thresholdAboveWarningString.isEmpty())) ?
-                            Float.valueOf(thresholdAboveWarningString) : Float.MAX_VALUE;
-                    float thresholdAboveCritical = ((thresholdAboveCriticalString != null) &&
-                            (!thresholdAboveCriticalString.isEmpty())) ?
-                            Float.valueOf(thresholdAboveCriticalString) : Float.MAX_VALUE;
-                    float thresholdBelowWarning = ((thresholdBelowWarningString != null) &&
-                            (!thresholdBelowWarningString.isEmpty())) ?
-                            Float.valueOf(thresholdBelowWarningString) : Float.MIN_VALUE;
-                    float thresholdBelowCritical = ((thresholdBelowCriticalString != null) &&
-                            (!thresholdBelowCriticalString.isEmpty())) ?
-                            Float.valueOf(thresholdBelowCriticalString) : Float.MIN_VALUE;
+                    float thresholdAboveWarning = (thresholdAboveWarningRaw != null) ?
+                            thresholdAboveWarningRaw : Float.MAX_VALUE;
+                    float thresholdAboveCritical = (thresholdAboveCriticalRaw != null) ?
+                            thresholdAboveCriticalRaw : Float.MAX_VALUE;
+                    float thresholdBelowWarning = (thresholdBelowWarningRaw != null) ?
+                            thresholdBelowWarningRaw : Float.MIN_VALUE;
+                    float thresholdBelowCritical = (thresholdBelowCriticalRaw != null) ?
+                            thresholdBelowCriticalRaw : Float.MIN_VALUE;
                     float floatValue = Float.valueOf(dataReceived);
                     if ((floatValue >= thresholdAboveCritical) || (floatValue <= thresholdBelowCritical)) {
                         return Enumerators.NotificationState.CRITICAL;

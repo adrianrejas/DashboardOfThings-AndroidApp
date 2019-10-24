@@ -50,10 +50,10 @@ public class HttpRequestHelper {
             SSLSocketFactory socketFactory = null;
             X509TrustManager trustManager = null;
             if (network.getHttpConfiguration().getHttpUseSsl()) {
-                if ((network.getHttpConfiguration().getCertAuthorityUrl() != null) &&
-                        (!network.getHttpConfiguration().getCertAuthorityUrl().isEmpty())) {
+                if ((network.getHttpConfiguration().getCertAuthorityUri() != null) &&
+                        (!network.getHttpConfiguration().getCertAuthorityUri().isEmpty())) {
                     SslUtility.getInstance().createSocketFactoryAndTrustManager(network.getId(),
-                            network.getHttpConfiguration().getCertAuthorityUrl());
+                            network.getHttpConfiguration().getCertAuthorityUri());
                     socketFactory = SslUtility.getInstance().getSocketFactory(network.getId());
                     trustManager = SslUtility.getInstance().getTrustedManager(network.getId());
                     if ((socketFactory == null) || (trustManager == null)) {
@@ -138,10 +138,10 @@ public class HttpRequestHelper {
             SSLSocketFactory socketFactory = null;
             X509TrustManager trustManager = null;
             if (network.getHttpConfiguration().getHttpUseSsl()) {
-                if ((network.getHttpConfiguration().getCertAuthorityUrl() != null) &&
-                        (!network.getHttpConfiguration().getCertAuthorityUrl().isEmpty())) {
+                if ((network.getHttpConfiguration().getCertAuthorityUri() != null) &&
+                        (!network.getHttpConfiguration().getCertAuthorityUri().isEmpty())) {
                     SslUtility.getInstance().createSocketFactoryAndTrustManager(network.getId(),
-                            network.getHttpConfiguration().getCertAuthorityUrl());
+                            network.getHttpConfiguration().getCertAuthorityUri());
                     socketFactory = SslUtility.getInstance().getSocketFactory(network.getId());
                     trustManager = SslUtility.getInstance().getTrustedManager(network.getId());
                     if ((socketFactory == null) || (trustManager == null)) {

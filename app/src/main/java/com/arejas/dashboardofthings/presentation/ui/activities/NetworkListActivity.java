@@ -108,6 +108,11 @@ public class NetworkListActivity extends AppCompatActivity implements View.OnCli
                         Intent intent = null;
                         switch (menuItem.getItemId()) {
                             case R.id.main_navigation_dashboard:
+                                intent = new Intent(getApplicationContext(),
+                                        MainDashboardActivity.class);
+                                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                                startActivity(intent);
+                                finish();
                                 break;
                             case R.id.main_navigation_sensors:
                                 intent = new Intent(getApplicationContext(),
@@ -124,11 +129,6 @@ public class NetworkListActivity extends AppCompatActivity implements View.OnCli
                                 finish();
                                 break;
                             case R.id.main_navigation_networks:
-                                intent = new Intent(getApplicationContext(),
-                                        NetworkListActivity.class);
-                                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-                                startActivity(intent);
-                                finish();
                                 break;
                             case R.id.main_navigation_map:
                                 intent = new Intent(getApplicationContext(),
@@ -148,6 +148,8 @@ public class NetworkListActivity extends AppCompatActivity implements View.OnCli
 
         // Set action of refreshing list when refreshing gesture detected
         uiBinding.networkContainer.srlRefreshLayout.setOnRefreshListener(() -> setList(false, true));
+
+        uiBinding.setListener(this);
 
         // Load network list
         setList(true, false);
