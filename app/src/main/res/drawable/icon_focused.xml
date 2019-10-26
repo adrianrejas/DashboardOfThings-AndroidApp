@@ -1,0 +1,4 @@
+<shape xmlns:android="http://schemas.android.com/apk/res/android" android:shape="oval">
+    <corners android:radius="@dimen/card_corner_radius"/>
+    <solid android:color="@color/iconFocusedBackground"></solid>
+</shape>

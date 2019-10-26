@@ -15,8 +15,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.arejas.dashboardofthings.R;
-import com.arejas.dashboardofthings.databinding.CardMaindashboardLogBinding;
-import com.arejas.dashboardofthings.databinding.FragmentMainlogsBinding;
+import com.arejas.dashboardofthings.databinding.CardLogBinding;
 import com.arejas.dashboardofthings.databinding.FragmentNetworkDetailsLogsBinding;
 import com.arejas.dashboardofthings.domain.entities.database.Log;
 import com.arejas.dashboardofthings.domain.entities.result.Resource;
@@ -207,7 +206,7 @@ public class NetworkDetailLogsFragment extends Fragment {
         @Override
         public NetworkDetailLogsFragment.LogsListAdapter.LogListViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             LayoutInflater inflater = LayoutInflater.from(parent.getContext());
-            CardMaindashboardLogBinding binding = DataBindingUtil.inflate(inflater, R.layout.card_maindashboard_log,
+            CardLogBinding binding = DataBindingUtil.inflate(inflater, R.layout.card_log,
                     parent, false);
             return new NetworkDetailLogsFragment.LogsListAdapter.LogListViewHolder(binding);
         }
@@ -231,9 +230,9 @@ public class NetworkDetailLogsFragment extends Fragment {
 
         class LogListViewHolder extends RecyclerView.ViewHolder {
 
-            final CardMaindashboardLogBinding binding;
+            final CardLogBinding binding;
 
-            LogListViewHolder(CardMaindashboardLogBinding binding) {
+            LogListViewHolder(CardLogBinding binding) {
                 super(binding.getRoot());
                 this.binding = binding;
             }

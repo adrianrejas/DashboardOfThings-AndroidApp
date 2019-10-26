@@ -40,7 +40,7 @@
     <dimen name="card_elevation_pressed">8dp</dimen>
 
     <!-- Card format -->
-    <dimen name="card_corner_radius">3dp</dimen>
+    <dimen name="card_corner_radius">10dp</dimen>
     <dimen name="card_border">1dp</dimen>
     <dimen name="card_icon_size">50dp</dimen>
 

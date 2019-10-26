@@ -29,6 +29,7 @@
     <color name="logErrorColorText">#f45320</color>
 
     <color name="tabsCollapsingBackground">#B3FFFFFF</color>
+    <color name="iconFocusedBackground">#B3DEDEDE</color>
 
     <color name="logInfoColor">#40ffffff</color>
     <color name="logWarnColor">#40ffe010</color>

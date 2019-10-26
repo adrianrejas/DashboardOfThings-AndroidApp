@@ -18,6 +18,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:focusable="true"
+        android:background="@drawable/selector_layout"
         android:nextFocusRight="@id/tv_network_options_listitem">
 
         <ImageView
@@ -98,7 +99,8 @@
             android:text="@string/options_icon"
             android:textAppearance="?android:textAppearanceLarge"
             android:onClick="@{(v) -> presenter.optionsClicked(v)}"
-            android:focusable="true"/>
+            android:focusable="true"
+            android:background="@drawable/selector_icon"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
     

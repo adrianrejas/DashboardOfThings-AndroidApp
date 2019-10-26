@@ -16,7 +16,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.arejas.dashboardofthings.R;
-import com.arejas.dashboardofthings.databinding.CardMaindashboardLogBinding;
+import com.arejas.dashboardofthings.databinding.CardLogBinding;
 import com.arejas.dashboardofthings.databinding.CardMaindashboardStatusBinding;
 import com.arejas.dashboardofthings.databinding.FragmentMainlogsBinding;
 import com.arejas.dashboardofthings.databinding.FragmentMainstatusBinding;

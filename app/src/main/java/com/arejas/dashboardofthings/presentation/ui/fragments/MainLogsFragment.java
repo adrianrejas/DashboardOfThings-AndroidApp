@@ -11,19 +11,17 @@ import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModelProviders;
-import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.arejas.dashboardofthings.R;
-import com.arejas.dashboardofthings.databinding.CardMaindashboardLogBinding;
+import com.arejas.dashboardofthings.databinding.CardLogBinding;
 import com.arejas.dashboardofthings.databinding.FragmentMainlogsBinding;
 import com.arejas.dashboardofthings.domain.entities.database.Log;
 import com.arejas.dashboardofthings.domain.entities.result.Resource;
 import com.arejas.dashboardofthings.presentation.interfaces.viewmodels.MainDashboardViewModel;
 import com.arejas.dashboardofthings.presentation.interfaces.viewmodels.factories.ViewModelFactory;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -188,7 +186,7 @@ public class MainLogsFragment extends Fragment {
         @Override
         public MainLogsFragment.LogsListAdapter.LogListViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             LayoutInflater inflater = LayoutInflater.from(parent.getContext());
-            CardMaindashboardLogBinding binding = DataBindingUtil.inflate(inflater, R.layout.card_maindashboard_log,
+            CardLogBinding binding = DataBindingUtil.inflate(inflater, R.layout.card_log,
                     parent, false);
             return new MainLogsFragment.LogsListAdapter.LogListViewHolder(binding);
         }
@@ -212,9 +210,9 @@ public class MainLogsFragment extends Fragment {
 
         class LogListViewHolder extends RecyclerView.ViewHolder {
 
-            final CardMaindashboardLogBinding binding;
+            final CardLogBinding binding;
 
-            LogListViewHolder(CardMaindashboardLogBinding binding) {
+            LogListViewHolder(CardLogBinding binding) {
                 super(binding.getRoot());
                 this.binding = binding;
             }
