@@ -85,17 +85,8 @@ public abstract class ActuatorsDao {
     @Update
     public abstract void update(Actuator actuator);
 
-    @Query("UPDATE `logs` SET elementName=:name WHERE id=:id AND elementType=:type")
-    protected abstract void updateLogElementName(Integer id, Enumerators.ElementType type, String name);
-
     @Query("DELETE FROM `logs` WHERE id=:id AND elementType=:type")
     protected abstract void deleteLogsForElement(Integer id, Enumerators.ElementType type);
-
-    @Transaction
-    public void updateExtended(Actuator actuator) {
-        update(actuator);
-        updateLogElementName(actuator.getId(), Enumerators.ElementType.ACTUATOR, actuator.getName());
-    }
 
     @Transaction
     public void deleteExtended(Actuator actuator) {

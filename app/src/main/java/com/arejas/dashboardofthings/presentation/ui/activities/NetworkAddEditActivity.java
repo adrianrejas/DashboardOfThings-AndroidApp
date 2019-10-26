@@ -1,7 +1,6 @@
 package com.arejas.dashboardofthings.presentation.ui.activities;
 
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.Menu;
@@ -11,7 +10,6 @@ import android.view.View;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
-import androidx.databinding.ObservableInt;
 import androidx.lifecycle.ViewModelProviders;
 
 import com.arejas.dashboardofthings.R;
@@ -19,6 +17,7 @@ import com.arejas.dashboardofthings.databinding.ActivityNetworkAddEditBinding;
 import com.arejas.dashboardofthings.domain.entities.database.Network;
 import com.arejas.dashboardofthings.domain.entities.extended.NetworkExtended;
 import com.arejas.dashboardofthings.domain.entities.result.Resource;
+import com.arejas.dashboardofthings.presentation.interfaces.viewmodels.NetworkAddEditViewModel;
 import com.arejas.dashboardofthings.presentation.interfaces.viewmodels.NetworkDetailsViewModel;
 import com.arejas.dashboardofthings.presentation.interfaces.viewmodels.factories.ViewModelFactory;
 import com.arejas.dashboardofthings.presentation.ui.helpers.AddEditElementPresenter;
@@ -44,7 +43,7 @@ public class NetworkAddEditActivity extends AppCompatActivity implements AddEdit
     public static final int REQUEST_PICK_HTTP_CERT = 42;
     public static final int REQUEST_PICK_MQTT_CERT = 43;
 
-    private NetworkDetailsViewModel networkDetailsViewModel;
+    private NetworkAddEditViewModel networkAddEditViewModel;
 
     ActivityNetworkAddEditBinding uiBinding;
 
@@ -90,57 +89,80 @@ public class NetworkAddEditActivity extends AppCompatActivity implements AddEdit
         }
 
         /* Get view model*/
-        if ((savedInstanceState != null) && (savedInstanceState.containsKey(NETWORK_ID))) {
-            this.viewModelFactory.setNetworkIdToLoad(networkId);
-        }
-        networkDetailsViewModel = ViewModelProviders.of(this, this.viewModelFactory).get(NetworkDetailsViewModel.class);
+        networkAddEditViewModel = ViewModelProviders.of(this, this.viewModelFactory).get(NetworkAddEditViewModel.class);
+        networkAddEditViewModel.setNetworkId(networkId);
 
         (new Handler()).post(() -> {
             uiBinding.setPresenter(this);
             uiBinding.setEditionMode(editionMode);
             if (editionMode) {
                 uiBinding.toolbar.setTitle(getString(R.string.toolbar_title_edit_network));
-                if (networkDetailsViewModel.getNetworkBeingEdited() != null) {
-                    networkDetailsViewModel.getNetwork(true).observe(this, networkExtendedResource -> {
-                        if (networkExtendedResource == null) {
-                            ToastHelper.showToast(getString(R.string.toast_edition_failed));
-                            finish();
-                        } else {
-                            if (networkExtendedResource.getStatus() == Resource.Status.ERROR) {
+                if (networkAddEditViewModel.getNetworkBeingEdited() == null) {
+                    networkAddEditViewModel.getNetwork(true).observe(this, networkExtendedResource -> {
+                        try {
+                            if (networkExtendedResource == null) {
                                 ToastHelper.showToast(getString(R.string.toast_edition_failed));
                                 finish();
-                            } else if (networkExtendedResource.getStatus() == Resource.Status.LOADING) {
-                                showLoading();
                             } else {
-                                NetworkExtended network = networkExtendedResource.getData();
-                                networkEdited = network;
-                                imagePicked = network.getImageUri();
-                                httpCertPicked = network.getHttpConfiguration().getCertAuthorityUri();
-                                mqttCertPicked = network.getMqttConfiguration().getMqttCertAuthorityUri();
-                                if (network != null) {
-                                    uiBinding.setNetwork(network);
-                                    uiBinding.setImagePicked(imagePicked);
-                                    uiBinding.setNetworkTypeSelected(network.getNetworkType().ordinal());
-                                    if (network.getNetworkType().equals(Enumerators.NetworkType.HTTP)) {
-                                        uiBinding.setNetworkTypeSelected(network.getHttpConfiguration().getHttpAauthenticationType().ordinal());
-                                        uiBinding.setHttpCertPicked(httpCertPicked);
-                                        uiBinding.setUseSslInHttp(network.getHttpConfiguration().getHttpUseSsl());
-                                    } else if (network.getNetworkType().equals(Enumerators.NetworkType.MQTT)) {
-                                        uiBinding.setMqttCertPicked(mqttCertPicked);
-                                        uiBinding.setUseSslInMqtt(network.getMqttConfiguration().getMqttUseSsl());
-                                    }
-                                    uiBinding.toolbar.setTitle(network.getName());
-                                    showEditArea();
-                                } else {
+                                if (networkExtendedResource.getStatus() == Resource.Status.ERROR) {
                                     ToastHelper.showToast(getString(R.string.toast_edition_failed));
                                     finish();
+                                } else if (networkExtendedResource.getStatus() == Resource.Status.LOADING) {
+                                    showLoading();
+                                } else {
+                                    NetworkExtended network = networkExtendedResource.getData();
+                                    populateUiWithProvidedNetwork(network);
+                                    networkEdited = network;
+                                    networkAddEditViewModel.setNetworkBeingEdited(networkEdited);
+                                    imagePicked = network.getImageUri();
+                                    if (network != null) {
+                                        uiBinding.setNetwork(network);
+                                        uiBinding.setImagePicked(imagePicked);
+                                        uiBinding.setNetworkTypeSelected(network.getNetworkType().ordinal());
+                                        if (network.getNetworkType().equals(Enumerators.NetworkType.HTTP)) {
+                                            uiBinding.setNetworkTypeSelected(network.getHttpConfiguration().getHttpAauthenticationType().ordinal());
+                                            httpCertPicked = network.getHttpConfiguration().getCertAuthorityUri();
+                                            uiBinding.setHttpCertPicked(httpCertPicked);
+                                            uiBinding.setUseSslInHttp(network.getHttpConfiguration().getHttpUseSsl());
+                                        } else if (network.getNetworkType().equals(Enumerators.NetworkType.MQTT)) {
+                                            mqttCertPicked = network.getMqttConfiguration().getMqttCertAuthorityUri();
+                                            uiBinding.setMqttCertPicked(mqttCertPicked);
+                                            uiBinding.setUseSslInMqtt(network.getMqttConfiguration().getMqttUseSsl());
+                                        }
+                                        showEditArea();
+                                    } else {
+                                        ToastHelper.showToast(getString(R.string.toast_edition_failed));
+                                        finish();
+                                    }
                                 }
                             }
+                        } catch (Exception e) {
+                            e.printStackTrace();
                         }
                     });
                 } else {
+                    networkEdited = networkAddEditViewModel.getNetworkBeingEdited();
                     try {
-                        populateUiWithProvidedNetwork(networkDetailsViewModel.getNetworkBeingEdited());
+                        populateUiWithProvidedNetwork(networkAddEditViewModel.getNetworkBeingEdited());
+                        networkEdited = networkAddEditViewModel.getNetworkBeingEdited();
+                        networkAddEditViewModel.setNetworkBeingEdited(networkEdited);
+                        imagePicked = networkEdited.getImageUri();
+                        if (networkEdited != null) {
+                            uiBinding.setNetwork(networkEdited);
+                            uiBinding.setImagePicked(imagePicked);
+                            uiBinding.setNetworkTypeSelected(networkEdited.getNetworkType().ordinal());
+                            if (networkEdited.getNetworkType().equals(Enumerators.NetworkType.HTTP)) {
+                                uiBinding.setNetworkTypeSelected(networkEdited.getHttpConfiguration().getHttpAauthenticationType().ordinal());
+                                httpCertPicked = networkEdited.getHttpConfiguration().getCertAuthorityUri();
+                                uiBinding.setHttpCertPicked(httpCertPicked);
+                                uiBinding.setUseSslInHttp(networkEdited.getHttpConfiguration().getHttpUseSsl());
+                            } else if (networkEdited.getNetworkType().equals(Enumerators.NetworkType.MQTT)) {
+                                mqttCertPicked = networkEdited.getMqttConfiguration().getMqttCertAuthorityUri();
+                                uiBinding.setMqttCertPicked(mqttCertPicked);
+                                uiBinding.setUseSslInMqtt(networkEdited.getMqttConfiguration().getMqttUseSsl());
+                            }
+                        }
+                        showEditArea();
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
@@ -148,9 +170,27 @@ public class NetworkAddEditActivity extends AppCompatActivity implements AddEdit
             } else {
                 uiBinding.toolbar.setTitle(getString(R.string.toolbar_title_new_network));
                 showEditArea();
-                if (networkDetailsViewModel.getNetworkBeingEdited() != null) {
+                if (networkAddEditViewModel.getNetworkBeingEdited() != null) {
                     try {
-                        populateUiWithProvidedNetwork(networkDetailsViewModel.getNetworkBeingEdited());
+                        populateUiWithProvidedNetwork(networkAddEditViewModel.getNetworkBeingEdited());
+                        networkEdited = networkAddEditViewModel.getNetworkBeingEdited();
+                        networkAddEditViewModel.setNetworkBeingEdited(networkEdited);
+                        imagePicked = networkEdited.getImageUri();
+                        if (networkEdited != null) {
+                            uiBinding.setNetwork(networkEdited);
+                            uiBinding.setImagePicked(imagePicked);
+                            uiBinding.setNetworkTypeSelected(networkEdited.getNetworkType().ordinal());
+                            if (networkEdited.getNetworkType().equals(Enumerators.NetworkType.HTTP)) {
+                                uiBinding.setNetworkTypeSelected(networkEdited.getHttpConfiguration().getHttpAauthenticationType().ordinal());
+                                httpCertPicked = networkEdited.getHttpConfiguration().getCertAuthorityUri();
+                                uiBinding.setHttpCertPicked(httpCertPicked);
+                                uiBinding.setUseSslInHttp(networkEdited.getHttpConfiguration().getHttpUseSsl());
+                            } else if (networkEdited.getNetworkType().equals(Enumerators.NetworkType.MQTT)) {
+                                mqttCertPicked = networkEdited.getMqttConfiguration().getMqttCertAuthorityUri();
+                                uiBinding.setMqttCertPicked(mqttCertPicked);
+                                uiBinding.setUseSslInMqtt(networkEdited.getMqttConfiguration().getMqttUseSsl());
+                            }
+                        }
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
@@ -191,13 +231,13 @@ public class NetworkAddEditActivity extends AppCompatActivity implements AddEdit
 
     @Override
     protected void onSaveInstanceState(@NonNull Bundle outState) {
-        Network networkInEdition = networkDetailsViewModel.getNetworkBeingEdited();
+        Network networkInEdition = networkAddEditViewModel.getNetworkBeingEdited();
         if (networkInEdition == null) networkInEdition = new Network();
         try {
             configureNetworkObjectWithFoldData(networkInEdition, true);
-            networkDetailsViewModel.setNetworkBeingEdited(networkInEdition);
+            networkAddEditViewModel.setNetworkBeingEdited(networkInEdition);
         } catch (Exception e) {
-            networkDetailsViewModel.setNetworkBeingEdited(null);
+            networkAddEditViewModel.setNetworkBeingEdited(null);
         }
         if (networkId != null) {
             outState.putInt(NETWORK_ID, networkId);
@@ -210,7 +250,7 @@ public class NetworkAddEditActivity extends AppCompatActivity implements AddEdit
             Network newNetwork = new Network();
             if (checkFoldData()) {
                 configureNetworkObjectWithFoldData(newNetwork, true);
-                networkDetailsViewModel.createNetwork(newNetwork);
+                networkAddEditViewModel.createNetwork(newNetwork);
                 finish();
             }
         } catch (Exception e) {
@@ -223,7 +263,7 @@ public class NetworkAddEditActivity extends AppCompatActivity implements AddEdit
         try {
             if (checkFoldData()) {
                 configureNetworkObjectWithFoldData(networkEdited, false);
-                networkDetailsViewModel.updateNetwork(networkEdited);
+                networkAddEditViewModel.updateNetwork(networkEdited);
                 finish();
             }
         } catch (Exception e) {
@@ -402,16 +442,13 @@ public class NetworkAddEditActivity extends AppCompatActivity implements AddEdit
         try {
             if (resultCode == RESULT_OK) {
                 if (requestCode == REQUEST_PICK_IMAGE) {
-                    Uri selectedImageUri = data.getData();
-                    imagePicked = selectedImageUri.toString();
+                    imagePicked = Utils.getUriFromFilSelected(this, data.getData());
                     uiBinding.setImagePicked(imagePicked);
                 } else if (requestCode == REQUEST_PICK_HTTP_CERT) {
-                    Uri selectedCertUri = data.getData();
-                    httpCertPicked = selectedCertUri.toString();
+                    httpCertPicked = Utils.getUriFromFilSelected(this, data.getData());
                     uiBinding.setHttpCertPicked(httpCertPicked);
                 } else if (requestCode == REQUEST_PICK_MQTT_CERT) {
-                    Uri selectedCertUri = data.getData();
-                    mqttCertPicked = selectedCertUri.toString();
+                    mqttCertPicked = Utils.getUriFromFilSelected(this, data.getData());
                     uiBinding.setMqttCertPicked(mqttCertPicked);
                 }
             }
@@ -422,7 +459,7 @@ public class NetworkAddEditActivity extends AppCompatActivity implements AddEdit
 
     @Override
     public void pickImage() {
-        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+        Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
         intent.addCategory(Intent.CATEGORY_OPENABLE);
         intent.setType("image/*");
         startActivityForResult(Intent.createChooser(intent, getString(R.string.edit_hint_image_pick)), REQUEST_PICK_IMAGE);
@@ -436,7 +473,7 @@ public class NetworkAddEditActivity extends AppCompatActivity implements AddEdit
 
     @Override
     public void pickHttpCert() {
-        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+        Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
         intent.addCategory(Intent.CATEGORY_OPENABLE);
         intent.setType("file/*");
         startActivityForResult(Intent.createChooser(intent, getString(R.string.edit_hint_http_cert_pick)), REQUEST_PICK_HTTP_CERT);
@@ -450,7 +487,7 @@ public class NetworkAddEditActivity extends AppCompatActivity implements AddEdit
 
     @Override
     public void pickMqttCert() {
-        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+        Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
         intent.addCategory(Intent.CATEGORY_OPENABLE);
         intent.setType("file/*");
         startActivityForResult(Intent.createChooser(intent, getString(R.string.edit_hint_mqtt_cert_pick)), REQUEST_PICK_MQTT_CERT);

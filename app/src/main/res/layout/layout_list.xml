@@ -9,14 +9,14 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:visibility="gone"
-        tools:visibility="gone">
+        tools:visibility="visible">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/main_list"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_margin="@dimen/list_element_magin"
-            android:visibility="gone"
+            android:visibility="visible"
             tools:visibility="visible"
             tools:context=".presentation.ui.activities.RecipesListActivity"/>
 

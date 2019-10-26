@@ -12,8 +12,10 @@ import com.arejas.dashboardofthings.domain.usecases.LogsManagementUseCase;
 import com.arejas.dashboardofthings.domain.usecases.NetworkManagementUseCase;
 import com.arejas.dashboardofthings.domain.usecases.SensorManagementUseCase;
 import com.arejas.dashboardofthings.presentation.interfaces.viewmodels.MainDashboardViewModel;
+import com.arejas.dashboardofthings.presentation.interfaces.viewmodels.NetworkAddEditViewModel;
 import com.arejas.dashboardofthings.presentation.interfaces.viewmodels.NetworkDetailsViewModel;
 import com.arejas.dashboardofthings.presentation.interfaces.viewmodels.NetworkListViewModel;
+import com.arejas.dashboardofthings.presentation.ui.activities.NetworkAddEditActivity;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -32,10 +34,7 @@ public class ViewModelFactory extends ViewModelProvider.NewInstanceFactory {
     private MainDashboardViewModel mainDashboardViewModel;
     private NetworkListViewModel networkListViewModel;
     private NetworkDetailsViewModel networkDetailsViewModel;
-
-    private Integer networkIdToLoad;
-    private Integer sensorIdToLoad;
-    private Integer actuatorIdToLoad;
+    private NetworkAddEditViewModel networkAddEditViewModel;
 
     @Inject
     public ViewModelFactory(@NonNull Application application,
@@ -52,16 +51,7 @@ public class ViewModelFactory extends ViewModelProvider.NewInstanceFactory {
         this.logsManagementUseCase = logsManagementUseCase;
         mainDashboardViewModelSingleton();
         networkListViewModelSingleton();
-        this.networkIdToLoad = null;
         this.networkDetailsViewModel = null;
-    }
-
-    public void setNetworkIdToLoad (Integer networkId) {
-        if ((networkId != networkIdToLoad)) {
-            networkIdToLoad = networkId;
-            this.networkDetailsViewModel = new NetworkDetailsViewModel(application, networkIdToLoad,
-                    networkManagementUseCase, logsManagementUseCase);
-        }
     }
 
     @Override
@@ -73,6 +63,8 @@ public class ViewModelFactory extends ViewModelProvider.NewInstanceFactory {
             return (T) networkListViewModelSingleton();
         } else if (modelClass.isAssignableFrom(NetworkDetailsViewModel.class)) {
             return (T) networkDetailsViewModelSingleton();
+        } else if (modelClass.isAssignableFrom(NetworkAddEditViewModel.class)) {
+            return (T) networkAddEditViewModelSingleton();
         } else {
             throw new ClassCastException("No view model class recognized");
         }
@@ -95,9 +87,14 @@ public class ViewModelFactory extends ViewModelProvider.NewInstanceFactory {
 
     private NetworkDetailsViewModel networkDetailsViewModelSingleton() {
         if (networkDetailsViewModel == null)
-            networkDetailsViewModel = new NetworkDetailsViewModel(application, networkIdToLoad,
-                    networkManagementUseCase, logsManagementUseCase);
+            networkDetailsViewModel = new NetworkDetailsViewModel(application, networkManagementUseCase, logsManagementUseCase);
         return networkDetailsViewModel;
+    }
+
+    private NetworkAddEditViewModel networkAddEditViewModelSingleton() {
+        if (networkAddEditViewModel == null)
+            networkAddEditViewModel = new NetworkAddEditViewModel(application, networkManagementUseCase);
+        return networkAddEditViewModel;
     }
 
 }

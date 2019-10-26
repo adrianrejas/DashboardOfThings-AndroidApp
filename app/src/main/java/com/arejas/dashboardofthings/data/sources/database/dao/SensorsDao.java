@@ -98,17 +98,8 @@ public abstract class SensorsDao {
     @Update
     public abstract void update(Sensor sensor);
 
-    @Query("UPDATE `logs` SET elementName=:name WHERE id=:id AND elementType=:type")
-    protected abstract void updateLogElementName(Integer id, Enumerators.ElementType type, String name);
-
     @Query("DELETE FROM `logs` WHERE id=:id AND elementType=:type")
     protected abstract void deleteLogsForElement(Integer id, Enumerators.ElementType type);
-
-    @Transaction
-    public void updateExtended(Sensor sensor) {
-        update(sensor);
-        updateLogElementName(sensor.getId(), Enumerators.ElementType.SENSOR, sensor.getName());
-    }
 
     @Transaction
     public void deleteExtended(Sensor sensor) {

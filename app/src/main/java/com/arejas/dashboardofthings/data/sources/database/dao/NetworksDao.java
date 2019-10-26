@@ -61,17 +61,8 @@ public abstract class NetworksDao {
     @Update
     public abstract void update(Network network);
 
-    @Query("UPDATE `logs` SET elementName=:name WHERE id=:id AND elementType=:type")
-    protected abstract void updateLogElementName(Integer id, Enumerators.ElementType type, String name);
-
     @Query("DELETE FROM `logs` WHERE id=:id AND elementType=:type")
-    protected abstract void deleteLogsForElement(Integer id, Enumerators.ElementType type);
-
-    @Transaction
-    public void updateExtended(Network network) {
-        update(network);
-        updateLogElementName(network.getId(), Enumerators.ElementType.NETWORK, network.getName());
-    }
+    public abstract void deleteLogsForElement(Integer id, Enumerators.ElementType type);
 
     @Transaction
     public void deleteExtended(Network network) {

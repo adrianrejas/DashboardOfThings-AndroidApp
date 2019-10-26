@@ -4,6 +4,13 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools" >
 
+    <data>
+        <import type="android.view.View"/>
+        <variable
+            name="listener"
+            type="android.view.View.OnClickListener" />
+    </data>
+
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -44,6 +51,18 @@
                 android:layout_height="match_parent"
                 android:layout_margin="@dimen/list_side_outer_margin"
                 android:orientation="vertical"/>
+
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/fab_network_create"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom|end"
+                android:layout_margin="@dimen/fab_margin"
+                android:onClick="@{(v) -> listener.onClick(v)}"
+                android:adjustViewBounds="true"
+                android:focusable="true"
+                android:scaleType="fitXY"
+                app:srcCompat="@drawable/create" />
 
         </FrameLayout>
 

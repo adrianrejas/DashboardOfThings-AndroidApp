@@ -16,6 +16,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import androidx.cardview.widget.CardView;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.ContextCompat;
 import androidx.databinding.BindingAdapter;
 
@@ -39,6 +40,8 @@ import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -62,6 +65,31 @@ public class DataBindingConverters {
                     .into(view);
         } else {
             view.setVisibility(View.GONE);
+        }
+    }
+
+    @BindingAdapter({"imageUrl", "errorResource", "loadingResource", "alternativeResource"})
+    public static void loadImage(ImageView view, String url, Drawable errorResource,
+                                 Drawable loadingResource, Drawable alternativeResource) {
+        // If not null, get poster image URI and load it with Glide library
+        if (url != null) {
+            view.setVisibility(View.VISIBLE);
+            Glide.with(DotApplication.getContext())
+                    .load(url)
+                    .error(errorResource)
+                    .placeholder(loadingResource)
+                    .into(view);
+        } else {
+            if (alternativeResource != null) {
+                view.setVisibility(View.VISIBLE);
+                Glide.with(DotApplication.getContext())
+                        .load(alternativeResource)
+                        .error(errorResource)
+                        .placeholder(loadingResource)
+                        .into(view);
+            } else {
+                view.setVisibility(View.GONE);
+            }
         }
     }
 
@@ -100,26 +128,26 @@ public class DataBindingConverters {
     }
 
     @BindingAdapter({"logLevel"})
-    public static void loadCardBackgroundAcordingToLogLevel(CardView view, Enumerators.LogLevel logLevel) {
+    public static void loadCardBackgroundAcordingToLogLevel(ConstraintLayout view, Enumerators.LogLevel logLevel) {
         if (logLevel != null) {
             switch (logLevel) {
                 case INFO:
-                    view.setCardBackgroundColor(ContextCompat.getColor(DotApplication.getContext(), R.color.logInfoColor));
+                    view.setBackgroundColor(ContextCompat.getColor(DotApplication.getContext(), R.color.logInfoColor));
                     break;
                 case WARN:
-                    view.setCardBackgroundColor(ContextCompat.getColor(DotApplication.getContext(), R.color.logWarnColor));
+                    view.setBackgroundColor(ContextCompat.getColor(DotApplication.getContext(), R.color.logWarnColor));
                     break;
                 case ERROR:
-                    view.setCardBackgroundColor(ContextCompat.getColor(DotApplication.getContext(), R.color.logErrorColor));
+                    view.setBackgroundColor(ContextCompat.getColor(DotApplication.getContext(), R.color.logErrorColor));
                     break;
                 case NOTIF_NONE:
-                    view.setCardBackgroundColor(ContextCompat.getColor(DotApplication.getContext(), R.color.logNotificationNoneColor));
+                    view.setBackgroundColor(ContextCompat.getColor(DotApplication.getContext(), R.color.logNotificationNoneColor));
                     break;
                 case NOTIF_WARN:
-                    view.setCardBackgroundColor(ContextCompat.getColor(DotApplication.getContext(), R.color.logNotificationWarningColor));
+                    view.setBackgroundColor(ContextCompat.getColor(DotApplication.getContext(), R.color.logNotificationWarningColor));
                     break;
                 case NOTIF_CRITICAL:
-                    view.setCardBackgroundColor(ContextCompat.getColor(DotApplication.getContext(), R.color.logNotificationCriticalColor));
+                    view.setBackgroundColor(ContextCompat.getColor(DotApplication.getContext(), R.color.logNotificationCriticalColor));
                     break;
                 default:
                     break;
@@ -447,6 +475,7 @@ public class DataBindingConverters {
     @BindingAdapter("selectionListener")
     public static void setSpinnerSelectionListener(Spinner spinner, ConsumerInt selectionListener) {
         if (selectionListener != null) {
+            spinner.setFocusable(true);
             spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                 @Override
                 public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {

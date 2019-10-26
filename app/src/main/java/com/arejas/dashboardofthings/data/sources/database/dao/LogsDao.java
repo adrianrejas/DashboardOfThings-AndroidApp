@@ -81,6 +81,9 @@ public abstract class LogsDao {
     @Delete
     protected abstract void delete(Log log);
 
+    @Query("DELETE FROM `logs`")
+    public abstract void deleteAll();
+
     @Delete
     protected abstract void deteleAll(Log... logs);
 

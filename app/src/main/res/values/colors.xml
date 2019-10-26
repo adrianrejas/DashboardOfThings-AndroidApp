@@ -28,6 +28,8 @@
     <color name="secondaryTextColor">#ffffff</color>
     <color name="logErrorColorText">#f45320</color>
 
+    <color name="tabsCollapsingBackground">#B3FFFFFF</color>
+
     <color name="logInfoColor">#40ffffff</color>
     <color name="logWarnColor">#40ffe010</color>
     <color name="logErrorColor">#40f45320</color>

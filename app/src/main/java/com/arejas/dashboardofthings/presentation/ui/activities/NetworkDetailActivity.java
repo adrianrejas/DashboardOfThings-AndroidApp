@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import com.arejas.dashboardofthings.R;
+import com.arejas.dashboardofthings.presentation.interfaces.viewmodels.NetworkDetailsViewModel;
 import com.arejas.dashboardofthings.presentation.interfaces.viewmodels.factories.ViewModelFactory;
 import com.arejas.dashboardofthings.presentation.ui.fragments.NetworkDetailFragment;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -16,10 +17,13 @@ import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.ActionBar;
+import androidx.lifecycle.ViewModelProviders;
 
 import android.view.MenuItem;
 
 import javax.inject.Inject;
+
+import dagger.android.AndroidInjection;
 
 /**
  * An activity representing a single Network detail screen. This
@@ -29,10 +33,17 @@ import javax.inject.Inject;
  */
 public class NetworkDetailActivity extends AppCompatActivity {
 
+    @Inject
+    ViewModelFactory viewModelFactory;
+    private Integer networkId;
+    private NetworkDetailsViewModel networkDetailsViewModel;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_network_detail);
+
+        AndroidInjection.inject(this);
 
         // savedInstanceState is non-null when there is fragment state
         // saved from previous configurations of this activity
@@ -44,6 +55,11 @@ public class NetworkDetailActivity extends AppCompatActivity {
         // http://developer.android.com/guide/components/fragments.html
         //
         if (savedInstanceState == null) {
+            networkId = getIntent().getIntExtra(NetworkDetailFragment.NETWORK_ID, -1);
+            if (networkId < 0) networkId = null;
+            // Get the viewmodel
+            networkDetailsViewModel = ViewModelProviders.of(this, this.viewModelFactory).get(NetworkDetailsViewModel.class);
+            networkDetailsViewModel.setNetworkId(networkId);
             // Create the detail fragment and add it to the activity
             // using a fragment transaction.
             Bundle arguments = new Bundle();

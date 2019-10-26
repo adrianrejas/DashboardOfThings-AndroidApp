@@ -1,8 +1,11 @@
 package com.arejas.dashboardofthings.utils;
 
+import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Build;
+import android.preference.PreferenceManager;
 import android.provider.MediaStore;
 import android.text.Html;
 import android.text.Spanned;
@@ -24,6 +27,22 @@ public class Utils {
         } else {
             return Html.fromHtml(htmlText);
         }
+    }
+
+    public static String getUriFromFilSelected (Context context, Uri contentUri) {
+        return contentUri.toString();
+        /*Cursor cursor = null;
+        try {
+            String[] proj = {MediaStore.Images.Media.DATA};
+            cursor = context.getContentResolver().query(contentUri, proj, null, null, null);
+            int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+            cursor.moveToFirst();
+            return cursor.getString(column_index);
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+        }*/
     }
 
 }

@@ -28,6 +28,8 @@ import java.util.Objects;
 
 import javax.inject.Inject;
 
+import dagger.android.support.AndroidSupportInjection;
+
 /**
  * A fragment representing a single Network detail screen.
  * This fragment is either contained in a {@link NetworkListActivity}
@@ -66,10 +68,16 @@ public class NetworkDetailDetailsFragment extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        // Get the movie activity view model and observe the changes in the details
-        viewModelFactory.setNetworkIdToLoad(networkId);
-        networkDetailsViewModel = ViewModelProviders.of(Objects.requireNonNull(getActivity()), viewModelFactory).get(NetworkDetailsViewModel.class);
-        setData(true, false);
+        // Inject dependencies
+        AndroidSupportInjection.inject(this);
+        if (networkId != null) {
+            // Get the movie activity view model and observe the changes in the details
+            networkDetailsViewModel = ViewModelProviders.of(Objects.requireNonNull(getActivity()), viewModelFactory).get(NetworkDetailsViewModel.class);
+            networkDetailsViewModel.setNetworkId(networkId);
+            setData(true, false);
+        } else {
+            showError();
+        }
     }
 
     @Override

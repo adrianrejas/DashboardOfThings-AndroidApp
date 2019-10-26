@@ -130,6 +130,7 @@
     <string name="edit_label_mqtt_conn_timeout">Connection timeout (milliseconds):</string>
     <string name="edit_hint_mqtt_conn_timeout">Timeout in milliseconds to wait until consider the connection lost</string>
     <string name="edit_label_mqtt_keepalive_interval">Keppalive interval (milliseconds):</string>
+    <string name="edit_label_mqtt_clean_session">Clean session</string>
     <string name="edit_hint_mqtt_keepalive_interval">Time in milliseconds to wait between keepalives</string>
     <string name="edit_label_sensor_network">Network to use:</string>
 

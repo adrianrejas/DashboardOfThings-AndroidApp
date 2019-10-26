@@ -19,7 +19,7 @@
 
     <!-- CHANGE: Defining a set of styles derived from AppCompat -->
 
-    <style name="Theme.Dot" parent="@style/Theme.AppCompat.Light.NoActionBar">
+    <style name="Theme.Dot" parent="@style/Theme.Design.Light.NoActionBar">
         <item name="colorPrimary">@color/primaryColor</item>
         <item name="colorPrimaryDark">@color/primaryDarkColor</item>
         <item name="colorAccent">@color/secondaryColor</item>
@@ -28,9 +28,12 @@
         <item name="android:textSize">@dimen/font_size_standard</item>
         <item name="android:textColor">@color/primaryTextColor</item>
         <item name="android:textColorLink">@color/secondaryColor</item>
+        <item name="android:windowActionBarOverlay">false</item>
     </style>
 
     <style name="Theme.Dot.Detail" parent="Theme.Dot"></style>
+
+    <style name="Theme.Dot.CreateEdit" parent="Theme.Dot"></style>
 
     <style name="Theme.Dot.TextData" parent="Theme.Dot">
         <item name="android:textSize">@dimen/font_size_list_text</item>

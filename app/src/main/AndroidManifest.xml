@@ -12,6 +12,7 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.ACTION_OPEN_DOCUMENT" />
 
     <application
         android:name=".DotApplication"
@@ -47,7 +48,7 @@
         <activity
             android:name=".presentation.ui.activities.MainDashboardActivity"
             android:launchMode="singleTop"
-            android:theme="@style/Theme.Dot.NoActionBar">
+            android:theme="@style/Theme.Dot">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -57,12 +58,12 @@
         <activity
             android:name=".presentation.ui.activities.NetworkListActivity"
             android:label="@string/title_network_list"
-            android:theme="@style/Theme.Dot.NoActionBar"></activity>
+            android:theme="@style/Theme.Dot"></activity>
         <activity
             android:name=".presentation.ui.activities.NetworkDetailActivity"
             android:label="@string/title_network_detail"
             android:parentActivityName=".presentation.ui.activities.NetworkListActivity"
-            android:theme="@style/Theme.Dot.NoActionBar">
+            android:theme="@style/Theme.Dot.Detail">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.arejas.dashboardofthings.presentation.ui.activities.NetworkListActivity" />
@@ -70,25 +71,25 @@
         <activity
             android:name=".presentation.ui.activities.NetworkAddEditActivity"
             android:label="@string/title_network_addedit"
-            android:theme="@style/Theme.Dot.NoActionBar"></activity>
+            android:theme="@style/Theme.Dot.CreateEdit"></activity>
         <activity
             android:name=".presentation.ui.activities.SensorListActivity"
             android:launchMode="singleTop"
-            android:theme="@style/Theme.Dot.NoActionBar" />
+            android:theme="@style/Theme.Dot" />
         <activity
             android:name=".presentation.ui.activities.ActuatorListActivity"
             android:launchMode="singleTop"
-            android:theme="@style/Theme.Dot.NoActionBar" />
+            android:theme="@style/Theme.Dot" />
         <activity
             android:name=".presentation.ui.activities.MapActivity"
             android:label="@string/title_activity_map"
             android:launchMode="singleTop"
-            android:theme="@style/Theme.Dot.NoActionBar" />
+            android:theme="@style/Theme.Dot" />
         <activity
             android:name=".presentation.ui.activities.SettingsActivity"
             android:label="@string/title_activity_settings"
             android:launchMode="singleTop"
-            android:theme="@style/Theme.Dot.NoActionBar" />
+            android:theme="@style/Theme.Dot" />
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
              (See the file "res/values/google_maps_api.xml").

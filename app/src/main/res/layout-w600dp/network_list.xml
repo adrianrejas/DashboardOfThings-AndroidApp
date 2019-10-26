@@ -4,8 +4,15 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools" >
 
+    <data>
+        <import type="android.view.View"/>
+        <variable
+            name="listener"
+            type="android.view.View.OnClickListener" />
+    </data>
+
     <LinearLayout
-        android:layout_width="@dimen/list_width_masterdetail"
+        android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginLeft="@dimen/list_side_outer_margin"
         android:layout_marginRight="@dimen/list_side_outer_margin"
@@ -16,7 +23,7 @@
         tools:context="com.arejas.dashboardofthings.presentation.ui.activities.NetworkListActivity">
 
         <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-            android:layout_width="match_parent"
+            android:layout_width="@dimen/list_width_masterdetail"
             android:layout_height="match_parent"
             android:id="@+id/srl_refresh_layout">
 
@@ -55,6 +62,18 @@
                     android:layout_height="match_parent"
                     android:layout_margin="@dimen/list_side_outer_margin"
                     android:orientation="vertical"/>
+
+                <com.google.android.material.floatingactionbutton.FloatingActionButton
+                    android:id="@+id/fab_network_create"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom|end"
+                    android:layout_margin="@dimen/fab_margin"
+                    android:onClick="@{(v) -> listener.onClick(v)}"
+                    android:adjustViewBounds="true"
+                    android:focusable="true"
+                    android:scaleType="fitXY"
+                    app:srcCompat="@drawable/create" />
 
             </FrameLayout>
 

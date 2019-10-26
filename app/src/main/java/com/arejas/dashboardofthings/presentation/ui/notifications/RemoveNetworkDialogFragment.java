@@ -1,5 +1,6 @@
 package com.arejas.dashboardofthings.presentation.ui.notifications;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
@@ -12,6 +13,8 @@ import com.arejas.dashboardofthings.R;
 import com.arejas.dashboardofthings.domain.entities.database.Network;
 import com.arejas.dashboardofthings.presentation.interfaces.viewmodels.NetworkDetailsViewModel;
 import com.arejas.dashboardofthings.presentation.interfaces.viewmodels.NetworkListViewModel;
+import com.arejas.dashboardofthings.utils.functional.Consumer;
+import com.arejas.dashboardofthings.utils.functional.NoArgsFunction;
 
 public class RemoveNetworkDialogFragment extends DialogFragment {
 
@@ -21,14 +24,19 @@ public class RemoveNetworkDialogFragment extends DialogFragment {
 
     NetworkDetailsViewModel networkDetailsViewModel;
 
+    NoArgsFunction callIfAccept;
+
     public RemoveNetworkDialogFragment(Network network, NetworkListViewModel networkListViewModel) {
         this.network = network;
         this.networkListViewModel = networkListViewModel;
+        this.callIfAccept = null;
     }
 
-    public RemoveNetworkDialogFragment(Network network, NetworkDetailsViewModel networkDetailsViewModel) {
+    public RemoveNetworkDialogFragment(Network network, NetworkDetailsViewModel networkDetailsViewModel,
+                                       NoArgsFunction callIfAccept) {
         this.network = network;
         this.networkDetailsViewModel = networkDetailsViewModel;
+        this.callIfAccept = callIfAccept;
     }
 
     @Override
@@ -43,6 +51,9 @@ public class RemoveNetworkDialogFragment extends DialogFragment {
                         else if (networkDetailsViewModel != null)
                             networkDetailsViewModel.removeNetwork(network);
                         dismiss();
+                    }
+                    if (callIfAccept != null) {
+                        callIfAccept.call();
                     }
                 })
                 .setNegativeButton(R.string.dialog_cancel, (dialog, which) -> {

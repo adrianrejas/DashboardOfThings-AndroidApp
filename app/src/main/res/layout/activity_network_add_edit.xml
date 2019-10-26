@@ -53,12 +53,13 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            android:theme="@style/Theme.Dot.ActionBar"
+            android:theme="@style/ThemeOverlay.AppCompat.Light"
             android:elevation="@dimen/toolbar_elevation">
 
             <androidx.appcompat.widget.Toolbar
                 android:id="@+id/toolbar"
-                app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+                android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+                app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
                 android:layout_marginLeft="@dimen/list_toolbar_side_margin"
                 android:layout_marginRight="@dimen/list_toolbar_side_margin"
                 android:layout_width="match_parent"
@@ -94,126 +95,146 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
 
-                    <TextView
-                        android:id="@+id/tv_network_addedit_general_variables_label"
-                        style="@style/Theme.Dot.TextTitle"
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/cl_network_addedit_general_options"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="@dimen/detail_inner_margin_big"
+                        android:layout_height="0dp"
                         android:layout_marginTop="@dimen/detail_inner_margin_big"
-                        android:layout_marginEnd="@dimen/detail_inner_margin_big"
-                        android:text="@string/edit_label_general_variables"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
-
-                    <TextView
-                        android:id="@+id/tv_network_addedit_name_label"
-                        style="@style/Theme.Dot.TextDataBold"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
                         android:layout_marginStart="@dimen/detail_inner_margin_big"
                         android:layout_marginEnd="@dimen/detail_inner_margin_big"
-                        android:layout_marginTop="@dimen/detail_inner_margin_big"
-                        android:text="@string/edit_label_name"
-                        app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/tv_network_addedit_general_variables_label" />
-
-                    <EditText
-                        android:id="@+id/ed_network_addedit_name"
-                        style="@style/Theme.Dot.Edittext"
-                        android:layout_width="match_parent"
-                        android:layout_height="0dp"
-                        android:layout_marginTop="@dimen/detail_inner_margin_small"
-                        android:layout_marginStart="@dimen/detail_inner_margin_big"
-                        android:layout_marginEnd="@dimen/detail_inner_margin_big"
-                        android:hint="@string/edit_hint_name_network"
-                        android:inputType="textNoSuggestions"
-                        android:text='@{network.name ?? ""}'
-                        app:layout_constraintTop_toBottomOf="@id/tv_network_addedit_name_label"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent" />
+                        app:layout_constraintTop_toTopOf="parent"
+                        android:visibility="visible">
 
-                    <TextView
-                        android:id="@+id/tv_network_addedit_type_label"
-                        style="@style/Theme.Dot.TextDataBold"
-                        android:layout_width="match_parent"
-                        android:layout_height="0dp"
-                        android:layout_marginTop="@dimen/detail_inner_margin_small"
-                        android:layout_marginStart="@dimen/detail_inner_margin_big"
-                        android:layout_marginEnd="@dimen/detail_inner_margin_big"
-                        android:text="@string/edit_label_type"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/ed_network_addedit_name" />
+                        <TextView
+                            android:id="@+id/tv_network_addedit_general_variables_label"
+                            style="@style/Theme.Dot.TextTitle"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/edit_label_general_variables"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
 
-                    <Spinner
-                        android:id="@+id/sp_network_addedit_type"
-                        android:layout_width="match_parent"
-                        android:layout_height="0dp"
-                        android:layout_marginTop="@dimen/detail_inner_margin_small"
-                        android:layout_marginStart="@dimen/detail_inner_margin_big"
-                        android:layout_marginEnd="@dimen/detail_inner_margin_big"
-                        android:entries="@array/edit_array_network_type"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/tv_network_addedit_type_label"
-                        app:selectionListener="@{(position) -> presenter.networkTypeSelected(position)}" />
+                        <TextView
+                            android:id="@+id/tv_network_addedit_name_label"
+                            style="@style/Theme.Dot.TextDataBold"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/detail_inner_margin_big"
+                            android:text="@string/edit_label_name"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toBottomOf="@id/tv_network_addedit_general_variables_label" />
 
-                    <ImageButton
-                        android:id="@+id/ib_network_addedit_image_picker"
-                        android:layout_width="@dimen/edit_icon_size"
-                        android:layout_height="@dimen/edit_icon_size"
-                        android:layout_marginStart="@dimen/detail_inner_margin_big"
-                        android:layout_marginTop="@dimen/detail_inner_margin_small"
-                        android:layout_marginEnd="@dimen/detail_inner_margin_small"
-                        android:adjustViewBounds="true"
-                        android:background="@android:color/transparent"
-                        android:contentDescription="@string/content_description_pick_image"
-                        android:onClick="@{(v) -> presenter.pickImage()}"
-                        android:scaleType="fitXY"
-                        app:errorResource="@{@drawable/error}"
-                        app:imageUrl="@{imagePicked}"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/sp_network_addedit_type"
-                        app:loadingResource="@{@drawable/loading}"
-                        app:pickResource="@{@drawable/pick_picture}"
-                        tools:srcCompat="@drawable/pick_picture" />
+                        <EditText
+                            android:id="@+id/ed_network_addedit_name"
+                            style="@style/Theme.Dot.Edittext"
+                            android:layout_width="match_parent"
+                            android:layout_height="0dp"
+                            android:layout_marginTop="@dimen/detail_inner_margin_small"
+                            android:hint="@string/edit_hint_name_network"
+                            android:inputType="textNoSuggestions"
+                            android:text='@{network.name ?? ""}'
+                            android:nextFocusDown="@id/sp_network_addedit_type"
+                            app:layout_constraintTop_toBottomOf="@id/tv_network_addedit_name_label"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent" />
 
-                    <TextView
-                        android:id="@+id/tv_network_addedit_pick_image_label"
-                        style="@style/Theme.Dot.TextDataBold"
-                        android:layout_width="0dp"
-                        android:layout_height="0dp"
-                        android:layout_marginStart="@dimen/detail_inner_margin_big"
-                        android:layout_marginEnd="@dimen/detail_inner_margin_small"
-                        android:gravity="center_vertical"
-                        android:text="@{((imagePicked != null) &amp;&amp; (!imagePicked.isEmpty())) ? @string/edit_hint_image_picked : @string/edit_hint_image_pick}"
-                        android:textAlignment="gravity"
-                        app:layout_constraintBottom_toBottomOf="@id/ib_network_addedit_image_picker"
-                        app:layout_constraintEnd_toStartOf="@id/ib_network_addedit_image_clear"
-                        app:layout_constraintStart_toEndOf="@id/ib_network_addedit_image_picker"
-                        app:layout_constraintTop_toTopOf="@id/ib_network_addedit_image_picker"
-                        tools:text="@string/edit_hint_image_picked" />
+                        <TextView
+                            android:id="@+id/tv_network_addedit_type_label"
+                            style="@style/Theme.Dot.TextDataBold"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/detail_inner_margin_small"
+                            android:text="@string/edit_label_type"
+                            app:layout_constraintHorizontal_bias="0.0"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@id/ed_network_addedit_name" />
 
-                    <ImageButton
-                        android:id="@+id/ib_network_addedit_image_clear"
-                        android:layout_width="@dimen/edit_icon_size"
-                        android:layout_height="@dimen/edit_icon_size"
-                        android:layout_marginStart="@dimen/detail_inner_margin_small"
-                        android:layout_marginEnd="@dimen/detail_inner_margin_big"
-                        android:adjustViewBounds="true"
-                        android:background="@android:color/transparent"
-                        android:contentDescription="@string/content_description_clear_image"
-                        android:onClick="@{(v) -> presenter.cancelImagePicked()}"
-                        android:scaleType="fitXY"
-                        android:tint="@color/primaryTextColor"
-                        android:visibility="@{((imagePicked != null) &amp;&amp; (!imagePicked.isEmpty())) ? View.VISIBLE : View.GONE }"
-                        app:layout_constraintBottom_toBottomOf="@id/ib_network_addedit_image_picker"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toEndOf="@id/tv_network_addedit_pick_image_label"
-                        app:layout_constraintTop_toTopOf="@id/ib_network_addedit_image_picker"
-                        app:srcCompat="@drawable/cancel" />
+                        <TextView
+                            android:id="@+id/tv_network_addedit_type_constant"
+                            style="@style/Theme.Dot.TextDataBold"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/detail_inner_margin_small"
+                            android:layout_marginStart="@dimen/detail_inner_margin_small"
+                            android:text="@{NetworkType.valueOf(networkTypeSelected).toString() }"
+                            android:visibility="@{editionMode ? View.VISIBLE : View.GONE}"
+                            app:layout_constraintStart_toEndOf="@id/tv_network_addedit_type_label"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toBottomOf="@id/ed_network_addedit_name"
+                            tools:text="HTTP"/>
+
+                        <Spinner
+                            android:id="@+id/sp_network_addedit_type"
+                            android:layout_width="match_parent"
+                            android:layout_height="0dp"
+                            android:layout_marginTop="@dimen/detail_inner_margin_small"
+                            android:entries="@array/edit_array_network_type"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            android:visibility="@{editionMode ? View.GONE : View.VISIBLE}"
+                            android:nextFocusUp="@id/ed_network_addedit_name"
+                            android:nextFocusDown="@id/ib_network_addedit_image_picker"
+                            app:layout_constraintTop_toBottomOf="@id/tv_network_addedit_type_label"
+                            android:focusable="true"
+                            app:selectionListener="@{(position) -> presenter.networkTypeSelected(position)}"
+                            tools:visibility="visible" />
+
+                        <ImageButton
+                            android:id="@+id/ib_network_addedit_image_picker"
+                            android:layout_width="@dimen/edit_icon_size"
+                            android:layout_height="@dimen/edit_icon_size"
+                            android:layout_marginTop="@dimen/detail_inner_margin_small"
+                            android:layout_marginEnd="@dimen/detail_inner_margin_small"
+                            android:adjustViewBounds="true"
+                            android:background="@android:color/transparent"
+                            android:contentDescription="@string/content_description_pick_image"
+                            android:onClick="@{(v) -> presenter.pickImage()}"
+                            android:scaleType="fitXY"
+                            app:errorResource="@{@drawable/error}"
+                            app:imageUrl="@{imagePicked}"
+                            android:nextFocusUp="@id/sp_network_addedit_type"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@id/sp_network_addedit_type"
+                            app:loadingResource="@{@drawable/loading}"
+                            app:pickResource="@{@drawable/pick}"
+                            tools:srcCompat="@drawable/pick" />
+
+                        <ImageButton
+                            android:id="@+id/ib_network_addedit_image_clear"
+                            android:layout_width="@dimen/edit_icon_size"
+                            android:layout_height="@dimen/edit_icon_size"
+                            android:layout_marginEnd="@dimen/detail_inner_margin_small"
+                            android:adjustViewBounds="true"
+                            android:background="@android:color/transparent"
+                            android:contentDescription="@string/content_description_clear_image"
+                            android:onClick="@{(v) -> presenter.cancelImagePicked()}"
+                            android:scaleType="fitXY"
+                            android:tint="@color/primaryTextColor"
+                            android:visibility="@{((imagePicked != null) &amp;&amp; (!imagePicked.isEmpty())) ? View.VISIBLE : View.GONE }"
+                            app:layout_constraintBottom_toBottomOf="@id/ib_network_addedit_image_picker"
+                            app:layout_constraintStart_toEndOf="@id/ib_network_addedit_image_picker"
+                            app:layout_constraintEnd_toStartOf="@id/tv_network_addedit_pick_image_label"
+                            app:layout_constraintTop_toTopOf="@id/ib_network_addedit_image_picker"
+                            app:srcCompat="@drawable/cancel" />
+
+                        <TextView
+                            android:id="@+id/tv_network_addedit_pick_image_label"
+                            style="@style/Theme.Dot.TextDataBold"
+                            android:layout_width="0dp"
+                            android:layout_height="0dp"
+                            android:gravity="center_vertical"
+                            android:text="@{((imagePicked != null) &amp;&amp; (!imagePicked.isEmpty())) ? @string/edit_hint_image_picked : @string/edit_hint_image_pick}"
+                            android:textAlignment="gravity"
+                            app:layout_constraintBottom_toBottomOf="@id/ib_network_addedit_image_picker"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toEndOf="@id/ib_network_addedit_image_clear"
+                            app:layout_constraintTop_toTopOf="@id/ib_network_addedit_image_picker"
+                            tools:text="@string/edit_hint_image_picked" />
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
 
                     <FrameLayout
                         android:id="@+id/fl_network_addedit_general_options_separator"
@@ -226,26 +247,26 @@
                         android:background="@color/primaryTextColor"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/ib_network_addedit_image_picker" />
+                        app:layout_constraintTop_toBottomOf="@id/cl_network_addedit_general_options" />
 
                     <androidx.constraintlayout.widget.ConstraintLayout
                         android:id="@+id/cl_network_addedit_http_options"
                         android:layout_width="match_parent"
                         android:layout_height="0dp"
+                        android:layout_marginTop="@dimen/detail_inner_margin_big"
+                        android:layout_marginStart="@dimen/detail_inner_margin_big"
                         android:layout_marginEnd="@dimen/detail_inner_margin_big"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@id/fl_network_addedit_general_options_separator"
-                        android:visibility="@{networkTypeSelected.equals(NetworkType.HTTP.ordinal()) ? View.VISIBLE : View.GONE }">
+                        android:visibility="@{networkTypeSelected.equals(NetworkType.HTTP.ordinal()) ? View.VISIBLE : View.GONE }"
+                        tools:visibility="visible">
 
                         <TextView
                             android:id="@+id/tv_network_addedit_http_variables_label"
                             style="@style/Theme.Dot.TextTitle"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginStart="@dimen/detail_inner_margin_big"
-                            android:layout_marginTop="@dimen/detail_inner_margin_big"
-                            android:layout_marginEnd="@dimen/detail_inner_margin_big"
                             android:text="@string/edit_label_http_variables"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
@@ -257,8 +278,6 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="@dimen/detail_inner_margin_big"
-                            android:layout_marginStart="@dimen/detail_inner_margin_big"
-                            android:layout_marginEnd="@dimen/detail_inner_margin_big"
                             android:text="@string/edit_label_http_baseurl"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintEnd_toEndOf="parent"
@@ -270,12 +289,11 @@
                             android:layout_width="match_parent"
                             android:layout_height="0dp"
                             android:layout_marginTop="@dimen/detail_inner_margin_small"
-                            android:layout_marginStart="@dimen/detail_inner_margin_big"
-                            android:layout_marginEnd="@dimen/detail_inner_margin_big"
                             android:gravity="bottom"
                             android:hint="@string/edit_hint_http_baseurl"
                             android:inputType="textNoSuggestions"
                             android:text='@{(network.httpConfiguration != null) ? network.httpConfiguration.httpBaseUrl : ""}'
+                            android:nextFocusDown="@id/sp_network_addedit_http_auth"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintTop_toBottomOf="@id/tv_network_addedit_http_baseurl_label" />
@@ -286,8 +304,6 @@
                             android:layout_width="match_parent"
                             android:layout_height="0dp"
                             android:layout_marginTop="@dimen/detail_inner_margin_small"
-                            android:layout_marginStart="@dimen/detail_inner_margin_big"
-                            android:layout_marginEnd="@dimen/detail_inner_margin_big"
                             android:text="@string/edit_label_http_authentication"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintEnd_toEndOf="parent"
@@ -298,9 +314,9 @@
                             android:layout_width="match_parent"
                             android:layout_height="0dp"
                             android:layout_marginTop="@dimen/detail_inner_margin_small"
-                            android:layout_marginStart="@dimen/detail_inner_margin_big"
-                            android:layout_marginEnd="@dimen/detail_inner_margin_big"
                             android:entries="@array/edit_array_network_http_authentication"
+                            android:focusable="true"
+                            android:nextFocusUp="@id/ed_network_addedit_http_baseurl"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintTop_toBottomOf="@id/tv_network_addedit_http_auth_label"
@@ -312,8 +328,6 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="@dimen/detail_inner_margin_big"
-                            android:layout_marginStart="@dimen/detail_inner_margin_big"
-                            android:layout_marginEnd="@dimen/detail_inner_margin_big"
                             android:text="@string/edit_label_http_auth_username"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintEnd_toEndOf="parent"
@@ -326,12 +340,11 @@
                             android:layout_width="match_parent"
                             android:layout_height="0dp"
                             android:layout_marginTop="@dimen/detail_inner_margin_small"
-                            android:layout_marginStart="@dimen/detail_inner_margin_big"
-                            android:layout_marginEnd="@dimen/detail_inner_margin_big"
                             android:gravity="bottom"
                             android:hint="@string/edit_hint_http_auth_username"
                             android:inputType="textNoSuggestions"
                             android:text='@{(network.httpConfiguration != null) ? network.httpConfiguration.httpUsername : ""}'
+                            android:nextFocusUp="@id/sp_network_addedit_http_auth"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintTop_toBottomOf="@id/tv_network_addedit_http_auth_username_label"
@@ -343,8 +356,6 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="@dimen/detail_inner_margin_big"
-                            android:layout_marginStart="@dimen/detail_inner_margin_big"
-                            android:layout_marginEnd="@dimen/detail_inner_margin_big"
                             android:text="@string/edit_label_http_auth_password"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintEnd_toEndOf="parent"
@@ -357,8 +368,6 @@
                             android:layout_width="match_parent"
                             android:layout_height="0dp"
                             android:layout_marginTop="@dimen/detail_inner_margin_small"
-                            android:layout_marginStart="@dimen/detail_inner_margin_big"
-                            android:layout_marginEnd="@dimen/detail_inner_margin_big"
                             android:gravity="bottom"
                             android:hint="@string/edit_hint_http_auth_password"
                             android:inputType="textPassword"
@@ -366,6 +375,7 @@
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintTop_toBottomOf="@id/tv_network_addedit_http_auth_password_label"
+                            android:nextFocusDown="@id/cb_network_addedit_http_use_ssl"
                             android:visibility="@{httpAuthTypeSelected.equals(HttpAuthenticationType.NONE.ordinal()) ? View.GONE : View.VISIBLE }" />
 
                         <CheckBox
@@ -373,8 +383,6 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="@dimen/detail_inner_margin_small"
-                            android:layout_marginStart="@dimen/detail_inner_margin_big"
-                            android:layout_marginEnd="@dimen/detail_inner_margin_big"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintTop_toBottomOf="@id/ed_network_addedit_http_auth_password"
@@ -386,7 +394,6 @@
                             android:id="@+id/ib_network_addedit_http_cert_picker"
                             android:layout_width="@dimen/edit_icon_size"
                             android:layout_height="@dimen/edit_icon_size"
-                            android:layout_marginStart="@dimen/detail_inner_margin_big"
                             android:layout_marginTop="@dimen/detail_inner_margin_small"
                             android:layout_marginEnd="@dimen/detail_inner_margin_small"
                             android:adjustViewBounds="true"
@@ -394,26 +401,10 @@
                             android:contentDescription="@string/content_description_pick_image"
                             android:onClick="@{(v) -> presenter.pickHttpCert()}"
                             android:scaleType="fitXY"
+                            android:nextFocusUp="@id/cb_network_addedit_http_use_ssl"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toBottomOf="@id/cb_network_addedit_http_use_ssl"
-                            app:srcCompat="@drawable/pick_file"
-                            android:visibility="@{useSslInHttp ? View.VISIBLE : View.GONE}" />
-
-                        <TextView
-                            android:id="@+id/tv_network_addedit_http_pick_cert_label"
-                            style="@style/Theme.Dot.TextDataBold"
-                            android:layout_width="0dp"
-                            android:layout_height="0dp"
-                            android:layout_marginStart="@dimen/detail_inner_margin_big"
-                            android:layout_marginEnd="@dimen/detail_inner_margin_small"
-                            android:gravity="center_vertical"
-                            android:text="@{((httpCertPicked != null) &amp;&amp; (!httpCertPicked.isEmpty())) ? @string/edit_hint_http_cert_picked : @string/edit_hint_http_cert_pick}"
-                            android:textAlignment="gravity"
-                            app:layout_constraintBottom_toBottomOf="@id/ib_network_addedit_http_cert_picker"
-                            app:layout_constraintEnd_toStartOf="@id/ib_network_addedit_http_cert_clear"
-                            app:layout_constraintStart_toEndOf="@id/ib_network_addedit_http_cert_picker"
-                            app:layout_constraintTop_toTopOf="@id/ib_network_addedit_http_cert_picker"
-                            tools:text="@string/edit_hint_http_cert_picked"
+                            app:srcCompat="@drawable/pick"
                             android:visibility="@{useSslInHttp ? View.VISIBLE : View.GONE}" />
 
                         <ImageButton
@@ -421,7 +412,7 @@
                             android:layout_width="@dimen/edit_icon_size"
                             android:layout_height="@dimen/edit_icon_size"
                             android:layout_marginStart="@dimen/detail_inner_margin_small"
-                            android:layout_marginEnd="@dimen/detail_inner_margin_big"
+                            android:layout_marginEnd="@dimen/detail_inner_margin_small"
                             android:adjustViewBounds="true"
                             android:background="@android:color/transparent"
                             android:contentDescription="@string/content_description_clear_image"
@@ -430,10 +421,26 @@
                             android:tint="@color/primaryTextColor"
                             android:visibility="@{(useSslInHttp &amp;&amp; (httpCertPicked != null) &amp;&amp; (!httpCertPicked.isEmpty())) ? View.VISIBLE : View.GONE }"
                             app:layout_constraintBottom_toBottomOf="@id/ib_network_addedit_http_cert_picker"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintStart_toEndOf="@id/tv_network_addedit_http_pick_cert_label"
+                            app:layout_constraintStart_toEndOf="@id/ib_network_addedit_http_cert_picker"
+                            app:layout_constraintEnd_toStartOf="@id/tv_network_addedit_http_pick_cert_label"
                             app:layout_constraintTop_toTopOf="@id/ib_network_addedit_http_cert_picker"
                             app:srcCompat="@drawable/cancel" />
+
+                        <TextView
+                            android:id="@+id/tv_network_addedit_http_pick_cert_label"
+                            style="@style/Theme.Dot.TextDataBold"
+                            android:layout_width="0dp"
+                            android:layout_height="0dp"
+                            android:layout_marginEnd="@dimen/detail_inner_margin_small"
+                            android:gravity="center_vertical"
+                            android:text="@{((httpCertPicked != null) &amp;&amp; (!httpCertPicked.isEmpty())) ? @string/edit_hint_http_cert_picked : @string/edit_hint_http_cert_pick}"
+                            android:textAlignment="gravity"
+                            app:layout_constraintBottom_toBottomOf="@id/ib_network_addedit_http_cert_picker"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toEndOf="@id/ib_network_addedit_http_cert_clear"
+                            app:layout_constraintTop_toTopOf="@id/ib_network_addedit_http_cert_picker"
+                            tools:text="@string/edit_hint_http_cert_picked"
+                            android:visibility="@{useSslInHttp ? View.VISIBLE : View.GONE}" />
 
                     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -441,20 +448,20 @@
                         android:id="@+id/cl_network_addedit_mqtt_options"
                         android:layout_width="match_parent"
                         android:layout_height="0dp"
+                        android:layout_marginTop="@dimen/detail_inner_margin_big"
+                        android:layout_marginStart="@dimen/detail_inner_margin_big"
                         android:layout_marginEnd="@dimen/detail_inner_margin_big"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/cl_network_addedit_http_options"
-                        android:visibility="@{networkTypeSelected.equals(NetworkType.MQTT.ordinal()) ? View.VISIBLE : View.GONE }">
+                        app:layout_constraintTop_toBottomOf="@id/fl_network_addedit_general_options_separator"
+                        android:visibility="@{networkTypeSelected.equals(NetworkType.MQTT.ordinal()) ? View.VISIBLE : View.GONE }"
+                        tools:visibility="gone">
 
                         <TextView
                             android:id="@+id/tv_network_addedit_mqtt_variables_label"
                             style="@style/Theme.Dot.TextTitle"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginStart="@dimen/detail_inner_margin_big"
-                            android:layout_marginTop="@dimen/detail_inner_margin_big"
-                            android:layout_marginEnd="@dimen/detail_inner_margin_big"
                             android:text="@string/edit_label_mqtt_variables"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
@@ -466,8 +473,6 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="@dimen/detail_inner_margin_big"
-                            android:layout_marginStart="@dimen/detail_inner_margin_big"
-                            android:layout_marginEnd="@dimen/detail_inner_margin_big"
                             android:text="@string/edit_label_mqtt_brokerurl"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintEnd_toEndOf="parent"
@@ -479,8 +484,6 @@
                             android:layout_width="match_parent"
                             android:layout_height="0dp"
                             android:layout_marginTop="@dimen/detail_inner_margin_small"
-                            android:layout_marginStart="@dimen/detail_inner_margin_big"
-                            android:layout_marginEnd="@dimen/detail_inner_margin_big"
                             android:gravity="bottom"
                             android:hint="@string/edit_hint_mqtt_brokerurl"
                             android:inputType="textNoSuggestions"
@@ -495,8 +498,6 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="@dimen/detail_inner_margin_small"
-                            android:layout_marginStart="@dimen/detail_inner_margin_big"
-                            android:layout_marginEnd="@dimen/detail_inner_margin_big"
                             android:text="@string/edit_label_mqtt_clientid"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintEnd_toEndOf="parent"
@@ -508,8 +509,6 @@
                             android:layout_width="match_parent"
                             android:layout_height="0dp"
                             android:layout_marginTop="@dimen/detail_inner_margin_small"
-                            android:layout_marginStart="@dimen/detail_inner_margin_big"
-                            android:layout_marginEnd="@dimen/detail_inner_margin_big"
                             android:gravity="bottom"
                             android:hint="@string/edit_hint_mqtt_clientid"
                             android:inputType="textNoSuggestions"
@@ -523,9 +522,7 @@
                             style="@style/Theme.Dot.TextDataBold"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="@dimen/detail_inner_margin_big"
-                            android:layout_marginStart="@dimen/detail_inner_margin_big"
-                            android:layout_marginEnd="@dimen/detail_inner_margin_big"
+                            android:layout_marginTop="@dimen/detail_inner_margin_small"
                             android:text="@string/edit_label_mqtt_username"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintEnd_toEndOf="parent"
@@ -537,8 +534,6 @@
                             android:layout_width="match_parent"
                             android:layout_height="0dp"
                             android:layout_marginTop="@dimen/detail_inner_margin_small"
-                            android:layout_marginStart="@dimen/detail_inner_margin_big"
-                            android:layout_marginEnd="@dimen/detail_inner_margin_big"
                             android:gravity="bottom"
                             android:hint="@string/edit_hint_mqtt_username"
                             android:inputType="textNoSuggestions"
@@ -552,9 +547,7 @@
                             style="@style/Theme.Dot.TextDataBold"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="@dimen/detail_inner_margin_big"
-                            android:layout_marginStart="@dimen/detail_inner_margin_big"
-                            android:layout_marginEnd="@dimen/detail_inner_margin_big"
+                            android:layout_marginTop="@dimen/detail_inner_margin_small"
                             android:text="@string/edit_label_mqtt_password"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintEnd_toEndOf="parent"
@@ -566,27 +559,39 @@
                             android:layout_width="match_parent"
                             android:layout_height="0dp"
                             android:layout_marginTop="@dimen/detail_inner_margin_small"
-                            android:layout_marginStart="@dimen/detail_inner_margin_big"
-                            android:layout_marginEnd="@dimen/detail_inner_margin_big"
                             android:gravity="bottom"
                             android:hint="@string/edit_hint_mqtt_password"
                             android:inputType="textPassword"
                             android:text='@{(network.mqttConfiguration != null) ? network.mqttConfiguration.mqttPassword : ""}'
+                            android:nextFocusDown="@id/cb_network_addedit_mqtt_clean_session"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintTop_toBottomOf="@id/tv_network_addedit_mqtt_password_label" />
+
+                        <CheckBox
+                            android:id="@+id/cb_network_addedit_mqtt_clean_session"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/detail_inner_margin_small"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toBottomOf="@id/ed_network_addedit_mqtt_password"
+                            android:focusable="true"
+                            android:nextFocusDown="@id/cb_network_addedit_mqtt_use_ssl"
+                            android:text="@string/edit_label_mqtt_clean_session"
+                            style="@style/Theme.Dot.TextDataBold" />
 
                         <CheckBox
                             android:id="@+id/cb_network_addedit_mqtt_use_ssl"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="@dimen/detail_inner_margin_small"
-                            android:layout_marginStart="@dimen/detail_inner_margin_big"
-                            android:layout_marginEnd="@dimen/detail_inner_margin_big"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintTop_toBottomOf="@id/ed_network_addedit_mqtt_password"
+                            app:layout_constraintTop_toBottomOf="@id/cb_network_addedit_mqtt_clean_session"
                             android:text="@string/edit_label_mqtt_use_ssl"
+                            android:focusable="true"
+                            android:nextFocusUp="@id/cb_network_addedit_mqtt_clean_session"
                             app:checkingListener="@{(checked) -> presenter.mqttUseSslChanged(checked)}"
                             style="@style/Theme.Dot.TextDataBold"/>
 
@@ -594,7 +599,6 @@
                             android:id="@+id/ib_network_addedit_mqtt_cert_picker"
                             android:layout_width="@dimen/edit_icon_size"
                             android:layout_height="@dimen/edit_icon_size"
-                            android:layout_marginStart="@dimen/detail_inner_margin_big"
                             android:layout_marginTop="@dimen/detail_inner_margin_small"
                             android:layout_marginEnd="@dimen/detail_inner_margin_small"
                             android:adjustViewBounds="true"
@@ -602,26 +606,10 @@
                             android:contentDescription="@string/content_description_pick_image"
                             android:onClick="@{(v) -> presenter.pickMqttCert()}"
                             android:scaleType="fitXY"
+                            android:nextFocusUp="@id/cb_network_addedit_mqtt_use_ssl"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toBottomOf="@id/cb_network_addedit_mqtt_use_ssl"
-                            app:srcCompat="@drawable/pick_file"
-                            android:visibility="@{useSslInMqtt ? View.VISIBLE : View.GONE}" />
-
-                        <TextView
-                            android:id="@+id/tv_network_addedit_mqtt_pick_cert_label"
-                            style="@style/Theme.Dot.TextDataBold"
-                            android:layout_width="0dp"
-                            android:layout_height="0dp"
-                            android:layout_marginStart="@dimen/detail_inner_margin_big"
-                            android:layout_marginEnd="@dimen/detail_inner_margin_small"
-                            android:gravity="center_vertical"
-                            android:text="@{((mqttCertPicked != null) &amp;&amp; (!mqttCertPicked.isEmpty())) ? @string/edit_hint_mqtt_cert_picked : @string/edit_hint_mqtt_cert_pick}"
-                            android:textAlignment="gravity"
-                            app:layout_constraintBottom_toBottomOf="@id/ib_network_addedit_mqtt_cert_picker"
-                            app:layout_constraintEnd_toStartOf="@id/ib_network_addedit_mqtt_cert_clear"
-                            app:layout_constraintStart_toEndOf="@id/ib_network_addedit_mqtt_cert_picker"
-                            app:layout_constraintTop_toTopOf="@id/ib_network_addedit_mqtt_cert_picker"
-                            tools:text="@string/edit_hint_mqtt_cert_picked"
+                            app:srcCompat="@drawable/pick"
                             android:visibility="@{useSslInMqtt ? View.VISIBLE : View.GONE}" />
 
                         <ImageButton
@@ -629,7 +617,7 @@
                             android:layout_width="@dimen/edit_icon_size"
                             android:layout_height="@dimen/edit_icon_size"
                             android:layout_marginStart="@dimen/detail_inner_margin_small"
-                            android:layout_marginEnd="@dimen/detail_inner_margin_big"
+                            android:layout_marginEnd="@dimen/detail_inner_margin_small"
                             android:adjustViewBounds="true"
                             android:background="@android:color/transparent"
                             android:contentDescription="@string/content_description_clear_image"
@@ -638,23 +626,25 @@
                             android:tint="@color/primaryTextColor"
                             android:visibility="@{(useSslInMqtt &amp;&amp; (mqttCertPicked != null) &amp;&amp; (!mqttCertPicked.isEmpty())) ? View.VISIBLE : View.GONE }"
                             app:layout_constraintBottom_toBottomOf="@id/ib_network_addedit_mqtt_cert_picker"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintStart_toEndOf="@id/tv_network_addedit_mqtt_pick_cert_label"
+                            app:layout_constraintStart_toEndOf="@id/ib_network_addedit_mqtt_cert_picker"
+                            app:layout_constraintEnd_toStartOf="@id/tv_network_addedit_mqtt_pick_cert_label"
                             app:layout_constraintTop_toTopOf="@id/ib_network_addedit_mqtt_cert_picker"
                             app:srcCompat="@drawable/cancel" />
 
-                        <CheckBox
-                            android:id="@+id/cb_network_addedit_mqtt_clean_session"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="@dimen/detail_inner_margin_small"
-                            android:layout_marginStart="@dimen/detail_inner_margin_big"
-                            android:layout_marginEnd="@dimen/detail_inner_margin_big"
-                            app:layout_constraintStart_toStartOf="parent"
+                        <TextView
+                            android:id="@+id/tv_network_addedit_mqtt_pick_cert_label"
+                            style="@style/Theme.Dot.TextDataBold"
+                            android:layout_width="0dp"
+                            android:layout_height="0dp"
+                            android:gravity="center_vertical"
+                            android:text="@{((mqttCertPicked != null) &amp;&amp; (!mqttCertPicked.isEmpty())) ? @string/edit_hint_mqtt_cert_picked : @string/edit_hint_mqtt_cert_pick}"
+                            android:textAlignment="gravity"
+                            app:layout_constraintBottom_toBottomOf="@id/ib_network_addedit_mqtt_cert_picker"
+                            app:layout_constraintStart_toEndOf="@id/ib_network_addedit_mqtt_cert_clear"
                             app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintTop_toBottomOf="@id/ib_network_addedit_mqtt_cert_picker"
-                            android:text="@string/edit_label_mqtt_keepalive_interval"
-                            style="@style/Theme.Dot.TextDataBold" />
+                            app:layout_constraintTop_toTopOf="@id/ib_network_addedit_mqtt_cert_picker"
+                            tools:text="@string/edit_hint_mqtt_cert_picked"
+                            android:visibility="@{useSslInMqtt ? View.VISIBLE : View.GONE}" />
 
                         <TextView
                             android:id="@+id/tv_network_addedit_mqtt_conn_timeout"
@@ -662,12 +652,10 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="@dimen/detail_inner_margin_big"
-                            android:layout_marginStart="@dimen/detail_inner_margin_big"
-                            android:layout_marginEnd="@dimen/detail_inner_margin_big"
                             android:text="@string/edit_label_mqtt_conn_timeout"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintTop_toBottomOf="@id/cb_network_addedit_mqtt_clean_session"/>
+                            app:layout_constraintTop_toBottomOf="@id/ib_network_addedit_mqtt_cert_picker"/>
 
                         <EditText
                             android:id="@+id/ed_network_addedit_conn_timeout"
@@ -675,8 +663,6 @@
                             android:layout_width="match_parent"
                             android:layout_height="0dp"
                             android:layout_marginTop="@dimen/detail_inner_margin_small"
-                            android:layout_marginStart="@dimen/detail_inner_margin_big"
-                            android:layout_marginEnd="@dimen/detail_inner_margin_big"
                             android:gravity="bottom"
                             android:hint="@string/edit_hint_mqtt_conn_timeout"
                             android:inputType="number"
@@ -691,8 +677,6 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="@dimen/detail_inner_margin_big"
-                            android:layout_marginStart="@dimen/detail_inner_margin_big"
-                            android:layout_marginEnd="@dimen/detail_inner_margin_big"
                             android:text="@string/edit_label_mqtt_keepalive_interval"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintEnd_toEndOf="parent"
@@ -704,8 +688,6 @@
                             android:layout_width="match_parent"
                             android:layout_height="0dp"
                             android:layout_marginTop="@dimen/detail_inner_margin_small"
-                            android:layout_marginStart="@dimen/detail_inner_margin_big"
-                            android:layout_marginEnd="@dimen/detail_inner_margin_big"
                             android:gravity="bottom"
                             android:hint="@string/edit_hint_mqtt_keepalive_interval"
                             android:inputType="number"

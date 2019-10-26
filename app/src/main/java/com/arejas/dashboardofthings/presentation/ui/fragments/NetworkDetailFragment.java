@@ -7,10 +7,8 @@ import android.os.Bundle;
 import com.arejas.dashboardofthings.DotApplication;
 import com.arejas.dashboardofthings.R;
 import com.arejas.dashboardofthings.databinding.FragmentNetworkDetailBinding;
-import com.arejas.dashboardofthings.domain.entities.database.Network;
 import com.arejas.dashboardofthings.domain.entities.extended.NetworkExtended;
 import com.arejas.dashboardofthings.domain.entities.result.Resource;
-import com.arejas.dashboardofthings.presentation.interfaces.viewmodels.MainDashboardViewModel;
 import com.arejas.dashboardofthings.presentation.interfaces.viewmodels.NetworkDetailsViewModel;
 import com.arejas.dashboardofthings.presentation.interfaces.viewmodels.factories.ViewModelFactory;
 import com.arejas.dashboardofthings.presentation.ui.activities.NetworkAddEditActivity;
@@ -25,6 +23,7 @@ import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
+import androidx.fragment.app.FragmentStatePagerAdapter;
 import androidx.lifecycle.ViewModelProviders;
 
 import android.view.LayoutInflater;
@@ -32,9 +31,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
-import java.util.Objects;
-
 import javax.inject.Inject;
+
+import dagger.android.support.AndroidSupportInjection;
 
 /**
  * A fragment representing a single Network detail screen.
@@ -88,24 +87,27 @@ public class NetworkDetailFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         uiBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_network_detail, container, false);
+
+        if (!bTwoPane) {
+            uiBinding.toolbarFragment.setNavigationIcon(getResources().getDrawable(R.drawable.action_back));
+            uiBinding.toolbarFragment.setNavigationOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    getActivity().finish();
+                }
+            });
+        } else {
+            uiBinding.toolbarFragment.setNavigationIcon(null);
+        }
+
         // Init the view pager with a fragment adapter for showing the fragments with different info
         // of the movie in a tab system
         NetworkDetailsFragmentPagerAdapter fragmentAdapter = new NetworkDetailsFragmentPagerAdapter(getActivity().getSupportFragmentManager(), getContext(), networkId);
         uiBinding.vpNetworkdetailsMaindashboard.setAdapter(fragmentAdapter);
         uiBinding.tlTabsNetworkdetails.setupWithViewPager(uiBinding.vpNetworkdetailsMaindashboard);
 
-        if (!bTwoPane) {
-            uiBinding.toolbar.setNavigationIcon(getResources().getDrawable(R.drawable.action_back));
-            uiBinding.toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    getActivity().finish();
-                }
-            });
-        }
-
-        uiBinding.toolbar.inflateMenu(R.menu.menu_element_management);
-        uiBinding.toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
+        uiBinding.toolbarFragment.inflateMenu(R.menu.menu_element_management);
+        uiBinding.toolbarFragment.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
 
             @Override
             public boolean onMenuItemClick(MenuItem item) {
@@ -120,7 +122,14 @@ public class NetworkDetailFragment extends Fragment {
                     case R.id.menu_remove:
                         if (networkObject != null) {
                             RemoveNetworkDialogFragment dialog =
-                                    new RemoveNetworkDialogFragment(networkObject, networkDetailsViewModel);
+                                    new RemoveNetworkDialogFragment(networkObject, networkDetailsViewModel,() -> {
+                                        if (bTwoPane) {
+                                            getFragmentManager().beginTransaction()
+                                                    .remove(NetworkDetailFragment.this).commit();
+                                        } else {
+                                            getActivity().finish();
+                                        }
+                                    });
                             dialog.show(getActivity().getSupportFragmentManager(), "removeNetwork");
                         } else {
                             ToastHelper.showToast(getString(R.string.toast_remove_failed));
@@ -138,30 +147,30 @@ public class NetworkDetailFragment extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        // Inject dependencies
+        AndroidSupportInjection.inject(this);
         // If the recipe ID is defined load the suitable viewmodel.
         if (networkId != null) {
-            // Configure the viewmodel provider
-            this.viewModelFactory.setNetworkIdToLoad(networkId);
             // Get the viewmodel
-            viewModelFactory.setNetworkIdToLoad(networkId);
-            networkDetailsViewModel = ViewModelProviders.of(this, this.viewModelFactory).get(NetworkDetailsViewModel.class);
+            networkDetailsViewModel = ViewModelProviders.of(getActivity(), this.viewModelFactory).get(NetworkDetailsViewModel.class);
+            networkDetailsViewModel.setNetworkId(networkId);
 
             networkDetailsViewModel.getNetwork(false).observe(this, networkExtendedResource -> {
                 if (networkExtendedResource == null) {
-                    uiBinding.toolbar.setTitle(R.string.toolbar_title_network_unrecognized);
+                    uiBinding.toolbarFragment.setTitle(R.string.toolbar_title_network_unrecognized);
                 } else {
                     if (networkExtendedResource.getStatus() == Resource.Status.ERROR) {
-                        uiBinding.toolbar.setTitle(R.string.toolbar_title_network_unrecognized);
+                        uiBinding.toolbarFragment.setTitle(R.string.toolbar_title_network_unrecognized);
                     } else if (networkExtendedResource.getStatus() == Resource.Status.LOADING) {
-                        uiBinding.toolbar.setTitle(R.string.toolbar_title_network_loading);
+                        uiBinding.toolbarFragment.setTitle(R.string.toolbar_title_network_loading);
                     } else {
                         NetworkExtended network = networkExtendedResource.getData();
                         if (network != null) {
                             networkObject = network;
                             uiBinding.setNetwork(network);
-                            uiBinding.toolbar.setTitle(network.getName());
+                            uiBinding.toolbarFragment.setTitle(network.getName());
                         } else {
-                            uiBinding.toolbar.setTitle(R.string.toolbar_title_network_unrecognized);
+                            uiBinding.toolbarFragment.setTitle(R.string.toolbar_title_network_unrecognized);
                         }
                     }
                 }
@@ -169,12 +178,11 @@ public class NetworkDetailFragment extends Fragment {
         }
     }
 
-
     /**
      * This adapter is used for defining the tab system of the movie activity, providing the
      * fragments it will used, so as the tab configuration.
      */
-    static class NetworkDetailsFragmentPagerAdapter extends FragmentPagerAdapter {
+    static class NetworkDetailsFragmentPagerAdapter extends FragmentStatePagerAdapter {
 
         private static final int NUM_ITEMS = 2;
 

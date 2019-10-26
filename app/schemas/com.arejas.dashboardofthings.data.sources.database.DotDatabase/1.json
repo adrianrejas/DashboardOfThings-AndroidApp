@@ -2,11 +2,11 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "12d32ef984a95003fde8becaf290f349",
+    "identityHash": "d0958c2f98ed317c96bc19223c16e025",
     "entities": [
       {
         "tableName": "networks",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `name` TEXT, `networkType` INTEGER, `imageUri` TEXT, `httpBaseUrl` TEXT, `httpAauthenticationType` INTEGER, `httpUsername` TEXT, `httpPassword` TEXT, `httpUseSsl` INTEGER, `certAuthorityUrl` TEXT, `mttBrokerUrl` TEXT, `mqttClientId` TEXT, `mqttUsername` TEXT, `mqttPassword` TEXT, `mqttCleanSession` INTEGER, `mqttConnTimeout` INTEGER, `mqttKeepaliveInterval` INTEGER, `mqttUseSsl` INTEGER, `mqttCertAuthorityUrl` TEXT)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `name` TEXT, `networkType` INTEGER, `imageUri` TEXT, `httpBaseUrl` TEXT, `httpAauthenticationType` INTEGER, `httpUsername` TEXT, `httpPassword` TEXT, `httpUseSsl` INTEGER, `certAuthorityUri` TEXT, `mqttBrokerUrl` TEXT, `mqttClientId` TEXT, `mqttUsername` TEXT, `mqttPassword` TEXT, `mqttCleanSession` INTEGER, `mqttConnTimeout` INTEGER, `mqttKeepaliveInterval` INTEGER, `mqttUseSsl` INTEGER, `mqttCertAuthorityUri` TEXT)",
         "fields": [
           {
             "fieldPath": "id",
@@ -63,14 +63,14 @@
             "notNull": false
           },
           {
-            "fieldPath": "httpConfiguration.certAuthorityUrl",
-            "columnName": "certAuthorityUrl",
+            "fieldPath": "httpConfiguration.certAuthorityUri",
+            "columnName": "certAuthorityUri",
             "affinity": "TEXT",
             "notNull": false
           },
           {
-            "fieldPath": "mqttConfiguration.mttBrokerUrl",
-            "columnName": "mttBrokerUrl",
+            "fieldPath": "mqttConfiguration.mqttBrokerUrl",
+            "columnName": "mqttBrokerUrl",
             "affinity": "TEXT",
             "notNull": false
           },
@@ -117,8 +117,8 @@
             "notNull": false
           },
           {
-            "fieldPath": "mqttConfiguration.mqttCertAuthorityUrl",
-            "columnName": "mqttCertAuthorityUrl",
+            "fieldPath": "mqttConfiguration.mqttCertAuthorityUri",
+            "columnName": "mqttCertAuthorityUri",
             "affinity": "TEXT",
             "notNull": false
           }
@@ -134,7 +134,7 @@
       },
       {
         "tableName": "sensors",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `name` TEXT, `type` TEXT, `imageUri` TEXT, `networkId` INTEGER, `httpRelativeUrl` TEXT, `httpHeaders` TEXT, `httpSecondsBetweenRequests` INTEGER, `mqttTopicToSubscribe` TEXT, `mqttQosLevel` INTEGER, `messageType` INTEGER, `dataType` INTEGER, `xmlOrJsonNode` TEXT, `rawRegularExpression` TEXT, `dataUnit` TEXT, `thresholdAboveCritical` TEXT, `thresholdAboveWarning` TEXT, `thresholdBelowCritical` TEXT, `thresholdBelowWarning` TEXT, `thresholdEqualsWarning` TEXT, `thresholdEqualsCritical` TEXT, `locationLat` INTEGER, `localtionLong` INTEGER, `showInMainDashboard` INTEGER, FOREIGN KEY(`networkId`) REFERENCES `networks`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE )",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `name` TEXT, `type` TEXT, `imageUri` TEXT, `networkId` INTEGER, `httpRelativeUrl` TEXT, `httpHeaders` TEXT, `httpSecondsBetweenRequests` INTEGER, `mqttTopicToSubscribe` TEXT, `mqttQosLevel` INTEGER, `messageType` INTEGER, `dataType` INTEGER, `xmlOrJsonNode` TEXT, `rawRegularExpression` TEXT, `dataUnit` TEXT, `thresholdAboveCritical` REAL, `thresholdAboveWarning` REAL, `thresholdBelowCritical` REAL, `thresholdBelowWarning` REAL, `thresholdEqualsWarning` TEXT, `thresholdEqualsCritical` TEXT, `locationLat` INTEGER, `localtionLong` INTEGER, `showInMainDashboard` INTEGER, FOREIGN KEY(`networkId`) REFERENCES `networks`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE )",
         "fields": [
           {
             "fieldPath": "id",
@@ -229,25 +229,25 @@
           {
             "fieldPath": "thresholdAboveCritical",
             "columnName": "thresholdAboveCritical",
-            "affinity": "TEXT",
+            "affinity": "REAL",
             "notNull": false
           },
           {
             "fieldPath": "thresholdAboveWarning",
             "columnName": "thresholdAboveWarning",
-            "affinity": "TEXT",
+            "affinity": "REAL",
             "notNull": false
           },
           {
             "fieldPath": "thresholdBelowCritical",
             "columnName": "thresholdBelowCritical",
-            "affinity": "TEXT",
+            "affinity": "REAL",
             "notNull": false
           },
           {
             "fieldPath": "thresholdBelowWarning",
             "columnName": "thresholdBelowWarning",
-            "affinity": "TEXT",
+            "affinity": "REAL",
             "notNull": false
           },
           {
@@ -590,7 +590,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '12d32ef984a95003fde8becaf290f349')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'd0958c2f98ed317c96bc19223c16e025')"
     ]
   }
 }

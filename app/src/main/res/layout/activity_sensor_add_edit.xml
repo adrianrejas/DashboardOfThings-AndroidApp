@@ -45,8 +45,7 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:context="com.arejas.dashboardofthings.presentation.ui.activities.SensorListActivity">
+        android:layout_height="match_parent">
 
         <com.google.android.material.appbar.AppBarLayout
             android:id="@+id/appbar"
@@ -55,12 +54,13 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            android:theme="@style/Theme.Dot.ActionBar"
+            android:theme="@style/ThemeOverlay.AppCompat.Light"
             android:elevation="@dimen/toolbar_elevation">
 
             <androidx.appcompat.widget.Toolbar
                 android:id="@+id/toolbar"
-                app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+                android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+                app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
                 android:layout_marginLeft="@dimen/list_toolbar_side_margin"
                 android:layout_marginRight="@dimen/list_toolbar_side_margin"
                 android:layout_width="match_parent"
@@ -181,8 +181,8 @@
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@id/ed_sensor_addedit_type"
                         app:loadingResource="@{@drawable/loading}"
-                        app:pickResource="@{@drawable/pick_picture}"
-                        tools:srcCompat="@drawable/pick_picture" />
+                        app:pickResource="@{@drawable/picture}"
+                        tools:srcCompat="@drawable/picture" />
 
                     <TextView
                         android:id="@+id/tv_sensor_addedit_pick_image_label"

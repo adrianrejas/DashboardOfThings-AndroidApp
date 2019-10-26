@@ -3,7 +3,8 @@
 <layout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools">
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:bind="http://schemas.android.com/apk/res-auto">
 
     <data>
         <import type="android.view.View"/>
@@ -31,12 +32,13 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                android:theme="@style/Theme.Dot.ActionBar"
+                android:theme="@style/ThemeOverlay.AppCompat.Light"
                 android:elevation="@dimen/toolbar_elevation">
 
                 <androidx.appcompat.widget.Toolbar
                     android:id="@+id/toolbar"
-                    app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+                    android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+                    app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
                     android:layout_marginLeft="@dimen/list_toolbar_side_margin"
                     android:layout_marginRight="@dimen/list_toolbar_side_margin"
                     android:layout_width="match_parent"
@@ -61,18 +63,8 @@
                 android:id="@+id/network_container"
                 layout="@layout/network_list"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"/>
-
-            <com.google.android.material.floatingactionbutton.FloatingActionButton
-                android:id="@+id/fab_network_create"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="bottom|end"
-                android:layout_margin="@dimen/fab_margin"
-                android:onClick="@{(v) -> listener.onClick(v)}"
-                android:adjustViewBounds="true"
-                android:scaleType="fitXY"
-                app:srcCompat="@drawable/create" />
+                android:layout_height="match_parent"
+                bind:listener="@{listener}"/>
 
         </FrameLayout>
 

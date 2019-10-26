@@ -8,11 +8,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.GravityCompat;
 import androidx.databinding.DataBindingUtil;
 import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModelProviders;
-import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.arejas.dashboardofthings.DotApplication;
@@ -34,7 +33,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.PopupMenu;
-import android.widget.TextView;
 
 import java.util.List;
 
@@ -69,7 +67,7 @@ public class NetworkListActivity extends AppCompatActivity implements View.OnCli
     private DrawerLayout drawerLayout;
 
     private LiveData<Resource<List<NetworkExtended>>> currentListShown;
-    private LinearLayoutManager llm_linear;
+    private GridLayoutManager glm_grid;
     private NetworkListAdapter mAdapter;
 
     ActivityNetworkListBinding uiBinding;
@@ -231,12 +229,9 @@ public class NetworkListActivity extends AppCompatActivity implements View.OnCli
 
     private void configureListAdapter() {
 
-        /* Get number of items in a row*/
-        int iElementsPerRow = getResources().getInteger(R.integer.list_maindash_column_count);
-
         // Configure recycler view with a grid layout
-        llm_linear = new LinearLayoutManager(getApplicationContext(), RecyclerView.VERTICAL, false);
-        uiBinding.networkContainer.networksListListLayout.mainList.setLayoutManager(llm_linear);
+        glm_grid = new GridLayoutManager(getApplicationContext(), 1);
+        uiBinding.networkContainer.networksListListLayout.mainList.setLayoutManager(glm_grid);
 
         // Configure adapter for recycler view
         mAdapter = new NetworkListAdapter(this, networkListViewModel, mTwoPane);
@@ -397,7 +392,7 @@ public class NetworkListActivity extends AppCompatActivity implements View.OnCli
                 //creating a popup menu
                 PopupMenu popup = new PopupMenu(DotApplication.getContext(), view);
                 //inflating menu from xml resource
-                popup.inflate(R.menu.menu_element_management);
+                popup.inflate(R.menu.menu_element_management_item);
                 //adding click listener
                 popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                     @Override

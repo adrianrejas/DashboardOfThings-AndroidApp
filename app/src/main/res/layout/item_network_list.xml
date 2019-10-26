@@ -17,7 +17,8 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@android:color/white">
+        android:focusable="true"
+        android:nextFocusRight="@id/tv_network_options_listitem">
 
         <ImageView
             android:id="@+id/iv_network_listitem"
@@ -30,6 +31,7 @@
             app:imageUrl="@{network.imageUri}"
             app:errorResource="@{@drawable/error}"
             app:loadingResource="@{@drawable/loading}"
+            app:alternativeResource="@{@drawable/picture}"
             app:layout_constraintEnd_toStartOf="@id/cl_network_info_listitem"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
@@ -39,7 +41,7 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/cl_network_info_listitem"
             android:layout_width="0dp"
-            android:layout_height="0dp"
+            android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/detail_inner_margin_small"
             android:layout_marginEnd="@dimen/detail_inner_margin_small"
             android:layout_marginBottom="@dimen/detail_inner_margin_small"
@@ -61,7 +63,7 @@
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toTopOf="@id/tv_network_type_listitem"
                 style="@style/Theme.Dot.TextTitle"
-                tools:text="Local network"/>
+                tools:text="Local network daskhjfalkds fjlkadsjflk adslkfajsdlkfjaldskjflkasdjf lkasdjflkadsj flakds fadsf"/>
 
             <TextView
                 android:id="@+id/tv_network_type_listitem"
@@ -89,11 +91,14 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             android:layout_margin="@dimen/detail_inner_margin_small"
-            android:paddingLeft="@dimen/detail_item_padding"
-            android:paddingRight="@dimen/detail_item_padding"
+            android:paddingTop="@dimen/detail_inner_margin_small"
+            android:paddingStart="@dimen/detail_inner_margin_big"
+            android:paddingEnd="@dimen/detail_inner_margin_big"
+            android:paddingBottom="@dimen/detail_inner_margin_small"
             android:text="@string/options_icon"
             android:textAppearance="?android:textAppearanceLarge"
-            android:onClick="@{(v) -> presenter.optionsClicked(v)}" />
+            android:onClick="@{(v) -> presenter.optionsClicked(v)}"
+            android:focusable="true"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
     

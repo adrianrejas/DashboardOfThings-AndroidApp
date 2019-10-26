@@ -31,6 +31,8 @@ import java.util.Objects;
 
 import javax.inject.Inject;
 
+import dagger.android.support.AndroidSupportInjection;
+
 public class MainStatusFragment extends Fragment {
 
     FragmentMainstatusBinding uiBinding;
@@ -48,6 +50,8 @@ public class MainStatusFragment extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        // Inject dependencies
+        AndroidSupportInjection.inject(this);
         // Get the movie activity view model and observe the changes in the details
         mainnetwork_addeditViewModel = ViewModelProviders.of(Objects.requireNonNull(getActivity()), viewModelFactory).get(MainDashboardViewModel.class);
         setList(true, false);
@@ -113,9 +117,6 @@ public class MainStatusFragment extends Fragment {
     }
 
     private void configureListAdapter() {
-
-        /* Get number of items in a row*/
-        int iElementsPerRow = getResources().getInteger(R.integer.list_maindash_column_count);
 
         // Configure recycler view with a grid layout
         llm_linear = new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false);

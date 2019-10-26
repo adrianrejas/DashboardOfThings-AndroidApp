@@ -7,75 +7,68 @@
 
     <data>
         <import type="android.view.View"/>
+        <import type="android.view.ViewGroup.LayoutParams"/>
         <variable
             name="network"
             type="com.arejas.dashboardofthings.domain.entities.extended.NetworkExtended" />
     </data>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:id="@+id/fragment_details_layout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:context="com.arejas.dashboardofthings.presentation.ui.activities.NetworkListActivity">
+        android:layout_height="match_parent">
 
         <com.google.android.material.appbar.AppBarLayout
-            android:id="@+id/appbar"
+            android:id="@+id/appbar_fragment"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            android:theme="@style/Theme.Dot.ActionBar"
+            android:background="?attr/colorPrimary"
+            android:theme="@style/ThemeOverlay.AppCompat.Light"
             android:elevation="@dimen/toolbar_elevation">
 
             <com.google.android.material.appbar.CollapsingToolbarLayout
-                android:id="@+id/details_collapsing_toolbar"
+                android:id="@+id/details_collapsing_toolbar_fragment"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                app:layout_scrollFlags="scroll|exitUntilCollapsed"
-                app:contentScrim="?attr/colorPrimary">
+                android:layout_height="wrap_content"
+                app:layout_scrollFlags="scroll|exitUntilCollapsed|snap"
+                app:titleEnabled="false"
+                app:contentScrim="?attr/colorPrimary"
+                tools:layout_height="@dimen/detail_Collapsing_toolbar_size">
 
-                <androidx.constraintlayout.widget.ConstraintLayout
+                <ImageView
+                    android:id="@+id/iv_network_details_image"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    app:layout_collapseMode="parallax">
+                    android:layout_height="match_parent"
+                    app:errorResource="@{@drawable/error}"
+                    app:imageUrl="@{network.imageUri}"
+                    app:loadingResource="@{@drawable/loading}"
+                    app:layout_constraintDimensionRatio="@string/detail_photo_aspect_ratio"
+                    android:contentDescription="@string/content_description_network_image"
+                    android:scaleType="centerCrop"
+                    android:adjustViewBounds="true"
+                    app:layout_collapseMode="parallax"/>
 
-                    <ImageView
-                        android:id="@+id/photo"
-                        android:layout_width="0dp"
-                        android:layout_height="0dp"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintDimensionRatio="@string/detail_photo_aspect_ratio"
-                        android:contentDescription="@string/content_description_network_image"
-                        app:imageUrl="@{network.imageUri}"
-                        app:errorResource="@{@drawable/error}"
-                        app:loadingResource="@{@drawable/loading}"
-                        android:scaleType="centerCrop" />
-
-                    <View
-                        android:id="@+id/photo_protection_dark"
-                        android:layout_width="0dp"
-                        android:layout_height="0dp"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        android:background="@drawable/photo_background_protection" />
-
-                </androidx.constraintlayout.widget.ConstraintLayout>
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:alpha="0.3"
+                    android:background="@android:color/black"
+                    android:fitsSystemWindows="true"
+                    android:visibility="@{(network.imageUri != null) ? View.VISIBLE : View.GONE }"/>
 
                 <androidx.appcompat.widget.Toolbar
-                    android:id="@+id/toolbar"
-                    app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-                    android:layout_marginLeft="@dimen/list_toolbar_side_margin"
-                    android:layout_marginRight="@dimen/list_toolbar_side_margin"
+                    android:id="@+id/toolbar_fragment"
                     android:layout_width="match_parent"
                     android:layout_height="?actionBarSize"
+                    android:layout_marginBottom="@dimen/detail_Collapsing_toolbar_bottom_margin"
+                    android:layout_gravity="top"
                     app:layout_collapseMode="pin"
                     app:navigationIcon="?attr/homeAsUpIndicator"
-                    android:background="?colorPrimary">
+                    android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+                    app:popupTheme="@style/ThemeOverlay.AppCompat.Light" >
 
                 </androidx.appcompat.widget.Toolbar>
 
@@ -83,11 +76,10 @@
                     android:id="@+id/tl_tabs_networkdetails"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@color/primaryColor"
                     app:tabGravity="fill"
                     app:tabMaxWidth="0dp"
                     app:tabMode="scrollable"
-                    app:layout_collapseMode="pin"
+                    android:layout_gravity="bottom"
                     app:tabTextColor="@color/secondaryTextColor">
 
                 </com.google.android.material.tabs.TabLayout>
@@ -99,14 +91,11 @@
         <androidx.viewpager.widget.ViewPager
             android:id="@+id/vp_networkdetails_maindashboard"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/appbar"
-            app:layout_constraintBottom_toBottomOf="parent">
+            android:layout_height="match_parent"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         </androidx.viewpager.widget.ViewPager>
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
 </layout>

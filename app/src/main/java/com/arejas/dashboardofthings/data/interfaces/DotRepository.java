@@ -6,6 +6,8 @@ import android.util.Pair;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
+import com.arejas.dashboardofthings.DotApplication;
+import com.arejas.dashboardofthings.R;
 import com.arejas.dashboardofthings.data.helpers.DataHelper;
 import com.arejas.dashboardofthings.data.sources.database.DotDatabase;
 import com.arejas.dashboardofthings.domain.entities.database.Actuator;
@@ -149,9 +151,12 @@ public class DotRepository {
             @Override
             public void run() {
                 try {
-                    dotDatabase.networksDao().updateExtended(network);
+                    dotDatabase.networksDao().update(network);
                     RxHelper.publishNetworkManagementChange(new Pair<>(network, Enumerators.ElementManagementFunction.UPDATE));
                     result.postValue(Resource.success(null));
+                    RxHelper.publishLog(network.getId(), Enumerators.ElementType.NETWORK,
+                            network.getName(), Enumerators.LogLevel.ERROR,
+                            DotApplication.getContext().getString(R.string.log_critical_sensor_scheduling));
                 } catch (Exception e) {
                     result.postValue(Resource.error(e, null));
                 }
@@ -282,7 +287,7 @@ public class DotRepository {
             @Override
             public void run() {
                 try {
-                    dotDatabase.sensorsDao().updateExtended(sensor);
+                    dotDatabase.sensorsDao().update(sensor);
                     RxHelper.publishSensorManagementChange(new Pair<>(sensor, Enumerators.ElementManagementFunction.UPDATE));
                     result.postValue(Resource.success(null));
                 } catch (Exception e) {
@@ -407,7 +412,7 @@ public class DotRepository {
             @Override
             public void run() {
                 try {
-                    dotDatabase.actuatorsDao().updateExtended(actuator);
+                    dotDatabase.actuatorsDao().update(actuator);
                     RxHelper.publishActuatorManagementChange(new Pair<>(actuator, Enumerators.ElementManagementFunction.UPDATE));
                     result.postValue(Resource.success(null));
                 } catch (Exception e) {
