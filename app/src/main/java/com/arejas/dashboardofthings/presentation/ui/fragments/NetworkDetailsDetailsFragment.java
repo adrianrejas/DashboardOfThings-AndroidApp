@@ -20,7 +20,7 @@ import com.arejas.dashboardofthings.domain.entities.extended.NetworkExtended;
 import com.arejas.dashboardofthings.domain.entities.result.Resource;
 import com.arejas.dashboardofthings.presentation.interfaces.viewmodels.NetworkDetailsViewModel;
 import com.arejas.dashboardofthings.presentation.interfaces.viewmodels.factories.ViewModelFactory;
-import com.arejas.dashboardofthings.presentation.ui.activities.NetworkDetailActivity;
+import com.arejas.dashboardofthings.presentation.ui.activities.NetworkDetailsActivity;
 import com.arejas.dashboardofthings.presentation.ui.activities.NetworkListActivity;
 
 import java.util.List;
@@ -33,10 +33,10 @@ import dagger.android.support.AndroidSupportInjection;
 /**
  * A fragment representing a single Network detail screen.
  * This fragment is either contained in a {@link NetworkListActivity}
- * in two-pane mode (on tablets) or a {@link NetworkDetailActivity}
+ * in two-pane mode (on tablets) or a {@link NetworkDetailsActivity}
  * on handsets.
  */
-public class NetworkDetailDetailsFragment extends Fragment {
+public class NetworkDetailsDetailsFragment extends Fragment {
     /**
      * The fragment argument representing the item ID that this fragment
      * represents.

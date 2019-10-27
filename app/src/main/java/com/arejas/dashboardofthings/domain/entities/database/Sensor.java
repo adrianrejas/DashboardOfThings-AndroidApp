@@ -67,9 +67,9 @@ public class Sensor implements Parcelable {
 
     private String thresholdEqualsCritical;
 
-    private Long locationLat;
+    private Double locationLat;
 
-    private Long localtionLong;
+    private Double localtionLong;
 
     private Boolean showInMainDashboard;
 
@@ -132,12 +132,12 @@ public class Sensor implements Parcelable {
         if (in.readByte() == 0) {
             locationLat = null;
         } else {
-            locationLat = in.readLong();
+            locationLat = in.readDouble();
         }
         if (in.readByte() == 0) {
             localtionLong = null;
         } else {
-            localtionLong = in.readLong();
+            localtionLong = in.readDouble();
         }
         byte tmpBShowInMainDashboard = in.readByte();
         showInMainDashboard = tmpBShowInMainDashboard == 0 ? null : tmpBShowInMainDashboard == 1;
@@ -323,19 +323,19 @@ public class Sensor implements Parcelable {
         this.thresholdEqualsCritical = sThresholdEqualsCritical;
     }
 
-    public Long getLocationLat() {
+    public Double getLocationLat() {
         return locationLat;
     }
 
-    public void setLocationLat(Long lLocationLat) {
+    public void setLocationLat(Double lLocationLat) {
         this.locationLat = lLocationLat;
     }
 
-    public Long getLocaltionLong() {
+    public Double getLocaltionLong() {
         return localtionLong;
     }
 
-    public void setLocaltionLong(Long lLocaltionLong) {
+    public void setLocaltionLong(Double lLocaltionLong) {
         this.localtionLong = lLocaltionLong;
     }
 
@@ -418,13 +418,13 @@ public class Sensor implements Parcelable {
             parcel.writeByte((byte) 0);
         } else {
             parcel.writeByte((byte) 1);
-            parcel.writeLong(locationLat);
+            parcel.writeDouble(locationLat);
         }
         if (localtionLong == null) {
             parcel.writeByte((byte) 0);
         } else {
             parcel.writeByte((byte) 1);
-            parcel.writeLong(localtionLong);
+            parcel.writeDouble(localtionLong);
         }
         parcel.writeByte((byte) (showInMainDashboard == null ? 0 : showInMainDashboard ? 1 : 2));
     }

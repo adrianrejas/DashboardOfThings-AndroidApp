@@ -4,8 +4,10 @@ import com.arejas.dashboardofthings.presentation.ui.activities.ActuatorListActiv
 import com.arejas.dashboardofthings.presentation.ui.activities.MainDashboardActivity;
 import com.arejas.dashboardofthings.presentation.ui.activities.MapActivity;
 import com.arejas.dashboardofthings.presentation.ui.activities.NetworkAddEditActivity;
-import com.arejas.dashboardofthings.presentation.ui.activities.NetworkDetailActivity;
+import com.arejas.dashboardofthings.presentation.ui.activities.NetworkDetailsActivity;
 import com.arejas.dashboardofthings.presentation.ui.activities.NetworkListActivity;
+import com.arejas.dashboardofthings.presentation.ui.activities.SensorAddEditActivity;
+import com.arejas.dashboardofthings.presentation.ui.activities.SensorDetailsActivity;
 import com.arejas.dashboardofthings.presentation.ui.activities.SensorListActivity;
 import com.arejas.dashboardofthings.presentation.ui.activities.SettingsActivity;
 
@@ -22,13 +24,19 @@ public abstract class ActivityBuilder {
     abstract NetworkListActivity bindNetworkListActivity();
 
     @ContributesAndroidInjector
-    abstract NetworkDetailActivity bindNetworkDetailActivity();
+    abstract NetworkDetailsActivity bindNetworkDetailActivity();
 
     @ContributesAndroidInjector
     abstract NetworkAddEditActivity bindNetworkAddEditActivity();
 
     @ContributesAndroidInjector
     abstract SensorListActivity bindSensorListActivity();
+
+    @ContributesAndroidInjector
+    abstract SensorDetailsActivity bindSensorDetailActivity();
+
+    @ContributesAndroidInjector
+    abstract SensorAddEditActivity bindSensorAddEditActivity();
 
     @ContributesAndroidInjector
     abstract ActuatorListActivity bindActuatorListActivity();

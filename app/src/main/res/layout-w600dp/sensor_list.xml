@@ -1,0 +1,90 @@
+
+
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools" >
+
+    <data>
+        <import type="android.view.View"/>
+        <variable
+            name="listener"
+            type="android.view.View.OnClickListener" />
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginLeft="@dimen/list_side_outer_margin"
+        android:layout_marginRight="@dimen/list_side_outer_margin"
+        android:baselineAligned="false"
+        android:divider="?android:attr/dividerHorizontal"
+        android:orientation="horizontal"
+        android:showDividers="middle"
+        tools:context="com.arejas.dashboardofthings.presentation.ui.activities.SensorListActivity">
+
+        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+            android:layout_width="@dimen/list_width_masterdetail"
+            android:layout_height="match_parent"
+            android:id="@+id/srl_refresh_layout">
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <include
+                    android:id="@+id/sensors_list_loading_layout"
+                    layout="@layout/layout_loading"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_margin="@dimen/list_side_outer_margin"
+                    android:orientation="vertical"/>
+
+                <include
+                    android:id="@+id/sensors_list_error_layout"
+                    layout="@layout/layout_error"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_margin="@dimen/list_side_outer_margin"
+                    android:orientation="vertical"/>
+
+                <include
+                    android:id="@+id/sensors_list_no_elements_layout"
+                    layout="@layout/layout_no_elements"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_margin="@dimen/list_side_outer_margin"
+                    android:orientation="vertical"/>
+
+                <include
+                    android:id="@+id/sensors_list_list_layout"
+                    layout="@layout/layout_list"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_margin="@dimen/list_side_outer_margin"
+                    android:orientation="vertical"/>
+
+                <com.google.android.material.floatingactionbutton.FloatingActionButton
+                    android:id="@+id/fab_sensor_create"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom|end"
+                    android:layout_margin="@dimen/fab_margin"
+                    android:onClick="@{(v) -> listener.onClick(v)}"
+                    android:adjustViewBounds="true"
+                    android:focusable="true"
+                    android:scaleType="fitXY"
+                    app:srcCompat="@drawable/create" />
+
+            </FrameLayout>
+
+        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+        <FrameLayout
+            android:id="@+id/sensor_detail_container"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="3" />
+
+    </LinearLayout>
+
+</layout>

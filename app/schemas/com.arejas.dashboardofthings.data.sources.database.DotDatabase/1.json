@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "d0958c2f98ed317c96bc19223c16e025",
+    "identityHash": "e004bf914b577c8ca249426ad20bf94c",
     "entities": [
       {
         "tableName": "networks",
@@ -134,7 +134,7 @@
       },
       {
         "tableName": "sensors",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `name` TEXT, `type` TEXT, `imageUri` TEXT, `networkId` INTEGER, `httpRelativeUrl` TEXT, `httpHeaders` TEXT, `httpSecondsBetweenRequests` INTEGER, `mqttTopicToSubscribe` TEXT, `mqttQosLevel` INTEGER, `messageType` INTEGER, `dataType` INTEGER, `xmlOrJsonNode` TEXT, `rawRegularExpression` TEXT, `dataUnit` TEXT, `thresholdAboveCritical` REAL, `thresholdAboveWarning` REAL, `thresholdBelowCritical` REAL, `thresholdBelowWarning` REAL, `thresholdEqualsWarning` TEXT, `thresholdEqualsCritical` TEXT, `locationLat` INTEGER, `localtionLong` INTEGER, `showInMainDashboard` INTEGER, FOREIGN KEY(`networkId`) REFERENCES `networks`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE )",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `name` TEXT, `type` TEXT, `imageUri` TEXT, `networkId` INTEGER, `httpRelativeUrl` TEXT, `httpHeaders` TEXT, `httpSecondsBetweenRequests` INTEGER, `mqttTopicToSubscribe` TEXT, `mqttQosLevel` INTEGER, `messageType` INTEGER, `dataType` INTEGER, `xmlOrJsonNode` TEXT, `rawRegularExpression` TEXT, `dataUnit` TEXT, `thresholdAboveCritical` REAL, `thresholdAboveWarning` REAL, `thresholdBelowCritical` REAL, `thresholdBelowWarning` REAL, `thresholdEqualsWarning` TEXT, `thresholdEqualsCritical` TEXT, `locationLat` REAL, `localtionLong` REAL, `showInMainDashboard` INTEGER, FOREIGN KEY(`networkId`) REFERENCES `networks`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE )",
         "fields": [
           {
             "fieldPath": "id",
@@ -265,13 +265,13 @@
           {
             "fieldPath": "locationLat",
             "columnName": "locationLat",
-            "affinity": "INTEGER",
+            "affinity": "REAL",
             "notNull": false
           },
           {
             "fieldPath": "localtionLong",
             "columnName": "localtionLong",
-            "affinity": "INTEGER",
+            "affinity": "REAL",
             "notNull": false
           },
           {
@@ -313,7 +313,7 @@
       },
       {
         "tableName": "actuators",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `name` TEXT, `type` TEXT, `imageUri` TEXT, `networkId` INTEGER, `httpRelativeUrl` TEXT, `httpMethod` INTEGER, `httpHeaders` TEXT, `mqttTopicToPublish` TEXT, `mqttQosLevel` INTEGER, `dataType` INTEGER, `dataNumberMinimum` REAL, `dataNumberMaximum` REAL, `dataFormatMessageToSend` TEXT, `mimeType` TEXT, `dataUnit` TEXT, `locationLat` INTEGER, `localtionLong` INTEGER, `showInMainDashboard` INTEGER, FOREIGN KEY(`networkId`) REFERENCES `networks`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE )",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `name` TEXT, `type` TEXT, `imageUri` TEXT, `networkId` INTEGER, `httpRelativeUrl` TEXT, `httpMethod` INTEGER, `httpHeaders` TEXT, `httpMimeType` TEXT, `mqttTopicToPublish` TEXT, `mqttQosLevel` INTEGER, `dataType` INTEGER, `dataNumberMinimum` REAL, `dataNumberMaximum` REAL, `dataFormatMessageToSend` TEXT, `dataUnit` TEXT, `locationLat` INTEGER, `localtionLong` INTEGER, `showInMainDashboard` INTEGER, FOREIGN KEY(`networkId`) REFERENCES `networks`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE )",
         "fields": [
           {
             "fieldPath": "id",
@@ -364,6 +364,12 @@
             "notNull": false
           },
           {
+            "fieldPath": "httpMimeType",
+            "columnName": "httpMimeType",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
             "fieldPath": "mqttTopicToPublish",
             "columnName": "mqttTopicToPublish",
             "affinity": "TEXT",
@@ -396,12 +402,6 @@
           {
             "fieldPath": "dataFormatMessageToSend",
             "columnName": "dataFormatMessageToSend",
-            "affinity": "TEXT",
-            "notNull": false
-          },
-          {
-            "fieldPath": "mimeType",
-            "columnName": "mimeType",
             "affinity": "TEXT",
             "notNull": false
           },
@@ -590,7 +590,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'd0958c2f98ed317c96bc19223c16e025')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'e004bf914b577c8ca249426ad20bf94c')"
     ]
   }
 }

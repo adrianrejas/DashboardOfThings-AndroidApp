@@ -27,7 +27,9 @@ import com.arejas.dashboardofthings.domain.entities.database.Actuator;
 import com.arejas.dashboardofthings.domain.entities.database.DataValue;
 import com.arejas.dashboardofthings.domain.entities.database.Network;
 import com.arejas.dashboardofthings.domain.entities.database.Sensor;
+import com.arejas.dashboardofthings.domain.entities.extended.NetworkExtended;
 import com.arejas.dashboardofthings.presentation.ui.helpers.HistoryChartHelper;
+import com.arejas.dashboardofthings.presentation.ui.notifications.ToastHelper;
 import com.arejas.dashboardofthings.utils.Enumerators;
 import com.arejas.dashboardofthings.utils.Utils;
 import com.arejas.dashboardofthings.utils.functional.ConsumerBoolean;
@@ -39,14 +41,18 @@ import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
+import com.github.mikephil.charting.utils.EntryXComparator;
+import com.google.android.gms.maps.model.Dot;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import java.util.Random;
 
 /*
 * Class with static functions used by DataBinding library for setting UI according to parameters passed.
@@ -268,6 +274,25 @@ public class DataBindingConverters {
         }
     }
 
+    @BindingAdapter({"sensorType", "elementProblems"})
+    public static void setSensorType(TextView view, String sensorType, Integer elementProblems) {
+        try {
+            if (sensorType != null) {
+                view.setText(sensorType);
+                if ((elementProblems != null) && (elementProblems > 0)) {
+                    view.setTextColor(ContextCompat.getColor(DotApplication.getContext(), R.color.logErrorColorText));
+                } else {
+                    view.setTextColor(ContextCompat.getColor(DotApplication.getContext(), R.color.primaryTextColor));
+                }
+            } else {
+                view.setText("-");
+                view.setTextColor(ContextCompat.getColor(DotApplication.getContext(), R.color.primaryTextColor));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     @BindingAdapter({"networkType"})
     public static void setNetworkType(TextView view, Enumerators.NetworkType networkType) {
         try {
@@ -295,31 +320,35 @@ public class DataBindingConverters {
     public static void setSensorValue(TextView view, String value, Enumerators.DataType type,
                                       String unit) {
         // If not null, set release date, with the format specified at the strings XML.
-        if (value != null) {
-            String dataToPrint = new String(value);
-            if (type != null) {
-                switch (type) {
-                    case INTEGER:
-                        dataToPrint = String.format("%i", Integer.valueOf(value));
-                        break;
-                    case DECIMAL:
-                        dataToPrint = String.format("%2f", Integer.valueOf(value));
-                        break;
-                    case BOOLEAN:
-                        if (value.equals(Boolean.TRUE.toString())) {
-                            dataToPrint = DotApplication.getContext().getString(R.string.boolean_active);
-                        } else {
-                            dataToPrint = DotApplication.getContext().getString(R.string.boolean_not_active);
-                        }
-                        break;
+        try {
+            if (value != null) {
+                String dataToPrint = new String(value);
+                if (type != null) {
+                    switch (type) {
+                        case INTEGER:
+                            dataToPrint = String.format("%d", Integer.valueOf(value));
+                            break;
+                        case DECIMAL:
+                            dataToPrint = String.format("%.2f", Float.valueOf(value));
+                            break;
+                        case BOOLEAN:
+                            if (value.equals(Boolean.TRUE.toString())) {
+                                dataToPrint = DotApplication.getContext().getString(R.string.boolean_active);
+                            } else {
+                                dataToPrint = DotApplication.getContext().getString(R.string.boolean_not_active);
+                            }
+                            break;
+                    }
                 }
+                if (unit != null) {
+                    dataToPrint = dataToPrint.concat(" ").concat(unit);
+                }
+                view.setText(dataToPrint);
+            } else {
+                view.setText("-");
             }
-            if (unit != null) {
-                dataToPrint = dataToPrint.concat(" ").concat(unit);
-            }
-            view.setText(dataToPrint);
-        } else {
-            view.setText("-");
+        } catch (Exception e) {
+            ToastHelper.showToast(DotApplication.getContext().getString(R.string.toast_actuator_printdata_error));
         }
     }
 
@@ -379,49 +408,78 @@ public class DataBindingConverters {
     @BindingAdapter({"sensorInfo", "data", "spinnerHistorySelected"})
     public static void setSensorValue(LineChart chart, Sensor sensorInfo, List<DataValue> data,
                                       Integer spinnerHistorySelected) {
+        Date dateMin = null, dateMax = null;
         try {
-            chart.setTouchEnabled(true);
-            chart.setPinchZoom(true);
-            // First, work out the X time Axis
-            XAxis xAxis = chart.getXAxis();
-            xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
-            xAxis.setTextSize(10f);
-            xAxis.setTextColor(Color.RED);
-            xAxis.setDrawAxisLine(true);
-            xAxis.setDrawGridLines(false);
-            xAxis.setValueFormatter(HistoryChartHelper.getValueFormatterForTimeAxis(spinnerHistorySelected,
-                    data.get(0).getDateReceived(), data.get(data.size() - 1).getDateReceived()));
-            // Second, work out the Y data Axis
-            YAxis yAxis = chart.getAxisLeft();
-            yAxis.setDrawLabels(true);
-            yAxis.setDrawAxisLine(false);
-            yAxis.setDrawGridLines(false);
-            yAxis.setDrawZeroLine(true);
-            yAxis.setValueFormatter(HistoryChartHelper.getValueFormatterForDataAxis(sensorInfo.getDataType()));
-            chart.getAxisRight().setEnabled(false);
-            // Third, set the data entry set
-            List<Entry> entries = new ArrayList<>();
-            for (DataValue value : data) {
-                entries.add(new Entry(Float.parseFloat(value.getValue()),
-                        value.getDateReceived().getTime()));
-            }
-            // Fourth, set the data entry set and style it
-            LineDataSet dataSet = new LineDataSet(entries,
-                    DotApplication.getContext().getResources().getStringArray(R.array.history_options_aray)[spinnerHistorySelected]); // add entries to dataset
+            if ((sensorInfo != null) && (data != null) && (spinnerHistorySelected != null)) {
+                if (spinnerHistorySelected == null) spinnerHistorySelected = 0;
+                chart.setTouchEnabled(false);
+                chart.setPinchZoom(false);
+                // First, work out the X time Axis
+                XAxis xAxis = chart.getXAxis();
+                xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
+                xAxis.setTextSize(10f);
+                xAxis.setDrawAxisLine(true);
+                xAxis.setDrawGridLines(true);
+                xAxis.setLabelRotationAngle(45);
+                if (data.size() > 0) {
+                    for (DataValue value : data) {
+                        if (dateMin == null) dateMin = value.getDateReceived();
+                        else if (dateMin.getTime() > value.getDateReceived().getTime()) {
+                            dateMin = value.getDateReceived();
+                        }
+                        if (dateMax == null) dateMax = value.getDateReceived();
+                        else if (dateMax.getTime() < value.getDateReceived().getTime()) {
+                            dateMax = value.getDateReceived();
+                        }
+                    }
+                    xAxis.setValueFormatter(HistoryChartHelper.getValueFormatterForTimeAxis(spinnerHistorySelected,
+                            dateMin, dateMax));
+                } else {
+                    dateMin = dateMax = new Date();
+                    xAxis.setValueFormatter(HistoryChartHelper.getValueFormatterForTimeAxis(spinnerHistorySelected,
+                            dateMin, dateMax));
+                }
+                // Second, work out the Y data Axis
+                YAxis yAxis = chart.getAxisLeft();
+                yAxis.setDrawLabels(true);
+                yAxis.setDrawAxisLine(true);
+                yAxis.setDrawGridLines(true);
+                yAxis.setDrawZeroLine(true);
+                yAxis.setValueFormatter(HistoryChartHelper.getValueFormatterForDataAxis(sensorInfo.getDataType()));
+                chart.getAxisRight().setEnabled(false);
+                // Third, set the data entry set
+                List<Entry> entries = new ArrayList<>();
+                for (DataValue value : data) {
+                    if (sensorInfo.getDataType().equals(Enumerators.DataType.BOOLEAN)) {
+                        entries.add(new Entry(value.getDateReceived().getTime() - dateMin.getTime(),
+                                value.getValue().equalsIgnoreCase("true") ? 1.0f : 0.0f));
+                    } else {
+                        entries.add(new Entry(value.getDateReceived().getTime() - dateMin.getTime(),
+                                Float.parseFloat(value.getValue())));
+                    }
+                }
+                Collections.sort(entries, new EntryXComparator());
+                // Fourth, set the data entry set and style it
+                LineDataSet dataSet = new LineDataSet(entries,
+                        DotApplication.getContext().getResources().getStringArray(R.array.history_options_aray)[spinnerHistorySelected]); // add entries to dataset
 
-            dataSet.setDrawIcons(false);
-            dataSet.setColor(ContextCompat.getColor(DotApplication.getContext(), R.color.primaryColor));
-            dataSet.setCircleColor(ContextCompat.getColor(DotApplication.getContext(), R.color.primaryDarkColor));
-            dataSet.setLineWidth(1f);
-            dataSet.setCircleRadius(3f);
-            dataSet.setDrawCircleHole(false);
-            dataSet.setValueTextSize(9f);
-            dataSet.setDrawFilled(false);
-            dataSet.setValueFormatter(HistoryChartHelper.getValueFormatterForDataAxis(sensorInfo.getDataType()));
-            // Firth, generate the data and refresh the chart
-            LineData lineData = new LineData(dataSet);
-            chart.setData(lineData);
-            chart.invalidate();
+                dataSet.setDrawIcons(false);
+                dataSet.setColor(ContextCompat.getColor(DotApplication.getContext(), R.color.primaryColor));
+                dataSet.setCircleColor(ContextCompat.getColor(DotApplication.getContext(), R.color.primaryDarkColor));
+                dataSet.setLineWidth(1f);
+                dataSet.setCircleRadius(3f);
+                dataSet.setDrawCircleHole(false);
+                dataSet.setValueTextSize(9f);
+                dataSet.setDrawFilled(false);
+                dataSet.setDrawValues(false);
+                dataSet.setValueFormatter(HistoryChartHelper.getValueFormatterForDataAxis(sensorInfo.getDataType()));
+                // Firth, generate the data and refresh the chart
+                LineData lineData = new LineData(dataSet);
+                chart.setData(lineData);
+                chart.setDescription(null);
+                chart.getLegend().setEnabled(false);
+                chart.invalidate();
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -459,8 +517,9 @@ public class DataBindingConverters {
         }
     }
 
-    @BindingAdapter("entryList")
-    public static void setNetworkTypeSpinnerValue(Spinner spinner, List<Network> entryList) {
+    @BindingAdapter({"entryList", "selectedPosition"})
+    public static void setNetworkTypeSpinnerValue(Spinner spinner, List<NetworkExtended> entryList,
+                                                  Integer selectedPosition) {
         if (entryList != null) {
             List<CharSequence> networkNames = new ArrayList<>();
             for (Network network : entryList) {
@@ -469,6 +528,9 @@ public class DataBindingConverters {
             ArrayAdapter<CharSequence> adapter = new ArrayAdapter (DotApplication.getContext(),
                     android.R.layout.simple_spinner_dropdown_item, networkNames);
             spinner.setAdapter(adapter);
+            if (selectedPosition != null) {
+                spinner.setSelection(selectedPosition);
+            }
         }
     }
 

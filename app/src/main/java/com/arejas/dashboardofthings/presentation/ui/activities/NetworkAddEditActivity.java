@@ -18,9 +18,8 @@ import com.arejas.dashboardofthings.domain.entities.database.Network;
 import com.arejas.dashboardofthings.domain.entities.extended.NetworkExtended;
 import com.arejas.dashboardofthings.domain.entities.result.Resource;
 import com.arejas.dashboardofthings.presentation.interfaces.viewmodels.NetworkAddEditViewModel;
-import com.arejas.dashboardofthings.presentation.interfaces.viewmodels.NetworkDetailsViewModel;
 import com.arejas.dashboardofthings.presentation.interfaces.viewmodels.factories.ViewModelFactory;
-import com.arejas.dashboardofthings.presentation.ui.helpers.AddEditElementPresenter;
+import com.arejas.dashboardofthings.presentation.ui.helpers.AddEditNetworkPresenter;
 import com.arejas.dashboardofthings.presentation.ui.notifications.ToastHelper;
 import com.arejas.dashboardofthings.utils.Enumerators;
 import com.arejas.dashboardofthings.utils.Utils;
@@ -35,7 +34,7 @@ import dagger.android.AndroidInjection;
  * item details are presented side-by-side with a list of items
  * in a {@link NetworkListActivity}.
  */
-public class NetworkAddEditActivity extends AppCompatActivity implements AddEditElementPresenter {
+public class NetworkAddEditActivity extends AppCompatActivity implements AddEditNetworkPresenter {
 
     public static final String NETWORK_ID = "network_id";
 
@@ -63,7 +62,6 @@ public class NetworkAddEditActivity extends AppCompatActivity implements AddEdit
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_network_detail);
 
         /* Inflate main layout and get UI element references */
         uiBinding = DataBindingUtil.setContentView(this, R.layout.activity_network_add_edit);

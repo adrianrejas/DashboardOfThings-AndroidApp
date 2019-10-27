@@ -10,7 +10,7 @@ public class ToastHelper {
 
     public static void showToast(String message) {
         if (mToast != null) mToast.cancel();
-        mToast = Toast.makeText(DotApplication.getContext(), message, Toast.LENGTH_SHORT);
+        mToast = Toast.makeText(DotApplication.getContext(), message, Toast.LENGTH_LONG);
         mToast.show();
     }
 

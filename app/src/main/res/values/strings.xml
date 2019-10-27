@@ -2,8 +2,11 @@
     <string name="app_name">Dashboard of Things</string>
     <string name="title_activity_maindash">Main dashboard</string>
     <string name="title_network_list">Networks</string>
-    <string name="title_network_detail">Network Detail</string>
+    <string name="title_network_detail">Network Details</string>
     <string name="title_network_addedit">Add/edit Network</string>
+    <string name="title_sensor_list">Sensor Details</string>
+    <string name="title_sensor_detail">Sensor Details</string>
+    <string name="title_sensor_addedit">Add/edit Sensor</string>
     <string name="title_activity_map">Map</string>
 
     <string name="main_navigation_dashboard">Main dashboard</string>
@@ -15,6 +18,7 @@
     <string name="menu_options">Options</string>
     <string name="menu_edit">Edit</string>
     <string name="menu_remove">Remove</string>
+    <string name="menu_reload">Reload</string>
     <string name="menu_ok">Ok</string>
 
     <string name="main_dashboard_tab_sensors">Sensors</string>
@@ -23,10 +27,12 @@
     <string name="main_dashboard_tab_status">Status</string>
     <string name="main_dashboard_tab_logs">Logs</string>
 
-    <string name="network_details_tab_details">Details</string>
-    <string name="network_details_tab_logs">Logs</string>
+    <string name="element_details_tab_details">Details</string>
+    <string name="element_details_tab_logs">Logs</string>
 
     <string name="dialog_remove_network">Do you want to remove the selected network?</string>
+    <string name="dialog_remove_sensor">Do you want to remove the selected sensor?</string>
+    <string name="dialog_remove_actuator">Do you want to remove the selected actuator?</string>
     <string name="dialog_ok">Ok</string>
     <string name="dialog_cancel">Cancel</string>
 
@@ -34,6 +40,10 @@
     <string name="toolbar_title_network_unrecognized">Unrecognized network</string>
     <string name="toolbar_title_new_network">New network</string>
     <string name="toolbar_title_edit_network">Editing network</string>
+    <string name="toolbar_title_sensor_loading">Loading sensor</string>
+    <string name="toolbar_title_sensor_unrecognized">Unrecognized sensor</string>
+    <string name="toolbar_title_new_sensor">New sensor</string>
+    <string name="toolbar_title_edit_sensor">Editing sensor</string>
 
     <string name="toast_removing">Removing element ...</string>
     <string name="toast_remove_succesful">Element succesfully removed.</string>
@@ -45,6 +55,14 @@
     <string name="toast_create_succesful">Element succesfully created.</string>
     <string name="toast_create_failed">Failed to create element.</string>
     <string name="toast_edition_failed">Failed to create element.</string>
+    <string name="toast_sensor_reload_request_loading">Requesting the sensor to reload data ....</string>
+    <string name="toast_sensor_reload_request_success">Reload of the sensor data requested to backend.</string>
+    <string name="toast_sensor_reload_request_failed">Failed to request a reload of the sensor data.</string>
+    <string name="toast_actuator_send_loading">Sending actuator data ...</string>
+    <string name="toast_actuator_send_success">Sending of actuator data requested to backend.</string>
+    <string name="toast_actuator_send_failed">Failed to send actuator data.</string>
+    <string name="toast_actuator_printdata_error">Error preparing the data to be printed.</string>
+    <string name="toast_create_first_network">Before creating a sensor or an actuator, you must create a network to link to it.</string>
 
     <string name="loading">Loading ...</string>
     <string name="no_elements_in_list">There are no elements in the list shown.</string>
@@ -80,7 +98,7 @@
 
     <string name="network_type_mqtt">MQTT network</string>
     <string name="network_type_http">HTTP network</string>
-    <string name="network_list_sensors">&lt;b>Sensors related:&lt;/b> %s</string>
+    <string name="network_list_sensors">&lt;b>Sensors related:&lt;/b></string>
     <string name="network_no_sensors">&lt;b>No sensors related.&lt;/b></string>
     <string name="network_list_actuators">&lt;b>Actuators related:&lt;/b></string>
     <string name="network_no_actuators">&lt;b>No actuators related.&lt;/b></string>
@@ -133,9 +151,69 @@
     <string name="edit_label_mqtt_clean_session">Clean session</string>
     <string name="edit_hint_mqtt_keepalive_interval">Time in milliseconds to wait between keepalives</string>
     <string name="edit_label_sensor_network">Network to use:</string>
+    <string name="edit_label_sensor_message_type">Message type:</string>
+    <string-array name="edit_array_sensor_message_type">
+        <item>XML</item>
+        <item>JSON</item>
+        <item>Raw data</item>
+    </string-array>
+    <string name="edit_label_sensor_data_type">Data type:</string>
+    <string-array name="edit_array_sensor_data_type">
+        <item>Boolean</item>
+        <item>Integer</item>
+        <item>Decimal</item>
+        <item>String</item>
+    </string-array>
+    <string name="edit_label_http_relative_url">HTTP relative URL:</string>
+    <string name="edit_hint_http_relative_url">Path to be added to network base URL for requesting data</string>
+    <string name="edit_label_http_headers">HTTP headers:</string>
+    <string name="edit_hint_http_header_name">Header name</string>
+    <string name="edit_hint_http_header_equal">=</string>
+    <string name="edit_hint_http_header_value">Header value</string>
+    <string name="edit_hint_location_pick">Pick a location</string>
+    <string name="edit_hint_location_picked">Location picked</string>
+    <string name="edit_label_show_in_main_dashboard">Show sensor in main dashboard</string>
+    <string name="edit_label_http_interval">Periodical interval:</string>
+    <string name="edit_hint_http_interval">Interval between periodic requests (seconds)</string>
+    <string name="edit_label_mqtt_topic_subscribe">MQTT topic to subscribe:</string>
+    <string name="edit_hint_mqtt_topic_subscribe">MQTT topic to be used for subscribing to messages</string>
+    <string name="edit_label_mqtt_qos_level">MQTT quality of service:</string>
+    <string-array name="edit_array_mqtt_qos_level">
+        <item>QOS 0</item>
+        <item>QOS 1</item>
+        <item>QOS 2</item>
+    </string-array>
+    <string name="edit_label_xml_variables">XML options</string>
+    <string name="edit_label_xml_node">XML node to locate data: </string>
+    <string name="edit_hint_xml_node">Example: node1.node2.node3</string>
+    <string name="edit_label_json_variables">JSON options</string>
+    <string name="edit_label_json_node">JSON node to locate data: </string>
+    <string name="edit_hint_json_node">Example: first_node.second_node.third_node</string>
+    <string name="edit_label_raw_variables">Raw data options</string>
+    <string name="edit_label_raw_regex">Extraction regular expression: </string>
+    <string name="edit_hint_raw_regex">Java Regular expression to use for extracting the data</string>
+    <string name="edit_label_integer_variables">Integer options</string>
+    <string name="edit_label_decimal_variables">Decimal options</string>
+    <string name="edit_label_boolean_variables">Boolean options</string>
+    <string name="edit_label_string_variables">String options</string>
+    <string name="edit_label_unit">Data unit: </string>
+    <string name="edit_hint_unit">unit to be used for expressing the data</string>
+    <string name="edit_label_warning_above_trigger">Warning notification above: </string>
+    <string name="edit_hint_warning_above_trigger">Trigger to launch a warning notification when data above</string>
+    <string name="edit_label_warning_below_trigger">Warning notification below: </string>
+    <string name="edit_hint_warning_below_trigger">Trigger to launch a warning notification when data below</string>
+    <string name="edit_label_critical_above_trigger">Critical notification above: </string>
+    <string name="edit_hint_critical_above_trigger">Trigger to launch a critical notification when data above</string>
+    <string name="edit_label_critical_below_trigger">Critical notification below: </string>
+    <string name="edit_hint_critical_below_trigger">Trigger to launch a critical notification when data below</string>
+    <string name="edit_label_warning_equals_trigger">Warning notification equals: </string>
+    <string name="edit_hint_warning_equals_trigger">Trigger to launch a warning notification when data equals</string>
+    <string name="edit_label_critical_equals_trigger">Critical notification equals: </string>
+    <string name="edit_hint_critical_equals_trigger">Trigger to launch a critical notification when data equals</string>
 
     <string name="edit_toast_check_name">Check name ...</string>
-    <string name="edit_toast_check_network_type">Select type ...</string>
+    <string name="edit_toast_check_type">Check type ...</string>
+    <string name="edit_toast_check_network_type">Select network type ...</string>
     <string name="edit_toast_check_http_baseurl">Check HTTP base URL ...</string>
     <string name="edit_toast_check_http_auth_type">Select HTTP authentication type ...</string>
     <string name="edit_toast_check_http_username">Select HTTP authentication username ...</string>
@@ -143,6 +221,19 @@
     <string name="edit_toast_check_mqtt_username">Select MQTT username ...</string>
     <string name="edit_toast_check_mqtt_password">Select MQTT password ...</string>
     <string name="edit_toast_check_mqtt_brokerurl">Check MQTT broker URL ...</string>
+    <string name="edit_toast_check_http_headers">Check the fields for introducing a new HTTP header ...</string>
+    <string name="edit_toast_check_network">Select a network ...</string>
+    <string name="edit_toast_check_http_relativeurl">Check HTTP relative URL ...</string>
+    <string name="edit_toast_check_http_interval">Check HTTP Interval ...</string>
+    <string name="edit_toast_check_http_interval_number">HTTP Interval should be at least 60 seconds ...</string>
+    <string name="edit_toast_check_mqtt_topic">Check MQTT topic ...</string>
+    <string name="edit_toast_check_xml_node">Check XML node ...</string>
+    <string name="edit_toast_check_json_node">Check JSON node ...</string>
+    <string name="edit_toast_check_raw_regex">Check raw data regular expression ...</string>
+    <string name="edit_toast_check_thresholds_integer">Check threshold values to be integer number ...</string>
+    <string name="edit_toast_check_thresholds_decimal">Check threshold values to be decimal number ...</string>
+    <string name="edit_toast_check_thresholds_boolean">Check threshold values to be \'true\' or \'false\' ...</string>
+
 
     <string name="dashboard_of_things_channel_name">Dashboard of Things notification channel</string>
     <string name="dashboard_of_things_channel_desc">Notification channel about the state of Dashboard of Things app</string>
@@ -188,6 +279,8 @@
     <string name="content_description_element_problems">Warning or error logs detected in the last minutes for this element</string>
     <string name="content_description_sensor_image">Image representing the sensor</string>
     <string name="content_description_sensor_title">Name and type of the sensor</string>
+    <string name="content_description_sensor_name">Name of the sensor</string>
+    <string name="content_description_sensor_type">Type of the sensor</string>
     <string name="content_description_sensor_value">Current value of the sensor</string>
     <string name="content_description_sensor_state">Current state of the sensor</string>
     <string name="content_description_nav_header">Main navigation menu</string>
@@ -203,6 +296,11 @@
     <string name="content_description_network_actuators">List of actuators related to the network</string>
     <string name="content_description_pick_image">Pick an image for using it with the element</string>
     <string name="content_description_clear_image">Clear the image picked for using with the element</string>
+    <string name="content_description_pick_certificate">Pick a certificate for securing connection</string>
+    <string name="content_description_clear_certificate">Clear the certificate picked for securing the connection</string>
+    <string name="content_description_pick_location">Pick a location for using it with the element</string>
+    <string name="content_description_clear_location">Clear the location picked for using with the element</string>
+    <string name="content_description_http_clear_header">Clear the selected header</string>
 
     <!-- Preference Titles -->
     <string name="messages_header">Messages</string>

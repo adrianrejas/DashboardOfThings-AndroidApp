@@ -12,6 +12,8 @@ import android.text.Spanned;
 
 import com.arejas.dashboardofthings.DotApplication;
 
+import java.util.Date;
+
 public class Utils {
 
     /**

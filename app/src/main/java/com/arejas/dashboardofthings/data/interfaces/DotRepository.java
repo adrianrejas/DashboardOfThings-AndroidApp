@@ -26,7 +26,10 @@ import com.arejas.dashboardofthings.utils.rx.RxHelper;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
+import java.util.Random;
 import java.util.concurrent.Executor;
 
 import javax.inject.Inject;
@@ -154,9 +157,6 @@ public class DotRepository {
                     dotDatabase.networksDao().update(network);
                     RxHelper.publishNetworkManagementChange(new Pair<>(network, Enumerators.ElementManagementFunction.UPDATE));
                     result.postValue(Resource.success(null));
-                    RxHelper.publishLog(network.getId(), Enumerators.ElementType.NETWORK,
-                            network.getName(), Enumerators.LogLevel.ERROR,
-                            DotApplication.getContext().getString(R.string.log_critical_sensor_scheduling));
                 } catch (Exception e) {
                     result.postValue(Resource.error(e, null));
                 }
@@ -289,6 +289,9 @@ public class DotRepository {
                 try {
                     dotDatabase.sensorsDao().update(sensor);
                     RxHelper.publishSensorManagementChange(new Pair<>(sensor, Enumerators.ElementManagementFunction.UPDATE));
+                    RxHelper.publishLog(sensor.getId(), Enumerators.ElementType.SENSOR,
+                            sensor.getName(), Enumerators.LogLevel.WARN,
+                            DotApplication.getContext().getString(R.string.log_critical_sensor_scheduling));
                     result.postValue(Resource.success(null));
                 } catch (Exception e) {
                     result.postValue(Resource.error(e, null));
@@ -448,6 +451,29 @@ public class DotRepository {
         result.postValue(Resource.loading(null));
         try {
             RxHelper.publishSensorReloadRequest(sensor);
+            Random r = new Random();
+            String dataToSend = "";
+            switch (sensor.getDataType()) {
+                case INTEGER:
+                    Integer dataInt = 1 + r.nextInt() * (8 - 1);
+                    dataToSend = dataInt.toString();
+                    break;
+                case STRING:
+                    Integer dataInt3 = 1 + r.nextInt() * (8 - 1);
+                    dataInt3 = 1 + r.nextInt() * (8 - 1);
+                    dataToSend = "DATA:" + dataInt3.toString();
+                    break;
+                case BOOLEAN:
+                    Integer dataInt2 = 1 + r.nextInt() * (8 - 1);
+                    Boolean dataBool = dataInt2 > 4;
+                    dataToSend = dataBool.toString();
+                    break;
+                case DECIMAL:
+                    Float dataFloat = 1 + r.nextFloat() * (8 - 1);
+                    dataToSend = dataFloat.toString();
+                    break;
+            }
+            RxHelper.publishSensorData(sensor.getId(), dataToSend);
             result.postValue(Resource.success(null));
         } catch (Exception e) {
             result.postValue(Resource.error(e, null));
@@ -480,17 +506,17 @@ public class DotRepository {
         }
     }
 
-    public LiveData<DataValue> findLastValuesForSensorId(int id) {
+    public LiveData<Resource<DataValue>> findLastValuesForSensorId(int id) {
         try {
-            return this.dotDatabase.dataValuesDao().findLastForSensorId(id);
+            return new LiveDataResource<DataValue>(() -> this.dotDatabase.dataValuesDao().findLastForSensorId(id));
         } catch (Exception e) {
             return null;
         }
     }
 
-    public LiveData<DataValue> findLastValuesForSensorIds(int[] ids) {
+    public LiveData<Resource<List<DataValue>>> findLastValuesForSensorIds(int[] ids) {
         try {
-            return this.dotDatabase.dataValuesDao().findLastForSensorIds(ids);
+            return new LiveDataResource<List<DataValue>>(() -> this.dotDatabase.dataValuesDao().findLastForSensorIds(ids));
         } catch (Exception e) {
             return null;
         }
@@ -506,7 +532,11 @@ public class DotRepository {
 
     public LiveData<Resource<List<DataValue>>> getAvgLastOneDayValuesForSensorId(int id) {
         try {
-            return new LiveDataResource<List<DataValue>>(() -> this.dotDatabase.dataValuesDao().getAvgLastOneDayValuesForSensorId(id));
+            Calendar cal = Calendar.getInstance();
+            Date today = cal.getTime();
+            cal.add(Calendar.HOUR, -24);
+            Date prevDay = cal.getTime();
+            return new LiveDataResource<List<DataValue>>(() -> this.dotDatabase.dataValuesDao().getAvgHourValuesForSensorId(id, prevDay));
         } catch (Exception e) {
             return null;
         }
@@ -514,7 +544,11 @@ public class DotRepository {
 
     public LiveData<Resource<List<DataValue>>> getAvgLastOneWeekValuesForSensorId(int id) {
         try {
-            return new LiveDataResource<List<DataValue>>(() -> this.dotDatabase.dataValuesDao().getAvgLastOneWeekValuesForSensorId(id));
+            Calendar cal = Calendar.getInstance();
+            Date today = cal.getTime();
+            cal.add(Calendar.DAY_OF_MONTH, -7);
+            Date prevWeek = cal.getTime();
+            return new LiveDataResource<List<DataValue>>(() -> this.dotDatabase.dataValuesDao().getAvgWeekdayValuesForSensorId(id, prevWeek));
         } catch (Exception e) {
             return null;
         }
@@ -522,7 +556,11 @@ public class DotRepository {
 
     public LiveData<Resource<List<DataValue>>> getAvgLastOneMonthValuesForSensorId(int id) {
         try {
-            return new LiveDataResource<List<DataValue>>(() -> this.dotDatabase.dataValuesDao().getAvgLastOneMonthValuesForSensorId(id));
+            Calendar cal = Calendar.getInstance();
+            Date today = cal.getTime();
+            cal.add(Calendar.MONTH, -1);
+            Date prevMonth = cal.getTime();
+            return new LiveDataResource<List<DataValue>>(() -> this.dotDatabase.dataValuesDao().getAvgPerMonthDayValuesForSensorId(id, prevMonth));
         } catch (Exception e) {
             return null;
         }
@@ -530,7 +568,11 @@ public class DotRepository {
 
     public LiveData<Resource<List<DataValue>>> getAvgLastOneYearValuesForSensorId(int id) {
         try {
-            return new LiveDataResource<List<DataValue>>(() -> this.dotDatabase.dataValuesDao().getAvgLastOneYearValuesForSensorId(id));
+            Calendar cal = Calendar.getInstance();
+            Date today = cal.getTime();
+            cal.add(Calendar.YEAR, -1);
+            Date prevYear = cal.getTime();
+            return new LiveDataResource<List<DataValue>>(() -> this.dotDatabase.dataValuesDao().getAvgPerMonthValuesForSensorId(id, prevYear));
         } catch (Exception e) {
             return null;
         }

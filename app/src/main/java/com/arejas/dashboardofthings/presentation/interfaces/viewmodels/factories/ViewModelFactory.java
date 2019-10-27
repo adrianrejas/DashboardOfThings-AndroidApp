@@ -15,6 +15,9 @@ import com.arejas.dashboardofthings.presentation.interfaces.viewmodels.MainDashb
 import com.arejas.dashboardofthings.presentation.interfaces.viewmodels.NetworkAddEditViewModel;
 import com.arejas.dashboardofthings.presentation.interfaces.viewmodels.NetworkDetailsViewModel;
 import com.arejas.dashboardofthings.presentation.interfaces.viewmodels.NetworkListViewModel;
+import com.arejas.dashboardofthings.presentation.interfaces.viewmodels.SensorAddEditViewModel;
+import com.arejas.dashboardofthings.presentation.interfaces.viewmodels.SensorDetailsViewModel;
+import com.arejas.dashboardofthings.presentation.interfaces.viewmodels.SensorListViewModel;
 import com.arejas.dashboardofthings.presentation.ui.activities.NetworkAddEditActivity;
 
 import javax.inject.Inject;
@@ -35,6 +38,9 @@ public class ViewModelFactory extends ViewModelProvider.NewInstanceFactory {
     private NetworkListViewModel networkListViewModel;
     private NetworkDetailsViewModel networkDetailsViewModel;
     private NetworkAddEditViewModel networkAddEditViewModel;
+    private SensorListViewModel sensorListViewModel;
+    private SensorDetailsViewModel sensorDetailsViewModel;
+    private SensorAddEditViewModel sensorAddEditViewModel;
 
     @Inject
     public ViewModelFactory(@NonNull Application application,
@@ -51,6 +57,7 @@ public class ViewModelFactory extends ViewModelProvider.NewInstanceFactory {
         this.logsManagementUseCase = logsManagementUseCase;
         mainDashboardViewModelSingleton();
         networkListViewModelSingleton();
+        sensorListViewModelSingleton();
         this.networkDetailsViewModel = null;
     }
 
@@ -65,6 +72,12 @@ public class ViewModelFactory extends ViewModelProvider.NewInstanceFactory {
             return (T) networkDetailsViewModelSingleton();
         } else if (modelClass.isAssignableFrom(NetworkAddEditViewModel.class)) {
             return (T) networkAddEditViewModelSingleton();
+        } else if (modelClass.isAssignableFrom(SensorListViewModel.class)) {
+            return (T) sensorListViewModelSingleton();
+        } else if (modelClass.isAssignableFrom(SensorDetailsViewModel.class)) {
+            return (T) sensorDetailsViewModelSingleton();
+        } else if (modelClass.isAssignableFrom(SensorAddEditViewModel.class)) {
+            return (T) sensorAddEditViewModelSingleton();
         } else {
             throw new ClassCastException("No view model class recognized");
         }
@@ -95,6 +108,26 @@ public class ViewModelFactory extends ViewModelProvider.NewInstanceFactory {
         if (networkAddEditViewModel == null)
             networkAddEditViewModel = new NetworkAddEditViewModel(application, networkManagementUseCase);
         return networkAddEditViewModel;
+    }
+
+    private SensorListViewModel sensorListViewModelSingleton() {
+        if (sensorListViewModel == null)
+            sensorListViewModel = new SensorListViewModel(application,
+                    sensorManagementUseCase);
+        return sensorListViewModel;
+    }
+
+    private SensorDetailsViewModel sensorDetailsViewModelSingleton() {
+        if (sensorDetailsViewModel == null)
+            sensorDetailsViewModel = new SensorDetailsViewModel(application, sensorManagementUseCase,
+                    dataManagementUseCase, logsManagementUseCase);
+        return sensorDetailsViewModel;
+    }
+
+    private SensorAddEditViewModel sensorAddEditViewModelSingleton() {
+        if (sensorAddEditViewModel == null)
+            sensorAddEditViewModel = new SensorAddEditViewModel(application, networkManagementUseCase, sensorManagementUseCase);
+        return sensorAddEditViewModel;
     }
 
 }

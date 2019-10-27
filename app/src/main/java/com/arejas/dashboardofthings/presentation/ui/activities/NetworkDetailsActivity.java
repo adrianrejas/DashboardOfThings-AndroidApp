@@ -6,17 +6,9 @@ import android.os.Bundle;
 import com.arejas.dashboardofthings.R;
 import com.arejas.dashboardofthings.presentation.interfaces.viewmodels.NetworkDetailsViewModel;
 import com.arejas.dashboardofthings.presentation.interfaces.viewmodels.factories.ViewModelFactory;
-import com.arejas.dashboardofthings.presentation.ui.fragments.NetworkDetailFragment;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
-
-import androidx.appcompat.widget.Toolbar;
-
-import android.view.Menu;
-import android.view.View;
+import com.arejas.dashboardofthings.presentation.ui.fragments.NetworkDetailsFragment;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.app.ActionBar;
 import androidx.lifecycle.ViewModelProviders;
 
 import android.view.MenuItem;
@@ -31,7 +23,7 @@ import dagger.android.AndroidInjection;
  * item details are presented side-by-side with a list of items
  * in a {@link NetworkListActivity}.
  */
-public class NetworkDetailActivity extends AppCompatActivity {
+public class NetworkDetailsActivity extends AppCompatActivity {
 
     @Inject
     ViewModelFactory viewModelFactory;
@@ -41,7 +33,7 @@ public class NetworkDetailActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_network_detail);
+        setContentView(R.layout.activity_network_details);
 
         AndroidInjection.inject(this);
 
@@ -55,7 +47,7 @@ public class NetworkDetailActivity extends AppCompatActivity {
         // http://developer.android.com/guide/components/fragments.html
         //
         if (savedInstanceState == null) {
-            networkId = getIntent().getIntExtra(NetworkDetailFragment.NETWORK_ID, -1);
+            networkId = getIntent().getIntExtra(NetworkDetailsFragment.NETWORK_ID, -1);
             if (networkId < 0) networkId = null;
             // Get the viewmodel
             networkDetailsViewModel = ViewModelProviders.of(this, this.viewModelFactory).get(NetworkDetailsViewModel.class);
@@ -63,10 +55,10 @@ public class NetworkDetailActivity extends AppCompatActivity {
             // Create the detail fragment and add it to the activity
             // using a fragment transaction.
             Bundle arguments = new Bundle();
-            arguments.putInt(NetworkDetailFragment.NETWORK_ID,
-                    getIntent().getIntExtra(NetworkDetailFragment.NETWORK_ID, -1));
-            arguments.putBoolean(NetworkDetailFragment.TWO_PANE, false);
-            NetworkDetailFragment fragment = new NetworkDetailFragment();
+            arguments.putInt(NetworkDetailsFragment.NETWORK_ID,
+                    getIntent().getIntExtra(NetworkDetailsFragment.NETWORK_ID, -1));
+            arguments.putBoolean(NetworkDetailsFragment.TWO_PANE, false);
+            NetworkDetailsFragment fragment = new NetworkDetailsFragment();
             fragment.setArguments(arguments);
             getSupportFragmentManager().beginTransaction()
                     .add(R.id.network_detail_container, fragment)

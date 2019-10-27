@@ -10,10 +10,12 @@ import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.arejas.dashboardofthings.DotApplication;
 import com.arejas.dashboardofthings.R;
 import com.arejas.dashboardofthings.databinding.CardMaindashboardSensorBinding;
 import com.arejas.dashboardofthings.databinding.FragmentMainsensorsBinding;
@@ -23,6 +25,7 @@ import com.arejas.dashboardofthings.domain.entities.extended.SensorExtended;
 import com.arejas.dashboardofthings.domain.entities.result.Resource;
 import com.arejas.dashboardofthings.presentation.interfaces.viewmodels.MainDashboardViewModel;
 import com.arejas.dashboardofthings.presentation.interfaces.viewmodels.factories.ViewModelFactory;
+import com.arejas.dashboardofthings.presentation.ui.notifications.ToastHelper;
 
 import java.util.HashMap;
 import java.util.List;

@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools" >
+
+    <data>
+        <import type="android.view.View"/>
+        <variable
+            name="sensor"
+            type="com.arejas.dashboardofthings.domain.entities.extended.SensorExtended" />
+        <variable
+            name="lastValue"
+            type="String" />
+        <variable
+            name="historyData"
+            type="java.util.List&lt;com.arejas.dashboardofthings.domain.entities.database.DataValue>" />
+        <variable
+            name="historySpinnerSelected"
+            type="Integer" />
+        <variable
+            name="presenter"
+            type="com.arejas.dashboardofthings.presentation.ui.helpers.SensorDetailsListener" />
+    </data>
+
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/srl_refresh_layout">
+
+        <androidx.core.widget.NestedScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior" >
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <include
+                    android:id="@+id/sensor_details_loading_layout"
+                    layout="@layout/layout_loading"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_margin="@dimen/list_side_outer_margin"
+                    android:orientation="vertical"/>
+
+                <include
+                    android:id="@+id/sensor_details_error_layout"
+                    layout="@layout/layout_error"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_margin="@dimen/list_side_outer_margin"
+                    android:orientation="vertical"/>
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/sensor_details_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:id="@+id/tv_sensor_details_problems"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/detail_inner_margin_big"
+                        android:layout_marginStart="@dimen/detail_inner_margin_small"
+                        android:layout_marginEnd="@dimen/detail_inner_margin_small"
+                        android:contentDescription="@string/content_description_element_problems"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        style="@style/Theme.Dot.TextTitleAlert"
+                        android:visibility="@{ (((sensor.recentErrorLogs != null)) &amp;&amp; (sensor.recentErrorLogs > 0)) ? View.VISIBLE : View.GONE }"
+                        android:text='(((sensor.recentErrorLogs != null) &amp;&amp; (sensor.recentErrorLogs > 0)) ? @plurals/error_log_number(sensor.recentErrorLogs) : ""}'
+                        tools:text="There are problems"/>
+
+                    <TextView
+                        android:id="@+id/tv_sensor_details_value"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/detail_inner_margin_small"
+                        android:layout_marginStart="@dimen/detail_inner_margin_small"
+                        android:layout_marginEnd="@dimen/detail_inner_margin_small"
+                        android:contentDescription="@string/content_description_sensor_title"
+                        app:sensorValue="@{lastValue}"
+                        app:sensorDataType="@{sensor.dataType}"
+                        app:sensorUnit="@{sensor.dataUnit}"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/tv_sensor_details_problems"
+                        style="@style/Theme.Dot.TextData"
+                        tools:text="38 ºC"/>
+
+                    <TextView
+                        android:id="@+id/tv_sensor_details_state"
+                        style="@style/Theme.Dot.TextData"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/detail_inner_margin_small"
+                        android:layout_marginTop="@dimen/detail_inner_margin_small"
+                        android:layout_marginEnd="@dimen/detail_inner_margin_small"
+                        android:contentDescription="@string/content_description_sensor_title"
+                        app:layout_constraintBottom_toTopOf="@id/lc_sensor_details_history_chart"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/tv_sensor_details_value"
+                        tools:text="NORMAL" />
+
+                    <com.github.mikephil.charting.charts.LineChart
+                        android:id="@+id/lc_sensor_details_history_chart"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/card_chart_size"
+                        android:layout_marginTop="@dimen/detail_inner_margin_small"
+                        android:layout_marginStart="@dimen/detail_inner_margin_small"
+                        android:layout_marginEnd="@dimen/detail_inner_margin_small"
+                        app:sensorInfo="@{sensor}"
+                        app:data="@{historyData}"
+                        app:spinnerHistorySelected="@{historySpinnerSelected}"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/tv_sensor_details_state"
+                        app:layout_constraintBottom_toTopOf="@id/sp_sensor_details_history_spinner"  />
+
+                    <Spinner
+                        android:id="@+id/sp_sensor_details_history_spinner"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/detail_inner_margin_small"
+                        android:layout_marginTop="@dimen/detail_inner_margin_small"
+                        android:layout_marginEnd="@dimen/detail_inner_margin_small"
+                        android:layout_marginBottom="@dimen/detail_inner_margin_big"
+                        android:gravity="start"
+                        android:paddingStart="@dimen/detail_item_padding"
+                        android:paddingEnd="@dimen/detail_item_padding"
+                        style="@style/Theme.Dot.TextData"
+                        android:entries="@array/history_options_aray"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0.0"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/lc_sensor_details_history_chart"
+                        app:selectionListener="@{(position) -> presenter.onSpinnerItemSelected(position)}"/>
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+            </FrameLayout>
+
+        </androidx.core.widget.NestedScrollView>
+
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+</layout>

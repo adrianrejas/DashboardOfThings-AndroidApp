@@ -19,6 +19,7 @@
     <integer name="list_maindash_history_column_count">1</integer>
     <dimen name="list_width_masterdetail">300dp</dimen>
     <dimen name="listitem_image_size">50dp</dimen>
+    <dimen name="listitem_image_size_small">35dp</dimen>
 
     <!-- detail -->
     <dimen name="detail_inner_margin_extra_small">4dp</dimen>

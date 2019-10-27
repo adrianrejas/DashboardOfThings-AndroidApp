@@ -4,7 +4,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Spinner;
 
-public interface AddEditElementPresenter {
+public interface AddEditNetworkPresenter {
 
     public void pickImage();
 

@@ -16,9 +16,9 @@ public interface DataManagementUseCase extends BaseUseCase {
 
     public LiveData<Resource<List<DataValue>>> getLastValuesFromAllMainDashboard();
 
-    public LiveData<DataValue> findLastForSensorId(int id);
+    public LiveData<Resource<DataValue>> findLastForSensorId(int id);
 
-    public LiveData<DataValue> findLastForSensorIds(int[] ids);
+    public LiveData<Resource<List<DataValue>>> findLastForSensorIds(int[] ids);
 
     public LiveData<Resource<List<DataValue>>> getLastValuesForSensorId(int id);
 

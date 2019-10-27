@@ -92,6 +92,8 @@ dependencies {
     implementation 'com.firebase:firebase-jobdispatcher:0.8.6'
     // Google Admob library for the management of ads in the application
     implementation 'com.google.android.gms:play-services-ads:18.2.0'
+    // Place picker library
+    implementation 'com.sucho:placepicker:1.0.0'
     // Testing-only dependencies
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test:runner:1.2.0'

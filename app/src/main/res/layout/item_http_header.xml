@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools" >
+
+    <data>
+        <import type="android.view.View"/>
+        <variable
+            name="httpHeader"
+            type="com.arejas.dashboardofthings.presentation.ui.helpers.HttpHeaderListAdapter.HttpHeader" />
+        <variable
+            name="presenter"
+            type="com.arejas.dashboardofthings.presentation.ui.helpers.HttpHeaderListAdapter.HttpHeaderElementOptionsListener" />
+    </data>
+    
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/detail_inner_margin_extra_small">
+
+        <TextView
+            android:id="@+id/tv_http_header_name_listitem"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@{httpHeader.name + ` = ` + httpHeader.value}"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/iv_http_header_listitem"
+            app:layout_constraintTop_toTopOf="parent"
+            style="@style/Theme.Dot.TextTitle"
+            tools:text="Local http_header daskhjfalkds fjlkadsjflk adslkfajsdlkfjaldskjflkasdjf lkasdjflkadsj flakds fadsf"/>
+
+        <ImageView
+            android:id="@+id/iv_http_header_listitem"
+            android:layout_width="@dimen/listitem_image_size_small"
+            android:layout_height="@dimen/listitem_image_size_small"
+            android:layout_margin="@dimen/detail_inner_margin_small"
+            android:adjustViewBounds="true"
+            android:contentDescription="@string/content_description_http_clear_header"
+            android:scaleType="centerCrop"
+            android:focusable="true"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/tv_http_header_name_listitem"
+            app:layout_constraintTop_toTopOf="@id/tv_http_header_name_listitem"
+            app:layout_constraintBottom_toBottomOf="@id/tv_http_header_name_listitem"
+            android:onClick="@{(v) -> presenter.removeClicked(v)}"
+            android:src="@drawable/cancel"
+            android:tint="@color/primaryTextColor"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+    
+</layout>

@@ -6,13 +6,13 @@ import android.os.Bundle;
 
 import com.arejas.dashboardofthings.DotApplication;
 import com.arejas.dashboardofthings.R;
-import com.arejas.dashboardofthings.databinding.FragmentNetworkDetailBinding;
+import com.arejas.dashboardofthings.databinding.FragmentNetworkDetailsBinding;
 import com.arejas.dashboardofthings.domain.entities.extended.NetworkExtended;
 import com.arejas.dashboardofthings.domain.entities.result.Resource;
 import com.arejas.dashboardofthings.presentation.interfaces.viewmodels.NetworkDetailsViewModel;
 import com.arejas.dashboardofthings.presentation.interfaces.viewmodels.factories.ViewModelFactory;
 import com.arejas.dashboardofthings.presentation.ui.activities.NetworkAddEditActivity;
-import com.arejas.dashboardofthings.presentation.ui.activities.NetworkDetailActivity;
+import com.arejas.dashboardofthings.presentation.ui.activities.NetworkDetailsActivity;
 import com.arejas.dashboardofthings.presentation.ui.activities.NetworkListActivity;
 import com.arejas.dashboardofthings.presentation.ui.notifications.RemoveNetworkDialogFragment;
 import com.arejas.dashboardofthings.presentation.ui.notifications.ToastHelper;
@@ -22,7 +22,6 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.fragment.app.FragmentStatePagerAdapter;
 import androidx.lifecycle.ViewModelProviders;
 
@@ -38,10 +37,10 @@ import dagger.android.support.AndroidSupportInjection;
 /**
  * A fragment representing a single Network detail screen.
  * This fragment is either contained in a {@link NetworkListActivity}
- * in two-pane mode (on tablets) or a {@link NetworkDetailActivity}
+ * in two-pane mode (on tablets) or a {@link NetworkDetailsActivity}
  * on handsets.
  */
-public class NetworkDetailFragment extends Fragment {
+public class NetworkDetailsFragment extends Fragment {
     /**
      * The fragment argument representing the item ID that this fragment
      * represents.
@@ -52,7 +51,7 @@ public class NetworkDetailFragment extends Fragment {
     @Inject
     ViewModelFactory viewModelFactory;
 
-    FragmentNetworkDetailBinding uiBinding;
+    FragmentNetworkDetailsBinding uiBinding;
 
     public Integer networkId;
     public boolean bTwoPane;
@@ -64,7 +63,7 @@ public class NetworkDetailFragment extends Fragment {
      * Mandatory empty constructor for the fragment manager to instantiate the
      * fragment (e.g. upon screen orientation changes).
      */
-    public NetworkDetailFragment() {}
+    public NetworkDetailsFragment() {}
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -86,7 +85,7 @@ public class NetworkDetailFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        uiBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_network_detail, container, false);
+        uiBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_network_details, container, false);
 
         if (!bTwoPane) {
             uiBinding.toolbarFragment.setNavigationIcon(getResources().getDrawable(R.drawable.action_back));
@@ -125,7 +124,7 @@ public class NetworkDetailFragment extends Fragment {
                                     new RemoveNetworkDialogFragment(networkObject, networkDetailsViewModel,() -> {
                                         if (bTwoPane) {
                                             getFragmentManager().beginTransaction()
-                                                    .remove(NetworkDetailFragment.this).commit();
+                                                    .remove(NetworkDetailsFragment.this).commit();
                                         } else {
                                             getActivity().finish();
                                         }
@@ -210,14 +209,14 @@ public class NetworkDetailFragment extends Fragment {
             switch (position) {
                 case 0: // Details
                     arguments = new Bundle();
-                    arguments.putInt(NetworkDetailDetailsFragment.NETWORK_ID, networkId);
-                    fragment = new NetworkDetailDetailsFragment();
+                    arguments.putInt(NetworkDetailsDetailsFragment.NETWORK_ID, networkId);
+                    fragment = new NetworkDetailsDetailsFragment();
                     fragment.setArguments(arguments);
                     return fragment;
                 case 1: // Cast
                     arguments = new Bundle();
-                    arguments.putInt(NetworkDetailLogsFragment.NETWORK_ID, networkId);
-                    fragment = new NetworkDetailLogsFragment();
+                    arguments.putInt(NetworkDetailsLogsFragment.NETWORK_ID, networkId);
+                    fragment = new NetworkDetailsLogsFragment();
                     fragment.setArguments(arguments);
                     return fragment;
                 default:
@@ -231,9 +230,9 @@ public class NetworkDetailFragment extends Fragment {
             if (mContext != null) {
                 switch (position) {
                     case 0: // Details
-                        return mContext.getString(R.string.network_details_tab_details);
+                        return mContext.getString(R.string.element_details_tab_details);
                     case 1: // Cast
-                        return mContext.getString(R.string.network_details_tab_logs);
+                        return mContext.getString(R.string.element_details_tab_logs);
                     default:
                         return null;
                 }

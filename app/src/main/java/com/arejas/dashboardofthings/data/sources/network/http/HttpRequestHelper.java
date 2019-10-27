@@ -157,7 +157,7 @@ public class HttpRequestHelper {
                             .appendEncodedPath(actuator.getHttpRelativeUrl())
                             .toString();
                     Response response = callToHttpRest(url, actuator.getHttpHeaders(),
-                            actuator.getHttpMethod(), messageToSend, actuator.getMimeType(),
+                            actuator.getHttpMethod(), messageToSend, actuator.getHttpMimeType(),
                             network.getHttpConfiguration().getHttpAauthenticationType(),
                             network.getHttpConfiguration().getHttpUsername(),
                             network.getHttpConfiguration().getHttpPassword(),

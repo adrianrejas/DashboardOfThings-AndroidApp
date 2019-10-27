@@ -25,16 +25,17 @@
         android:layout_margin="@dimen/list_element_magin"
         android:background="@drawable/card_border_background"
         app:cardCornerRadius="@dimen/card_corner_radius"
-        tools:layout_width="300dp">
+        tools:layout_width="300dp"
+        android:focusable="true"
+        android:nextFocusDown="@id/ib_sensor_refresh_card">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@android:color/white">
+            android:layout_height="match_parent">
 
             <ImageView
                 android:id="@+id/iv_sensor_card"
-                android:layout_width="0dp"
+                android:layout_width="wrap_content"
                 android:layout_height="0dp"
                 android:adjustViewBounds="true"
                 android:contentDescription="@string/content_description_sensor_image"
@@ -43,7 +44,6 @@
                 app:errorResource="@{@drawable/error}"
                 app:loadingResource="@{@drawable/loading}"
                 android:background="@color/secondaryTextColor"
-                app:layout_constraintDimensionRatio="@string/card_image_proportion"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
@@ -118,7 +118,7 @@
                 android:id="@+id/ib_sensor_refresh_card"
                 android:layout_width="@dimen/card_icon_size"
                 android:layout_height="@dimen/card_icon_size"
-                android:background="@android:color/transparent"
+                android:background="@drawable/selector_icon"
                 android:onClick="@{(v) -> presenter.requestReload()}"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"

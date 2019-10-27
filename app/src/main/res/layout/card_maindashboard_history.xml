@@ -33,6 +33,7 @@
             android:id="@+id/history_data_layout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:visibility="gone"
             android:background="@android:color/white">
 
             <TextView
@@ -67,7 +68,7 @@
                 app:layout_constraintTop_toBottomOf="@id/tv_history_title_card"
                 app:layout_constraintBottom_toTopOf="@id/lc_history_spinner_card"  />
 
-            <androidx.appcompat.widget.AppCompatSpinner
+            <Spinner
                 android:id="@+id/lc_history_spinner_card"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -85,7 +86,7 @@
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/lc_history_chart_card"
-                android:onItemSelected="@{(parent,view,pos,id) -> presenter.onSpinnerItemSelected(pos)}" />
+                app:selectionListener="@{(position) -> presenter.onSpinnerItemSelected(position)}"/>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

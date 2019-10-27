@@ -41,6 +41,8 @@ public class Actuator implements Parcelable {
 
     private Map<String, String> httpHeaders;
 
+    private String httpMimeType;
+
     private String mqttTopicToPublish;
 
     private Enumerators.MqttQosLevel mqttQosLevel;
@@ -52,8 +54,6 @@ public class Actuator implements Parcelable {
     private Float dataNumberMaximum;
 
     private String dataFormatMessageToSend;
-
-    private String mimeType;
 
     private String dataUnit;
 
@@ -100,7 +100,7 @@ public class Actuator implements Parcelable {
             dataNumberMaximum = in.readFloat();
         }
         dataFormatMessageToSend = in.readString();
-        mimeType = in.readString();
+        httpMimeType = in.readString();
         dataUnit = in.readString();
         if (in.readByte() == 0) {
             locationLat = null;
@@ -239,12 +239,12 @@ public class Actuator implements Parcelable {
         this.dataFormatMessageToSend = sDataFormatMessageToSend;
     }
 
-    public String getMimeType() {
-        return mimeType;
+    public String getHttpMimeType() {
+        return httpMimeType;
     }
 
-    public void setMimeType(String mimeType) {
-        this.mimeType = mimeType;
+    public void setHttpMimeType(String httpMimeType) {
+        this.httpMimeType = httpMimeType;
     }
 
     public String getDataUnit() {
@@ -324,7 +324,7 @@ public class Actuator implements Parcelable {
             parcel.writeFloat(dataNumberMaximum);
         }
         parcel.writeString(dataFormatMessageToSend);
-        parcel.writeString(mimeType);
+        parcel.writeString(httpMimeType);
         parcel.writeString(dataUnit);
         if (locationLat == null) {
             parcel.writeByte((byte) 0);

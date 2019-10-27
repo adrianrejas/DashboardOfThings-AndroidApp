@@ -9,10 +9,12 @@
     -->
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.ACTION_OPEN_DOCUMENT" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 
     <application
         android:name=".DotApplication"
@@ -60,13 +62,9 @@
             android:label="@string/title_network_list"
             android:theme="@style/Theme.Dot"></activity>
         <activity
-            android:name=".presentation.ui.activities.NetworkDetailActivity"
+            android:name=".presentation.ui.activities.NetworkDetailsActivity"
             android:label="@string/title_network_detail"
-            android:parentActivityName=".presentation.ui.activities.NetworkListActivity"
             android:theme="@style/Theme.Dot.Detail">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.arejas.dashboardofthings.presentation.ui.activities.NetworkListActivity" />
         </activity>
         <activity
             android:name=".presentation.ui.activities.NetworkAddEditActivity"
@@ -74,8 +72,18 @@
             android:theme="@style/Theme.Dot.CreateEdit"></activity>
         <activity
             android:name=".presentation.ui.activities.SensorListActivity"
+            android:label="@string/title_sensor_list"
             android:launchMode="singleTop"
             android:theme="@style/Theme.Dot" />
+        <activity
+            android:name=".presentation.ui.activities.SensorDetailsActivity"
+            android:label="@string/title_sensor_detail"
+            android:theme="@style/Theme.Dot.Detail">
+        </activity>
+        <activity
+            android:name=".presentation.ui.activities.SensorAddEditActivity"
+            android:label="@string/title_sensor_addedit"
+            android:theme="@style/Theme.Dot.CreateEdit"></activity>
         <activity
             android:name=".presentation.ui.activities.ActuatorListActivity"
             android:launchMode="singleTop"

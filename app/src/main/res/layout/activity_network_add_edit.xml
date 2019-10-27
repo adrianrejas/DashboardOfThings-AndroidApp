@@ -38,7 +38,7 @@
             type="String" />
         <variable
             name="presenter"
-            type="com.arejas.dashboardofthings.presentation.ui.helpers.AddEditElementPresenter" />
+            type="com.arejas.dashboardofthings.presentation.ui.helpers.AddEditNetworkPresenter" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -135,6 +135,7 @@
                             android:layout_marginTop="@dimen/detail_inner_margin_small"
                             android:hint="@string/edit_hint_name_network"
                             android:inputType="textNoSuggestions"
+                            android:maxLength="50"
                             android:text='@{network.name ?? ""}'
                             android:nextFocusDown="@id/sp_network_addedit_type"
                             app:layout_constraintTop_toBottomOf="@id/tv_network_addedit_name_label"
@@ -247,7 +248,7 @@
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@id/fl_network_addedit_general_options_separator"
                         android:visibility="@{networkTypeSelected.equals(NetworkType.HTTP.ordinal()) ? View.VISIBLE : View.GONE }"
-                        tools:visibility="visible">
+                        tools:visibility="gone">
 
                         <TextView
                             android:id="@+id/tv_network_addedit_http_variables_label"
@@ -279,6 +280,7 @@
                             android:gravity="bottom"
                             android:hint="@string/edit_hint_http_baseurl"
                             android:inputType="textNoSuggestions"
+                            android:maxLength="200"
                             android:text='@{(network.httpConfiguration != null) ? network.httpConfiguration.httpBaseUrl : ""}'
                             android:nextFocusDown="@id/sp_network_addedit_http_auth"
                             app:layout_constraintStart_toStartOf="parent"
@@ -330,6 +332,7 @@
                             android:gravity="bottom"
                             android:hint="@string/edit_hint_http_auth_username"
                             android:inputType="textNoSuggestions"
+                            android:maxLength="50"
                             android:text='@{(network.httpConfiguration != null) ? network.httpConfiguration.httpUsername : ""}'
                             android:nextFocusUp="@id/sp_network_addedit_http_auth"
                             app:layout_constraintStart_toStartOf="parent"
@@ -358,6 +361,7 @@
                             android:gravity="bottom"
                             android:hint="@string/edit_hint_http_auth_password"
                             android:inputType="textPassword"
+                            android:maxLength="50"
                             android:text='@{(network.httpConfiguration != null) ? network.httpConfiguration.httpPassword : ""}'
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintEnd_toEndOf="parent"
@@ -374,6 +378,7 @@
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintTop_toBottomOf="@id/ed_network_addedit_http_auth_password"
                             android:text="@string/edit_label_http_use_ssl"
+                            android:checked="@{((network != null) &amp;&amp; (network.httpConfiguration != null)) ? network.httpConfiguration.httpUseSsl : false}"
                             app:checkingListener="@{(checked) -> presenter.httpUseSslChanged(checked)}"
                             style="@style/Theme.Dot.TextDataBold" />
 
@@ -385,7 +390,7 @@
                             android:layout_marginEnd="@dimen/detail_inner_margin_small"
                             android:adjustViewBounds="true"
                             android:background="@drawable/selector_icon"
-                            android:contentDescription="@string/content_description_pick_image"
+                            android:contentDescription="@string/content_description_pick_certificate"
                             android:onClick="@{(v) -> presenter.pickHttpCert()}"
                             android:scaleType="fitXY"
                             android:nextFocusUp="@id/cb_network_addedit_http_use_ssl"
@@ -402,7 +407,7 @@
                             android:layout_marginEnd="@dimen/detail_inner_margin_small"
                             android:adjustViewBounds="true"
                             android:background="@drawable/selector_icon"
-                            android:contentDescription="@string/content_description_clear_image"
+                            android:contentDescription="@string/content_description_clear_certificate"
                             android:onClick="@{(v) -> presenter.cancelImagePicked()}"
                             android:scaleType="fitXY"
                             android:tint="@color/primaryTextColor"
@@ -474,6 +479,7 @@
                             android:gravity="bottom"
                             android:hint="@string/edit_hint_mqtt_brokerurl"
                             android:inputType="textNoSuggestions"
+                            android:maxLength="200"
                             android:text='@{(network.mqttConfiguration != null) ? network.mqttConfiguration.mqttBrokerUrl : ""}'
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintEnd_toEndOf="parent"
@@ -499,6 +505,7 @@
                             android:gravity="bottom"
                             android:hint="@string/edit_hint_mqtt_clientid"
                             android:inputType="textNoSuggestions"
+                            android:maxLength="50"
                             android:text='@{(network.mqttConfiguration != null) ? network.mqttConfiguration.mqttClientId : ""}'
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintEnd_toEndOf="parent"
@@ -524,6 +531,7 @@
                             android:gravity="bottom"
                             android:hint="@string/edit_hint_mqtt_username"
                             android:inputType="textNoSuggestions"
+                            android:maxLength="50"
                             android:text='@{(network.mqttConfiguration != null) ? network.mqttConfiguration.mqttUsername : ""}'
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintEnd_toEndOf="parent"
@@ -549,6 +557,7 @@
                             android:gravity="bottom"
                             android:hint="@string/edit_hint_mqtt_password"
                             android:inputType="textPassword"
+                            android:maxLength="50"
                             android:text='@{(network.mqttConfiguration != null) ? network.mqttConfiguration.mqttPassword : ""}'
                             android:nextFocusDown="@id/cb_network_addedit_mqtt_clean_session"
                             app:layout_constraintStart_toStartOf="parent"
@@ -565,6 +574,7 @@
                             app:layout_constraintTop_toBottomOf="@id/ed_network_addedit_mqtt_password"
                             android:focusable="true"
                             android:nextFocusDown="@id/cb_network_addedit_mqtt_use_ssl"
+                            android:checked="@{((network != null) &amp;&amp; (network.mqttConfiguration != null)) ? network.mqttConfiguration.mqttCleanSession : false}"
                             android:text="@string/edit_label_mqtt_clean_session"
                             style="@style/Theme.Dot.TextDataBold" />
 
@@ -579,6 +589,7 @@
                             android:text="@string/edit_label_mqtt_use_ssl"
                             android:focusable="true"
                             android:nextFocusUp="@id/cb_network_addedit_mqtt_clean_session"
+                            android:checked="@{((network != null) &amp;&amp; (network.mqttConfiguration != null)) ? network.mqttConfiguration.mqttUseSsl : false}"
                             app:checkingListener="@{(checked) -> presenter.mqttUseSslChanged(checked)}"
                             style="@style/Theme.Dot.TextDataBold"/>
 
@@ -590,7 +601,7 @@
                             android:layout_marginEnd="@dimen/detail_inner_margin_small"
                             android:adjustViewBounds="true"
                             android:background="@drawable/selector_icon"
-                            android:contentDescription="@string/content_description_pick_image"
+                            android:contentDescription="@string/content_description_pick_certificate"
                             android:onClick="@{(v) -> presenter.pickMqttCert()}"
                             android:scaleType="fitXY"
                             android:nextFocusUp="@id/cb_network_addedit_mqtt_use_ssl"
@@ -607,7 +618,7 @@
                             android:layout_marginEnd="@dimen/detail_inner_margin_small"
                             android:adjustViewBounds="true"
                             android:background="@drawable/selector_icon"
-                            android:contentDescription="@string/content_description_clear_image"
+                            android:contentDescription="@string/content_description_clear_certificate"
                             android:onClick="@{(v) -> presenter.cancelImagePicked()}"
                             android:scaleType="fitXY"
                             android:tint="@color/primaryTextColor"
@@ -653,6 +664,7 @@
                             android:gravity="bottom"
                             android:hint="@string/edit_hint_mqtt_conn_timeout"
                             android:inputType="number"
+                            android:maxLength="5"
                             android:text='@{((network.mqttConfiguration != null) &amp;&amp; (network.mqttConfiguration.mqttConnTimeout != null) )? network.mqttConfiguration.mqttConnTimeout.toString() : ""}'
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintEnd_toEndOf="parent"
@@ -678,6 +690,7 @@
                             android:gravity="bottom"
                             android:hint="@string/edit_hint_mqtt_keepalive_interval"
                             android:inputType="number"
+                            android:maxLength="5"
                             android:text='@{((network.mqttConfiguration != null) &amp;&amp; (network.mqttConfiguration.mqttKeepaliveInterval != null) )? network.mqttConfiguration.mqttKeepaliveInterval.toString() : ""}'
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintEnd_toEndOf="parent"

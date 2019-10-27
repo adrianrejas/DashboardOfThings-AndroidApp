@@ -10,7 +10,6 @@ import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.LiveData;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -44,7 +43,7 @@ public class MainHistoryFragment extends Fragment {
     @Inject
     ViewModelFactory viewModelFactory;
 
-    private MainDashboardViewModel mainnetwork_addeditViewModel;
+    private MainDashboardViewModel mainHistoryViewModel;
 
     private LiveData<Resource<List<SensorExtended>>> currentListShown;
     private GridLayoutManager glm_grid;
@@ -56,7 +55,7 @@ public class MainHistoryFragment extends Fragment {
         // Inject dependencies
         AndroidSupportInjection.inject(this);
         // Get the movie activity view model and observe the changes in the details
-        mainnetwork_addeditViewModel = ViewModelProviders.of(Objects.requireNonNull(getActivity()), viewModelFactory).get(MainDashboardViewModel.class);
+        mainHistoryViewModel = ViewModelProviders.of(Objects.requireNonNull(getActivity()), viewModelFactory).get(MainDashboardViewModel.class);
         setList(true, false);
     }
 
@@ -88,7 +87,7 @@ public class MainHistoryFragment extends Fragment {
             currentListShown.removeObservers(this);
             currentListShown = null;
         }
-        currentListShown = mainnetwork_addeditViewModel.getListOfSensorsMainDashboard(refreshData);
+        currentListShown = mainHistoryViewModel.getListOfSensorsMainDashboard(refreshData);
         if (currentListShown != null) {
             currentListShown.observe(this, listResource -> {
                 if (listResource == null) {
@@ -114,6 +113,7 @@ public class MainHistoryFragment extends Fragment {
                         }
                         updateList(dataToSet);
                         uiBinding.srlRefreshLayout.setRefreshing(false);
+                        showList();
                     }
                 }
             });
@@ -221,29 +221,34 @@ public class MainHistoryFragment extends Fragment {
         @Override
         public MainHistoryFragment.HistoryListAdapter.HistoryListViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             LayoutInflater inflater = LayoutInflater.from(parent.getContext());
-            CardMaindashboardHistoryBinding binding = DataBindingUtil.inflate(inflater, R.layout.card_maindashboard_sensor,
+            CardMaindashboardHistoryBinding binding = DataBindingUtil.inflate(inflater, R.layout.card_maindashboard_history,
                     parent, false);
             return new MainHistoryFragment.HistoryListAdapter.HistoryListViewHolder(binding);
         }
 
         @Override
         public void onBindViewHolder(final MainHistoryFragment.HistoryListAdapter.HistoryListViewHolder holder, int position) {
-            if ((mData != null) && (mData.size() > position) &&
-                    (mSpinnerOptionSelectedPerSensor != null) && (mSpinnerOptionSelectedPerSensor.containsKey(position))) {
+            if ((mData != null) && (mData.size() > position)) {
                 holder.itemView.setTag(position);
                 Sensor sensor = mData.get(position);
-                if ((sensor.getDataType().equals(Enumerators.DataType.STRING)) ||
-                        (sensor.getDataType().equals(Enumerators.DataType.BOOLEAN))) {
-                    mSpinnerOptionSelectedPerSensor.put(sensor.getId(), HistoryChartHelper.SPINNER_HISTORY_LASTVAL);
-                    holder.binding.setSpinnerSelected(HistoryChartHelper.SPINNER_HISTORY_LASTVAL);
-                    holder.binding.lcHistorySpinnerCard.setSelection(HistoryChartHelper.SPINNER_HISTORY_LASTVAL);
-                    holder.binding.lcHistorySpinnerCard.setVisibility(View.GONE);
-                } else {
-                    holder.binding.setSpinnerSelected(mSpinnerOptionSelectedPerSensor.get(sensor.getId()));
-                    holder.binding.lcHistorySpinnerCard.setSelection(mSpinnerOptionSelectedPerSensor.get(sensor.getId()));
-                    holder.binding.lcHistorySpinnerCard.setVisibility(View.VISIBLE);
+                if ((sensor != null) && (mSpinnerOptionSelectedPerSensor != null) && (mSpinnerOptionSelectedPerSensor.containsKey(sensor.getId()))) {
+                    if (sensor.getDataType().equals(Enumerators.DataType.STRING)) {
+                        holder.binding.lcHistorySpinnerCard.setVisibility(View.GONE);
+                        holder.binding.lcHistoryChartCard.setVisibility(View.GONE);
+                    } else if (sensor.getDataType().equals(Enumerators.DataType.BOOLEAN)) {
+                        mSpinnerOptionSelectedPerSensor.put(sensor.getId(), HistoryChartHelper.SPINNER_HISTORY_LASTVAL);
+                        holder.binding.setSpinnerSelected(HistoryChartHelper.SPINNER_HISTORY_LASTVAL);
+                        holder.binding.lcHistorySpinnerCard.setSelection(HistoryChartHelper.SPINNER_HISTORY_LASTVAL);
+                        holder.binding.lcHistorySpinnerCard.setVisibility(View.GONE);
+                    } else {
+                        holder.binding.setSpinnerSelected(mSpinnerOptionSelectedPerSensor.get(sensor.getId()));
+                        holder.binding.lcHistorySpinnerCard.setSelection(mSpinnerOptionSelectedPerSensor.get(sensor.getId()));
+                        holder.binding.lcHistorySpinnerCard.setVisibility(View.VISIBLE);
+                    }
+                    holder.setSensor(sensor);
+                    holder.binding.setSensor(sensor);
+                    holder.requestHistoryData();
                 }
-                holder.binding.setSensor(sensor);
             }
         }
 
@@ -267,6 +272,7 @@ public class MainHistoryFragment extends Fragment {
             HistoryListViewHolder(CardMaindashboardHistoryBinding binding) {
                 super(binding.getRoot());
                 this.binding = binding;
+                binding.setPresenter(this);
             }
 
             public Sensor getSensor() {
@@ -281,8 +287,16 @@ public class MainHistoryFragment extends Fragment {
             public void onSpinnerItemSelected(int position) {
                 if (sensor != null) {
                     mSpinnerOptionSelectedPerSensor.put(sensor.getId(), position);
-                    if (dataToObserve != null) dataToObserve.removeObservers(MainHistoryFragment.this);
-                    dataToObserve = mainnetwork_addeditViewModel.getLastValuesForSensorId(sensor.getId());
+                    requestHistoryData();
+                }
+            }
+
+            public void requestHistoryData() {
+                if (sensor != null) {
+                    int position = mSpinnerOptionSelectedPerSensor.get(sensor.getId());
+                    if (dataToObserve != null)
+                        dataToObserve.removeObservers(MainHistoryFragment.this);
+                    dataToObserve = mainHistoryViewModel.getHistoricalValue(sensor.getId(), position);
                     dataToObserve.observe(MainHistoryFragment.this, listResource -> {
                         if (listResource == null) {
                             showErrorCard();
@@ -293,6 +307,7 @@ public class MainHistoryFragment extends Fragment {
                                 showLoadingCard();
                             } else {
                                 showDataCard();
+                                binding.setSpinnerSelected(position);
                                 binding.setData(listResource.getData());
                             }
                         }

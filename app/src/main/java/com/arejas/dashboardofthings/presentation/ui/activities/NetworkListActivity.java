@@ -23,7 +23,7 @@ import com.arejas.dashboardofthings.domain.entities.extended.NetworkExtended;
 import com.arejas.dashboardofthings.domain.entities.result.Resource;
 import com.arejas.dashboardofthings.presentation.interfaces.viewmodels.NetworkListViewModel;
 import com.arejas.dashboardofthings.presentation.interfaces.viewmodels.factories.ViewModelFactory;
-import com.arejas.dashboardofthings.presentation.ui.fragments.NetworkDetailFragment;
+import com.arejas.dashboardofthings.presentation.ui.fragments.NetworkDetailsFragment;
 import com.arejas.dashboardofthings.presentation.ui.notifications.RemoveNetworkDialogFragment;
 import com.google.android.material.navigation.NavigationView;
 
@@ -44,7 +44,7 @@ import dagger.android.AndroidInjection;
  * An activity representing a list of Networks. This activity
  * has different presentations for handset and tablet-size devices. On
  * handsets, the activity presents a list of items, which when touched,
- * lead to a {@link NetworkDetailActivity} representing
+ * lead to a {@link NetworkDetailsActivity} representing
  * item details. On tablets, the activity presents the list of items and
  * item details side-by-side using two vertical panes.
  */
@@ -316,17 +316,17 @@ public class NetworkListActivity extends AppCompatActivity implements View.OnCli
                 NetworkExtended item = (NetworkExtended) view.getTag();
                 if (mTwoPane) {
                     Bundle arguments = new Bundle();
-                    arguments.putInt(NetworkDetailFragment.NETWORK_ID, item.getId());
-                    arguments.putBoolean(NetworkDetailFragment.TWO_PANE, true);
-                    NetworkDetailFragment fragment = new NetworkDetailFragment();
+                    arguments.putInt(NetworkDetailsFragment.NETWORK_ID, item.getId());
+                    arguments.putBoolean(NetworkDetailsFragment.TWO_PANE, true);
+                    NetworkDetailsFragment fragment = new NetworkDetailsFragment();
                     fragment.setArguments(arguments);
                     mParentActivity.getSupportFragmentManager().beginTransaction()
                             .replace(R.id.network_detail_container, fragment)
                             .commit();
                 } else {
                     Context context = view.getContext();
-                    Intent intent = new Intent(context, NetworkDetailActivity.class);
-                    intent.putExtra(NetworkDetailFragment.NETWORK_ID, item.getId());
+                    Intent intent = new Intent(context, NetworkDetailsActivity.class);
+                    intent.putExtra(NetworkDetailsFragment.NETWORK_ID, item.getId());
 
                     context.startActivity(intent);
                 }

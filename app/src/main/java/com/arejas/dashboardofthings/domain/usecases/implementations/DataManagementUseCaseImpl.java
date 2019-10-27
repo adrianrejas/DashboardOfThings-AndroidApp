@@ -25,12 +25,12 @@ public class DataManagementUseCaseImpl implements DataManagementUseCase {
     }
 
     @Override
-    public LiveData<DataValue> findLastForSensorId(int id) {
+    public LiveData<Resource<DataValue>> findLastForSensorId(int id) {
         return repository.findLastValuesForSensorId(id);
     }
 
     @Override
-    public LiveData<DataValue> findLastForSensorIds(int[] ids) {
+    public LiveData<Resource<List<DataValue>>> findLastForSensorIds(int[] ids) {
         return repository.findLastValuesForSensorIds(ids);
     }
 

@@ -16,7 +16,8 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:layout_margin="@dimen/list_side_outer_margin"
-        app:cardCornerRadius="@dimen/card_corner_radius">
+        app:cardCornerRadius="@dimen/card_corner_radius"
+        android:focusable="true">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
