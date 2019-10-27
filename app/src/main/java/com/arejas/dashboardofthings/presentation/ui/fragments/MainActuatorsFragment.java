@@ -23,6 +23,7 @@ import com.arejas.dashboardofthings.domain.entities.extended.ActuatorExtended;
 import com.arejas.dashboardofthings.domain.entities.result.Resource;
 import com.arejas.dashboardofthings.presentation.interfaces.viewmodels.MainDashboardViewModel;
 import com.arejas.dashboardofthings.presentation.interfaces.viewmodels.factories.ViewModelFactory;
+import com.arejas.dashboardofthings.presentation.ui.notifications.ToastHelper;
 
 import java.util.HashMap;
 import java.util.List;
@@ -246,28 +247,83 @@ public class MainActuatorsFragment extends Fragment {
 
             @Override
             public void sendInteger() {
-                if (actuator != null) {
-                    String data = binding.etActuatorIntegerValue.getText().toString();
-                    if (data != null)
-                    mainnetwork_addeditViewModel.sendActuatorData(actuator, data);
+                try {
+                    if (actuator != null) {
+                        String data = binding.etActuatorIntegerValue.getText().toString();
+                        Float comparingData = Float.valueOf(data);
+                        if ((actuator.getDataNumberMinimum() != null) && (actuator.getDataNumberMaximum() != null)) {
+                            if ((comparingData < actuator.getDataNumberMinimum()) || ((comparingData > actuator.getDataNumberMaximum()))) {
+                                ToastHelper.showToast(getString(R.string.set_toast_between,
+                                        actuator.getDataNumberMinimum().toString(),
+                                        actuator.getDataNumberMaximum().toString()));
+                                return;
+                            }
+                        } else if (actuator.getDataNumberMinimum() != null) {
+                            if (comparingData < actuator.getDataNumberMinimum()) {
+                                ToastHelper.showToast(getString(R.string.set_toast_smaller_than,
+                                        actuator.getDataNumberMinimum().toString()));
+                                return;
+                            }
+                        } else if (actuator.getDataNumberMaximum() != null) {
+                            if (comparingData > actuator.getDataNumberMaximum()) {
+                                ToastHelper.showToast(getString(R.string.set_toast_bigger_than,
+                                        actuator.getDataNumberMaximum().toString()));
+                                return;
+                            }
+                        }
+                        if (data != null)
+                            mainnetwork_addeditViewModel.sendActuatorData(actuator, data);
+                    }
+                } catch (Exception e) {
+                    ToastHelper.showToast(getString(R.string.set_toast_error));
                 }
             }
 
             @Override
             public void sendFloat() {
-                if (actuator != null) {
-                    String data = binding.etActuatorDecimalValue.getText().toString();
-                    if (data != null)
-                        mainnetwork_addeditViewModel.sendActuatorData(actuator, data);
+                try {
+                    if (actuator != null) {
+                        String data = binding.etActuatorDecimalValue.getText().toString();
+                        Float comparingData = Float.valueOf(data);
+                        if ((actuator.getDataNumberMinimum() != null) && (actuator.getDataNumberMaximum() != null)) {
+                            if ((comparingData < actuator.getDataNumberMinimum()) || ((comparingData > actuator.getDataNumberMaximum()))) {
+                                ToastHelper.showToast(getString(R.string.set_toast_between,
+                                        actuator.getDataNumberMinimum().toString(),
+                                        actuator.getDataNumberMaximum().toString()));
+                                return;
+                            }
+                        } else if (actuator.getDataNumberMinimum() != null) {
+                            if (comparingData < actuator.getDataNumberMinimum()) {
+                                ToastHelper.showToast(getString(R.string.set_toast_smaller_than,
+                                        actuator.getDataNumberMinimum().toString()));
+                                return;
+                            }
+                        } else if (actuator.getDataNumberMaximum() != null) {
+                            if (comparingData > actuator.getDataNumberMaximum()) {
+                                ToastHelper.showToast(getString(R.string.set_toast_bigger_than,
+                                        actuator.getDataNumberMaximum().toString()));
+                                return;
+                            }
+                        }
+                        if (data != null)
+                            mainnetwork_addeditViewModel.sendActuatorData(actuator, data);
+                    }
+                } catch (Exception e) {
+                    ToastHelper.showToast(getString(R.string.set_toast_error));
                 }
             }
 
             @Override
-            public void sendBoolean() {
+            public void sendBooleanFalse() {
                 if (actuator != null) {
-                    String data = Boolean.toString(binding.tbActuatorBooleanSet.isActivated());
-                    if (data != null)
-                        mainnetwork_addeditViewModel.sendActuatorData(actuator, data);
+                    mainnetwork_addeditViewModel.sendActuatorData(actuator, "false");
+                }
+            }
+
+            @Override
+            public void sendBooleanTrue() {
+                if (actuator != null) {
+                    mainnetwork_addeditViewModel.sendActuatorData(actuator, "true");
                 }
             }
 
@@ -289,7 +345,9 @@ public class MainActuatorsFragment extends Fragment {
 
         public void sendFloat ();
 
-        public void sendBoolean ();
+        public void sendBooleanFalse ();
+
+        public void sendBooleanTrue ();
 
         public void sendString ();
 

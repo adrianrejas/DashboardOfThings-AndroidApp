@@ -63,7 +63,7 @@
                 app:layout_constraintTop_toBottomOf="@id/iv_actuator_card"
                 style="@style/Theme.Dot.TextTitleAlert"
                 android:visibility="@{ ((actuator.recentErrorLogs != null) &amp;&amp; (actuator.recentErrorLogs > 0)) ? View.VISIBLE : View.GONE }"
-                android:text="@{@plurals/error_log_number(actuator.recentErrorLogs)}"
+                android:text="@{@plurals/error_log_number_short(actuator.recentErrorLogs, actuator.recentErrorLogs)}"
                 tools:text="There are problems"/>
 
             <TextView
@@ -102,10 +102,9 @@
                     android:layout_width="0dp"
                     android:layout_height="0dp"
                     style="@style/Theme.Dot.Edittext"
-                    android:inputType="number"
+                    android:inputType="number|numberSigned"
                     android:hint="@string/actuator_integer_hint"
-                    app:minValue="@{actuator.dataNumberMinimum}"
-                    app:maxValue="@{actuator.dataNumberMaximum}"
+                    android:maxLength="10"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toStartOf="@id/ib_actuator_integer_set"
                     app:layout_constraintStart_toStartOf="parent"
@@ -147,10 +146,9 @@
                     android:layout_width="0dp"
                     android:layout_height="0dp"
                     style="@style/Theme.Dot.Edittext"
-                    android:inputType="numberDecimal"
+                    android:inputType="numberDecimal|numberSigned"
                     android:hint="@string/actuator_decimal_hint"
-                    app:minValue="@{actuator.dataNumberMinimum}"
-                    app:maxValue="@{actuator.dataNumberMaximum}"
+                    android:maxLength="10"
                     android:focusable="true"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toStartOf="@id/ib_actuator_decimal_set"
@@ -187,15 +185,27 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/tv_actuator_title_card">
 
-                <ToggleButton
-                    android:id="@+id/tb_actuator_boolean_set"
+                <Button
+                    android:id="@+id/tb_actuator_boolean_set_false"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    android:onCheckedChanged="@{(v, i) -> presenter.sendBoolean()}"
-                    android:contentDescription="@string/content_description_actuator_toggle" />
+                    android:text="@string/actuator_send_boolean_false"
+                    android:onClick="@{(v) -> presenter.sendBooleanFalse()}"
+                    android:contentDescription="@string/content_description_actuator_sendfalse" />
+
+                <Button
+                    android:id="@+id/tb_actuator_boolean_set_true"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/tb_actuator_boolean_set_false"
+                    app:layout_constraintTop_toTopOf="parent"
+                    android:text="@string/actuator_send_boolean_true"
+                    android:onClick="@{(v) -> presenter.sendBooleanTrue()}"
+                    android:contentDescription="@string/content_description_actuator_sendtrue" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -221,6 +231,7 @@
                     style="@style/Theme.Dot.Edittext"
                     android:inputType="textNoSuggestions"
                     android:hint="@string/actuator_string_hint"
+                    android:maxLength="100"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toStartOf="@id/ib_actuator_string_set"
                     app:layout_constraintStart_toStartOf="parent"

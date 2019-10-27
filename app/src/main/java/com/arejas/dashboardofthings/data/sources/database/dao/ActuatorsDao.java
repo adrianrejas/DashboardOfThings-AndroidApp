@@ -18,6 +18,9 @@ import java.util.List;
 public abstract class ActuatorsDao {
 
     @Query("SELECT * FROM actuators")
+    public abstract List<Actuator> getAllInstant();
+
+    @Query("SELECT * FROM actuators")
     public abstract LiveData<List<Actuator>> getAll();
 
     @Query("SELECT * FROM actuators WHERE networkId=:networkId")
@@ -35,7 +38,7 @@ public abstract class ActuatorsDao {
     @Query("SELECT actuators.*, networks.name AS networkName, networks.networkType AS networkType, " +
             "(SELECT COUNT(`logs`.elementId) FROM `logs` WHERE `logs`.elementId=actuators.id " +
             "AND `logs`.elementType IN(:elementTypes) AND `logs`.logLevel IN(:logLevels) " +
-            "AND `logs`.dateRegistered >= date('now','-5 minute')) " +
+            "AND `logs`.dateRegistered >= CAST(strftime('%s', 'now') AS LONG)*1000-300000) " +
             "AS recentErrorLogs " +
             "FROM actuators, networks WHERE actuators.id=:id AND actuators.networkId= networks.id LIMIT 1")
     public abstract LiveData<ActuatorExtended> findByIdExtended(int id,
@@ -45,7 +48,7 @@ public abstract class ActuatorsDao {
     @Query("SELECT actuators.*, networks.name AS networkName, networks.networkType AS networkType, " +
             "(SELECT COUNT(`logs`.elementId) FROM `logs` WHERE `logs`.elementId=actuators.id " +
             "AND `logs`.elementType IN(:elementTypes) AND `logs`.logLevel IN(:logLevels) " +
-            "AND `logs`.dateRegistered >= date('now','-5 minute')) " +
+            "AND `logs`.dateRegistered >= CAST(strftime('%s', 'now') AS LONG)*1000-300000) " +
             "AS recentErrorLogs " +
             "FROM actuators, networks")
     public abstract LiveData<List<ActuatorExtended>> getAllExtended(Enumerators.ElementType[] elementTypes,
@@ -54,7 +57,15 @@ public abstract class ActuatorsDao {
     @Query("SELECT actuators.*, networks.name AS networkName, networks.networkType AS networkType, " +
             "(SELECT COUNT(`logs`.elementId) FROM `logs` WHERE `logs`.elementId=actuators.id " +
             "AND `logs`.elementType IN(:elementTypes) AND `logs`.logLevel IN(:logLevels) " +
-            "AND `logs`.dateRegistered >= date('now','-5 minute')) " +
+            "AND `logs`.dateRegistered >= CAST(strftime('%s', 'now') AS LONG)*1000-300000) " +
+            "AS recentErrorLogs " +
+            "FROM actuators, networks")
+    public abstract List<ActuatorExtended> getAllExtendedInstant(Enumerators.ElementType[] elementTypes,
+                                                                    Enumerators.LogLevel[] logLevels);
+
+    @Query("SELECT actuators.*, networks.name AS networkName, networks.networkType AS networkType, " +
+            "(SELECT COUNT(`logs`.elementId) FROM `logs` WHERE `logs`.elementId=actuators.id " +
+            "AND `logs`.elementType IN(:elementTypes) AND `logs`.logLevel IN(:logLevels)) " +
             "AS recentErrorLogs FROM actuators, networks WHERE showInMainDashboard=1")
     public abstract LiveData<List<ActuatorExtended>> getAllExtendedToBeShownInMainDashboard(Enumerators.ElementType[] elementTypes,
                                                                                                Enumerators.LogLevel[] logLevels);
@@ -62,7 +73,7 @@ public abstract class ActuatorsDao {
     @Query("SELECT actuators.*, networks.name AS networkName, networks.networkType AS networkType, " +
             "(SELECT COUNT(`logs`.elementId) FROM `logs` WHERE `logs`.elementId=actuators.id " +
             "AND `logs`.elementType IN(:elementTypes) AND `logs`.logLevel IN(:logLevels) " +
-            "AND `logs`.dateRegistered >= date('now','-5 minute')) " +
+            "AND `logs`.dateRegistered >= CAST(strftime('%s', 'now') AS LONG)*1000-300000) " +
             "AS recentErrorLogs FROM actuators, networks WHERE locationLat IS NOT NULL AND localtionLong IS NOT NULL")
     public abstract LiveData<List<ActuatorExtended>> getAllExtendedLocated(Enumerators.ElementType[] elementTypes,
                                                                               Enumerators.LogLevel[] logLevels);
@@ -79,7 +90,7 @@ public abstract class ActuatorsDao {
     @Delete
     public abstract void deteleAll(Actuator... actuators);
 
-    @Query("DELETE FROM networks WHERE id=:id")
+    @Query("DELETE FROM actuators WHERE id=:id")
     protected abstract void deleteById(Integer id);
 
     @Update

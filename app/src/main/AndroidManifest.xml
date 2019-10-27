@@ -60,6 +60,7 @@
         <activity
             android:name=".presentation.ui.activities.NetworkListActivity"
             android:label="@string/title_network_list"
+            android:launchMode="singleTop"
             android:theme="@style/Theme.Dot"></activity>
         <activity
             android:name=".presentation.ui.activities.NetworkDetailsActivity"
@@ -86,8 +87,18 @@
             android:theme="@style/Theme.Dot.CreateEdit"></activity>
         <activity
             android:name=".presentation.ui.activities.ActuatorListActivity"
+            android:label="@string/title_actuator_list"
             android:launchMode="singleTop"
             android:theme="@style/Theme.Dot" />
+        <activity
+            android:name=".presentation.ui.activities.ActuatorDetailsActivity"
+            android:label="@string/title_actuator_detail"
+            android:theme="@style/Theme.Dot.Detail">
+        </activity>
+        <activity
+            android:name=".presentation.ui.activities.ActuatorAddEditActivity"
+            android:label="@string/title_actuator_addedit"
+            android:theme="@style/Theme.Dot.CreateEdit"></activity>
         <activity
             android:name=".presentation.ui.activities.MapActivity"
             android:label="@string/title_activity_map"

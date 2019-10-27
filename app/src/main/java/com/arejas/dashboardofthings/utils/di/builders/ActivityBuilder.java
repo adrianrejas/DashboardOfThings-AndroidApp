@@ -1,5 +1,7 @@
 package com.arejas.dashboardofthings.utils.di.builders;
 
+import com.arejas.dashboardofthings.presentation.ui.activities.ActuatorAddEditActivity;
+import com.arejas.dashboardofthings.presentation.ui.activities.ActuatorDetailsActivity;
 import com.arejas.dashboardofthings.presentation.ui.activities.ActuatorListActivity;
 import com.arejas.dashboardofthings.presentation.ui.activities.MainDashboardActivity;
 import com.arejas.dashboardofthings.presentation.ui.activities.MapActivity;
@@ -40,6 +42,12 @@ public abstract class ActivityBuilder {
 
     @ContributesAndroidInjector
     abstract ActuatorListActivity bindActuatorListActivity();
+
+    @ContributesAndroidInjector
+    abstract ActuatorDetailsActivity bindActuatorDetailActivity();
+
+    @ContributesAndroidInjector
+    abstract ActuatorAddEditActivity bindActuatorAddEditActivity();
 
     @ContributesAndroidInjector
     abstract MapActivity bindMapActivity();

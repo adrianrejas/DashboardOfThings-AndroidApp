@@ -39,7 +39,7 @@ public abstract class SensorsDao {
     @Query("SELECT sensors.*, networks.name AS networkName, networks.networkType AS networkType, " +
             "(SELECT COUNT(`logs`.elementId) FROM `logs` WHERE `logs`.elementId=sensors.id " +
             "AND `logs`.elementType IN(:elementTypes) AND `logs`.logLevel IN(:logLevels) " +
-            "AND `logs`.dateRegistered >= date('now','-5 minute')) " +
+            "AND `logs`.dateRegistered >= CAST(strftime('%s', 'now') AS LONG)*1000-300000) " +
             "AS recentErrorLogs " +
             "FROM sensors " +
             "INNER JOIN networks ON sensors.networkId=networks.id")
@@ -49,7 +49,7 @@ public abstract class SensorsDao {
     @Query("SELECT sensors.*, networks.name AS networkName, networks.networkType AS networkType, " +
             "(SELECT COUNT(`logs`.elementId) FROM `logs` WHERE `logs`.elementId=sensors.id " +
             "AND `logs`.elementType IN(:elementTypes) AND `logs`.logLevel IN(:logLevels) " +
-            "AND `logs`.dateRegistered >= date('now','-5 minute')) " +
+            "AND `logs`.dateRegistered >= CAST(strftime('%s', 'now') AS LONG)*1000-300000) " +
             "AS recentErrorLogs " +
             "FROM sensors " +
             "INNER JOIN networks ON sensors.networkId=networks.id " +
@@ -60,7 +60,7 @@ public abstract class SensorsDao {
     @Query("SELECT sensors.*, networks.name AS networkName, networks.networkType AS networkType, " +
             "(SELECT COUNT(`logs`.elementId) FROM `logs` WHERE `logs`.elementId=sensors.id " +
             "AND `logs`.elementType IN(:elementTypes) AND `logs`.logLevel IN(:logLevels) " +
-            "AND `logs`.dateRegistered >= date('now','-5 minute')) " +
+            "AND `logs`.dateRegistered >= CAST(strftime('%s', 'now') AS LONG)*1000-300000) " +
             "AS recentErrorLogs " +
             "FROM sensors " +
             "INNER JOIN networks ON sensors.networkId=networks.id " +
@@ -71,7 +71,7 @@ public abstract class SensorsDao {
     @Query("SELECT sensors.*, networks.name AS networkName, networks.networkType AS networkType, " +
             "(SELECT COUNT(`logs`.elementId) FROM `logs` WHERE `logs`.elementId=sensors.id " +
             "AND `logs`.elementType IN(:elementTypes) AND `logs`.logLevel IN(:logLevels) " +
-            "AND `logs`.dateRegistered >= date('now','-5 minute')) " +
+            "AND `logs`.dateRegistered >= CAST(strftime('%s', 'now') AS LONG)*1000-300000) " +
             "AS recentErrorLogs " +
             "FROM sensors " +
             "INNER JOIN networks ON sensors.networkId=networks.id " +

@@ -176,7 +176,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="@dimen/detail_inner_margin_big"
-                            android:text="@string/edit_label_sensor_network"
+                            android:text="@string/edit_label_element_network"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toBottomOf="@id/ed_sensor_addedit_type" />
@@ -205,7 +205,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="@dimen/detail_inner_margin_big"
-                            android:text="@string/edit_label_sensor_message_type"
+                            android:text="@string/edit_label_element_message_type"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toBottomOf="@id/sp_sensor_addedit_network" />
@@ -217,7 +217,7 @@
                             android:layout_marginTop="@dimen/detail_inner_margin_small"
                             android:enabled="@{editionMode ? false : true}"
                             android:clickable="@{editionMode ? false : true}"
-                            android:entries="@array/edit_array_sensor_message_type"
+                            android:entries="@array/edit_array_element_message_type"
                             android:focusable="true"
                             android:nextFocusUp="@id/sp_sensor_addedit_network"
                             android:nextFocusDown="@id/sp_sensor_addedit_data_type"
@@ -232,7 +232,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="@dimen/detail_inner_margin_big"
-                            android:text="@string/edit_label_sensor_data_type"
+                            android:text="@string/edit_label_element_data_type"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toBottomOf="@id/sp_sensor_addedit_message_type" />
@@ -242,7 +242,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="0dp"
                             android:layout_marginTop="@dimen/detail_inner_margin_small"
-                            android:entries="@array/edit_array_sensor_data_type"
+                            android:entries="@array/edit_array_element_data_type"
                             android:enabled="@{editionMode ? false : true}"
                             android:clickable="@{editionMode ? false : true}"
                             android:focusable="true"
@@ -878,7 +878,7 @@
                             android:layout_marginTop="@dimen/detail_inner_margin_small"
                             android:gravity="bottom"
                             android:hint="@string/edit_hint_warning_above_trigger"
-                            android:inputType="number"
+                            android:inputType="number|numberSigned"
                             android:maxLength="20"
                             android:text='@{(sensor.thresholdAboveWarning != null) ? Integer.valueOf(sensor.thresholdAboveWarning.intValue()).toString() : ""}'
                             app:layout_constraintEnd_toEndOf="parent"
@@ -904,7 +904,7 @@
                             android:layout_marginTop="@dimen/detail_inner_margin_small"
                             android:gravity="bottom"
                             android:hint="@string/edit_hint_warning_below_trigger"
-                            android:inputType="number"
+                            android:inputType="number|numberSigned"
                             android:maxLength="20"
                             android:text='@{(sensor.thresholdBelowWarning != null) ? Integer.valueOf(sensor.thresholdBelowWarning.intValue()).toString() : ""}'
                             app:layout_constraintEnd_toEndOf="parent"
@@ -930,7 +930,7 @@
                             android:layout_marginTop="@dimen/detail_inner_margin_small"
                             android:gravity="bottom"
                             android:hint="@string/edit_hint_critical_above_trigger"
-                            android:inputType="number"
+                            android:inputType="number|numberSigned"
                             android:maxLength="20"
                             android:text='@{(sensor.thresholdAboveCritical != null) ? Integer.valueOf(sensor.thresholdAboveCritical.intValue()).toString() : ""}'
                             app:layout_constraintEnd_toEndOf="parent"
@@ -956,7 +956,7 @@
                             android:layout_marginTop="@dimen/detail_inner_margin_small"
                             android:gravity="bottom"
                             android:hint="@string/edit_hint_critical_below_trigger"
-                            android:inputType="number"
+                            android:inputType="number|numberSigned"
                             android:maxLength="20"
                             android:text='@{(sensor.thresholdBelowCritical != null) ? Integer.valueOf(sensor.thresholdBelowCritical.intValue()).toString() : ""}'
                             app:layout_constraintEnd_toEndOf="parent"
@@ -1033,7 +1033,7 @@
                             android:layout_marginTop="@dimen/detail_inner_margin_small"
                             android:gravity="bottom"
                             android:hint="@string/edit_hint_warning_above_trigger"
-                            android:inputType="numberDecimal"
+                            android:inputType="numberDecimal|numberSigned"
                             android:maxLength="20"
                             android:text='@{(sensor.thresholdAboveWarning != null) ? sensor.thresholdAboveWarning.toString() : ""}'
                             app:layout_constraintEnd_toEndOf="parent"
@@ -1059,7 +1059,7 @@
                             android:layout_marginTop="@dimen/detail_inner_margin_small"
                             android:gravity="bottom"
                             android:hint="@string/edit_hint_warning_below_trigger"
-                            android:inputType="numberDecimal"
+                            android:inputType="numberDecimal|numberSigned"
                             android:maxLength="20"
                             android:text='@{(sensor.thresholdBelowWarning != null) ? sensor.thresholdBelowWarning.toString() : ""}'
                             app:layout_constraintEnd_toEndOf="parent"
@@ -1085,7 +1085,7 @@
                             android:layout_marginTop="@dimen/detail_inner_margin_small"
                             android:gravity="bottom"
                             android:hint="@string/edit_hint_critical_above_trigger"
-                            android:inputType="numberDecimal"
+                            android:inputType="numberDecimal|numberSigned"
                             android:maxLength="20"
                             android:text='@{(sensor.thresholdAboveCritical != null) ? sensor.thresholdAboveCritical.toString() : ""}'
                             app:layout_constraintEnd_toEndOf="parent"
@@ -1111,7 +1111,7 @@
                             android:layout_marginTop="@dimen/detail_inner_margin_small"
                             android:gravity="bottom"
                             android:hint="@string/edit_hint_critical_below_trigger"
-                            android:inputType="numberDecimal"
+                            android:inputType="numberDecimal|numberSigned"
                             android:maxLength="20"
                             android:text='@{(sensor.thresholdBelowCritical != null) ? sensor.thresholdBelowCritical.toString() : ""}'
                             app:layout_constraintEnd_toEndOf="parent"

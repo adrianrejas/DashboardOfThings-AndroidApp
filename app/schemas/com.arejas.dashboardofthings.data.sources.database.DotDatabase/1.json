@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "e004bf914b577c8ca249426ad20bf94c",
+    "identityHash": "bd3fe0dd98c1215132262e62acfe8f1d",
     "entities": [
       {
         "tableName": "networks",
@@ -313,7 +313,7 @@
       },
       {
         "tableName": "actuators",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `name` TEXT, `type` TEXT, `imageUri` TEXT, `networkId` INTEGER, `httpRelativeUrl` TEXT, `httpMethod` INTEGER, `httpHeaders` TEXT, `httpMimeType` TEXT, `mqttTopicToPublish` TEXT, `mqttQosLevel` INTEGER, `dataType` INTEGER, `dataNumberMinimum` REAL, `dataNumberMaximum` REAL, `dataFormatMessageToSend` TEXT, `dataUnit` TEXT, `locationLat` INTEGER, `localtionLong` INTEGER, `showInMainDashboard` INTEGER, FOREIGN KEY(`networkId`) REFERENCES `networks`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE )",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `name` TEXT, `type` TEXT, `imageUri` TEXT, `networkId` INTEGER, `httpRelativeUrl` TEXT, `httpMethod` INTEGER, `httpHeaders` TEXT, `httpMimeType` TEXT, `mqttTopicToPublish` TEXT, `mqttQosLevel` INTEGER, `dataType` INTEGER, `dataNumberMinimum` REAL, `dataNumberMaximum` REAL, `dataFormatMessageToSend` TEXT, `dataUnit` TEXT, `locationLat` REAL, `localtionLong` REAL, `showInMainDashboard` INTEGER, FOREIGN KEY(`networkId`) REFERENCES `networks`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE )",
         "fields": [
           {
             "fieldPath": "id",
@@ -414,13 +414,13 @@
           {
             "fieldPath": "locationLat",
             "columnName": "locationLat",
-            "affinity": "INTEGER",
+            "affinity": "REAL",
             "notNull": false
           },
           {
             "fieldPath": "localtionLong",
             "columnName": "localtionLong",
-            "affinity": "INTEGER",
+            "affinity": "REAL",
             "notNull": false
           },
           {
@@ -590,7 +590,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'e004bf914b577c8ca249426ad20bf94c')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'bd3fe0dd98c1215132262e62acfe8f1d')"
     ]
   }
 }

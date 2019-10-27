@@ -2,17 +2,20 @@
     <string name="app_name">Dashboard of Things</string>
     <string name="title_activity_maindash">Main dashboard</string>
     <string name="title_network_list">Networks</string>
-    <string name="title_network_detail">Network Details</string>
-    <string name="title_network_addedit">Add/edit Network</string>
-    <string name="title_sensor_list">Sensor Details</string>
-    <string name="title_sensor_detail">Sensor Details</string>
-    <string name="title_sensor_addedit">Add/edit Sensor</string>
+    <string name="title_network_detail">Network details</string>
+    <string name="title_network_addedit">Add/edit network</string>
+    <string name="title_sensor_list">Sensors</string>
+    <string name="title_sensor_detail">Sensor details</string>
+    <string name="title_sensor_addedit">Add/edit sensor</string>
+    <string name="title_actuator_list">Actuators</string>
+    <string name="title_actuator_detail">Actuator details</string>
+    <string name="title_actuator_addedit">Add/edit actuator</string>
     <string name="title_activity_map">Map</string>
 
     <string name="main_navigation_dashboard">Main dashboard</string>
     <string name="main_navigation_networks">Networks</string>
     <string name="main_navigation_sensors">Sensors</string>
-    <string name="main_navigation_actuators">Acuators</string>
+    <string name="main_navigation_actuators">Actuators</string>
     <string name="main_navigation_map">Map</string>
 
     <string name="menu_options">Options</string>
@@ -44,6 +47,10 @@
     <string name="toolbar_title_sensor_unrecognized">Unrecognized sensor</string>
     <string name="toolbar_title_new_sensor">New sensor</string>
     <string name="toolbar_title_edit_sensor">Editing sensor</string>
+    <string name="toolbar_title_actuator_loading">Loading actuator</string>
+    <string name="toolbar_title_actuator_unrecognized">Unrecognized actuator</string>
+    <string name="toolbar_title_new_actuator">New actuator</string>
+    <string name="toolbar_title_edit_actuator">Editing actuator</string>
 
     <string name="toast_removing">Removing element ...</string>
     <string name="toast_remove_succesful">Element succesfully removed.</string>
@@ -73,11 +80,16 @@
     <string name="actuator_integer_hint">Enter not decimal number here.</string>
     <string name="actuator_decimal_hint">Enter decimal number here.</string>
     <string name="actuator_string_hint">Enter string here.</string>
-    <string name="error_logs_number">%i warning or error logs applied to this element.</string>
     <plurals name="error_log_number">
-        <item quantity="one">%s warning or error log applied to this element.</item>
-        <item quantity="other">%s warning or error logs applied to this element.</item>
+        <item quantity="one">%s warning or error log applied to this element</item>
+        <item quantity="other">%s warning or error logs applied to this element</item>
     </plurals>
+    <plurals name="error_log_number_short">
+        <item quantity="one">%s problematic log</item>
+        <item quantity="other">%s problematic logs</item>
+    </plurals>
+    <string name="actuator_send_boolean_true">Activate</string>
+    <string name="actuator_send_boolean_false">Deactivate</string>
 
     <string name="maindash_status_warning_message">This sensor, with %s as its last value, is in warning state.</string>
     <string name="maindash_status_critical_message">This sensor, with %s as its last value, is in critical state.</string>
@@ -109,7 +121,7 @@
     <string name="edit_hint_name_sensor">Name of the sensor</string>
     <string name="edit_hint_name_actuator">Name of the actuator</string>
     <string name="edit_label_type">Type:</string>
-    <string name="edit_hint_type_network">Type of network</string>
+    <string name="edit_hint_type_network">Type of network:</string>
     <string name="edit_hint_type_sensor">Type of sensor</string>
     <string name="edit_hint_type_actuator">Type of actuator</string>
     <string-array name="edit_array_network_type">
@@ -150,15 +162,15 @@
     <string name="edit_label_mqtt_keepalive_interval">Keppalive interval (milliseconds):</string>
     <string name="edit_label_mqtt_clean_session">Clean session</string>
     <string name="edit_hint_mqtt_keepalive_interval">Time in milliseconds to wait between keepalives</string>
-    <string name="edit_label_sensor_network">Network to use:</string>
-    <string name="edit_label_sensor_message_type">Message type:</string>
-    <string-array name="edit_array_sensor_message_type">
+    <string name="edit_label_element_network">Network to use:</string>
+    <string name="edit_label_element_message_type">Message type:</string>
+    <string-array name="edit_array_element_message_type">
         <item>XML</item>
         <item>JSON</item>
         <item>Raw data</item>
     </string-array>
-    <string name="edit_label_sensor_data_type">Data type:</string>
-    <string-array name="edit_array_sensor_data_type">
+    <string name="edit_label_element_data_type">Data type:</string>
+    <string-array name="edit_array_element_data_type">
         <item>Boolean</item>
         <item>Integer</item>
         <item>Decimal</item>
@@ -175,8 +187,10 @@
     <string name="edit_label_show_in_main_dashboard">Show sensor in main dashboard</string>
     <string name="edit_label_http_interval">Periodical interval:</string>
     <string name="edit_hint_http_interval">Interval between periodic requests (seconds)</string>
-    <string name="edit_label_mqtt_topic_subscribe">MQTT topic to subscribe:</string>
-    <string name="edit_hint_mqtt_topic_subscribe">MQTT topic to be used for subscribing to messages</string>
+    <string name="edit_label_mqtt_topic_subscribe">MQTT topic filter to subscribe:</string>
+    <string name="edit_hint_mqtt_topic_subscribe">MQTT topic filter to be used for subscribing to messages</string>
+    <string name="edit_label_mqtt_topic_publish">MQTT topic to publish:</string>
+    <string name="edit_hint_mqtt_topic_publish">MQTT topic to be used for publishing messages</string>
     <string name="edit_label_mqtt_qos_level">MQTT quality of service:</string>
     <string-array name="edit_array_mqtt_qos_level">
         <item>QOS 0</item>
@@ -184,6 +198,14 @@
         <item>QOS 2</item>
     </string-array>
     <string name="edit_label_xml_variables">XML options</string>
+    <string name="edit_label_message_variables">Message options</string>
+    <string name="edit_label_message_format">Message format to be sent: </string>
+    <string name="edit_hint_message_format">Message to be sent to the network when sending information from the actuator. \n
+        The following strings inside the message will be replaced prior to send the message accordingly to the following:\n
+         - ${DATA}: Replaced by the value sent by the actuator in the default format.\n
+         - ${DATA(\u003Cformat\u003E)}: Replaced by the value sent by the actuator in the Java String format especified by \u003Cformat\u003E.\n
+         - ${TIMESTAMP}: Replaced by the current timestamp.\n
+         - ${DATE(\u003Cformat\u003E)}: Replaced by the current date in the Java Date format especified by \u003Cformat\u003E.</string>
     <string name="edit_label_xml_node">XML node to locate data: </string>
     <string name="edit_hint_xml_node">Example: node1.node2.node3</string>
     <string name="edit_label_json_variables">JSON options</string>
@@ -210,6 +232,24 @@
     <string name="edit_hint_warning_equals_trigger">Trigger to launch a warning notification when data equals</string>
     <string name="edit_label_critical_equals_trigger">Critical notification equals: </string>
     <string name="edit_hint_critical_equals_trigger">Trigger to launch a critical notification when data equals</string>
+    <string name="edit_label_data_minimum">Minimum value:</string>
+    <string name="edit_hint_data_minimum">Minimum value possible to bet set for the actuator.</string>
+    <string name="edit_label_data_maximum">Maximum value:</string>
+    <string name="edit_hint_data_maximum">Maximum value possible to bet set for the actuator.</string>
+    <string name="edit_label_element_http_method">HTTP method:</string>
+    <string-array name="edit_array_element_http_method">
+        <item>GET</item>
+        <item>PUT</item>
+        <item>POST</item>
+        <item>PATCH</item>
+    </string-array>
+    <string name="edit_label_http_mime_type">HTTP MIME type: </string>
+    <string name="edit_hint_http_mime_type">MIME type to use in HTTP request</string>
+
+    <string name="set_toast_bigger_than">The number set cannot be bigger than %s ...</string>
+    <string name="set_toast_smaller_than">The number set cannot be smaller than %s ...</string>
+    <string name="set_toast_between">The number set must be between %s and %s ...</string>
+    <string name="set_toast_error">Error setting data ...</string>
 
     <string name="edit_toast_check_name">Check name ...</string>
     <string name="edit_toast_check_type">Check type ...</string>
@@ -229,10 +269,14 @@
     <string name="edit_toast_check_mqtt_topic">Check MQTT topic ...</string>
     <string name="edit_toast_check_xml_node">Check XML node ...</string>
     <string name="edit_toast_check_json_node">Check JSON node ...</string>
+    <string name="edit_toast_check_message_format">Check message format ...</string>
+    <string name="edit_toast_check_message_format_data">Message format should include ${DATA} or ${DATA(\u003Cformat\u003E)} ...</string>
     <string name="edit_toast_check_raw_regex">Check raw data regular expression ...</string>
     <string name="edit_toast_check_thresholds_integer">Check threshold values to be integer number ...</string>
     <string name="edit_toast_check_thresholds_decimal">Check threshold values to be decimal number ...</string>
     <string name="edit_toast_check_thresholds_boolean">Check threshold values to be \'true\' or \'false\' ...</string>
+    <string name="edit_toast_check_limits_integer">Check minimum and maximum to be integer number ...</string>
+    <string name="edit_toast_check_limits_decimal">Check minimum and maximum to be decimal number ...</string>
 
 
     <string name="dashboard_of_things_channel_name">Dashboard of Things notification channel</string>
@@ -281,6 +325,8 @@
     <string name="content_description_sensor_title">Name and type of the sensor</string>
     <string name="content_description_sensor_name">Name of the sensor</string>
     <string name="content_description_sensor_type">Type of the sensor</string>
+    <string name="content_description_actuator_name">Name of the actuator</string>
+    <string name="content_description_actuator_type">Type of the actuator</string>
     <string name="content_description_sensor_value">Current value of the sensor</string>
     <string name="content_description_sensor_state">Current state of the sensor</string>
     <string name="content_description_nav_header">Main navigation menu</string>
@@ -288,7 +334,8 @@
     <string name="content_description_actuator_image">Image representing the actuator</string>
     <string name="content_description_actuator_title">Name and type of the actuator</string>
     <string name="content_description_actuator_send">Send data to server</string>
-    <string name="content_description_actuator_toggle">Toggle value between active and not and send data to server</string>
+    <string name="content_description_actuator_sendtrue">Send an active boolean to server</string>
+    <string name="content_description_actuator_sendfalse">Send an inactive boolean to server</string>
     <string name="content_description_network_image">Image representing the network</string>
     <string name="content_description_network_name">Name of the network</string>
     <string name="content_description_network_type">Type of the network</string>

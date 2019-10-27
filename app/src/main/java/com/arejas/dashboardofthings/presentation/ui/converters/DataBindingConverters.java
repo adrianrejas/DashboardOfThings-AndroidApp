@@ -211,7 +211,7 @@ public class DataBindingConverters {
             if (name != null) {
                 if ((elementProblems != null) && (elementProblems > 0)) {
                     view.setText(name + " - " + DotApplication.getContext().getResources().
-                            getQuantityString(R.plurals.error_log_number, elementProblems));
+                            getQuantityString(R.plurals.error_log_number_short, elementProblems, elementProblems));
                     view.setTextColor(ContextCompat.getColor(DotApplication.getContext(), R.color.logErrorColorText));
                 } else {
                     view.setText(name);
@@ -350,26 +350,6 @@ public class DataBindingConverters {
         } catch (Exception e) {
             ToastHelper.showToast(DotApplication.getContext().getString(R.string.toast_actuator_printdata_error));
         }
-    }
-
-    @BindingAdapter({"minValue", "maxValue"})
-    public static void setNumberEditTextMinMaxFilter(EditText view, Float minValue, Float maxValue) {
-        InputFilter[] filters = new InputFilter[1];
-        filters[0] = new InputFilter() {
-            @Override
-            public CharSequence filter(CharSequence source, int start, int end, Spanned dest, int dstart, int dend) {
-                try {
-                    float input = Float.parseFloat(dest.toString() + source.toString());
-                    if (isInRange(minValue, maxValue, input))
-                        return null;
-                } catch (NumberFormatException nfe) { }
-                return "";
-            }
-            private boolean isInRange(float a, float b, float c) {
-                return b > a ? c >= a && c <= b : c >= b && c <= a;
-            }
-        };
-        view.setFilters(filters);
     }
 
     @BindingAdapter({"dataReceived", "dataType", "thresholdAboveWarning", "thresholdAboveCritical",

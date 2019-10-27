@@ -1,5 +1,8 @@
 package com.arejas.dashboardofthings.utils.di.builders;
 
+import com.arejas.dashboardofthings.presentation.ui.fragments.ActuatorDetailsDetailsFragment;
+import com.arejas.dashboardofthings.presentation.ui.fragments.ActuatorDetailsFragment;
+import com.arejas.dashboardofthings.presentation.ui.fragments.ActuatorDetailsLogsFragment;
 import com.arejas.dashboardofthings.presentation.ui.fragments.MainActuatorsFragment;
 import com.arejas.dashboardofthings.presentation.ui.fragments.MainHistoryFragment;
 import com.arejas.dashboardofthings.presentation.ui.fragments.MainLogsFragment;
@@ -50,5 +53,14 @@ public abstract class FragmentBuilder {
 
     @ContributesAndroidInjector
     abstract SensorDetailsLogsFragment bindSensorDetailLogsFragment();
+
+    @ContributesAndroidInjector
+    abstract ActuatorDetailsFragment bindActuatorDetailFragment();
+
+    @ContributesAndroidInjector
+    abstract ActuatorDetailsDetailsFragment bindActuatorDetailDetailsFragment();
+
+    @ContributesAndroidInjector
+    abstract ActuatorDetailsLogsFragment bindActuatorDetailLogsFragment();
 
 }

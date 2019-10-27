@@ -1,0 +1,917 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <import type="android.view.View"/>
+        <import type="com.arejas.dashboardofthings.utils.Enumerators.NetworkType"/>
+        <import type="com.arejas.dashboardofthings.utils.Enumerators.MessageType"/>
+        <import type="com.arejas.dashboardofthings.utils.Enumerators.DataType"/>
+        <import type="com.arejas.dashboardofthings.utils.Enumerators.MqttQosLevel"/>
+        <variable
+            name="editionMode"
+            type="Boolean" />
+        <variable
+            name="actuator"
+            type="com.arejas.dashboardofthings.domain.entities.database.Actuator" />
+        <variable
+            name="imagePicked"
+            type="String" />
+        <variable
+            name="locationPicked"
+            type="com.sucho.placepicker.AddressData" />
+        <variable
+            name="networks"
+            type="java.util.List&lt;com.arejas.dashboardofthings.domain.entities.extended.NetworkExtended>" />
+        <variable
+            name="networkSelected"
+            type="Integer" />
+        <variable
+            name="networkTypeSelected"
+            type="Integer" />
+        <variable
+            name="dataTypeSelected"
+            type="Integer" />
+        <variable
+            name="presenter"
+            type="com.arejas.dashboardofthings.presentation.ui.helpers.AddEditSensorActuatorPresenter" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context="com.arejas.dashboardofthings.presentation.ui.activities.ActuatorListActivity">
+
+        <com.google.android.material.appbar.AppBarLayout
+            android:id="@+id/appbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:theme="@style/ThemeOverlay.AppCompat.Light"
+            android:elevation="@dimen/toolbar_elevation">
+
+            <androidx.appcompat.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+                app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+                android:layout_marginLeft="@dimen/list_toolbar_side_margin"
+                android:layout_marginRight="@dimen/list_toolbar_side_margin"
+                android:layout_width="match_parent"
+                android:layout_height="?actionBarSize"
+                android:layout_gravity="top"
+                android:background="?colorPrimary">
+
+            </androidx.appcompat.widget.Toolbar>
+
+        </com.google.android.material.appbar.AppBarLayout>
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="?actionBarSize">
+
+            <include
+                android:id="@+id/actuator_addedit_loading_layout"
+                layout="@layout/layout_loading"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="@dimen/list_side_outer_margin"
+                android:orientation="vertical"/>
+
+            <ScrollView
+                android:id="@+id/actuator_addedit_editarea_layout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:visibility="gone"
+                tools:visibility="visible">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/cl_actuator_addedit_general_options"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_marginStart="@dimen/detail_inner_margin_big"
+                        android:layout_marginTop="@dimen/detail_inner_margin_big"
+                        android:layout_marginEnd="@dimen/detail_inner_margin_big"
+                        android:visibility="visible"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        tools:visibility="gone">
+
+                        <TextView
+                            android:id="@+id/tv_actuator_addedit_general_variables_label"
+                            style="@style/Theme.Dot.TextTitle"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/edit_label_general_variables"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <TextView
+                            android:id="@+id/tv_actuator_addedit_name_label"
+                            style="@style/Theme.Dot.TextDataBold"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/detail_inner_margin_big"
+                            android:text="@string/edit_label_name"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@id/tv_actuator_addedit_general_variables_label" />
+
+                        <EditText
+                            android:id="@+id/ed_actuator_addedit_name"
+                            style="@style/Theme.Dot.Edittext"
+                            android:layout_width="match_parent"
+                            android:layout_height="0dp"
+                            android:layout_marginTop="@dimen/detail_inner_margin_small"
+                            android:hint="@string/edit_hint_name_actuator"
+                            android:inputType="textNoSuggestions"
+                            android:maxLength="50"
+                            android:text='@{actuator.name ?? ""}'
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@id/tv_actuator_addedit_name_label" />
+
+                        <TextView
+                            android:id="@+id/tv_actuator_addedit_type_label"
+                            style="@style/Theme.Dot.TextDataBold"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/detail_inner_margin_small"
+                            android:text="@string/edit_label_type"
+                            app:layout_constraintHorizontal_bias="0.0"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@id/ed_actuator_addedit_name" />
+
+                        <EditText
+                            android:id="@+id/ed_actuator_addedit_type"
+                            style="@style/Theme.Dot.Edittext"
+                            android:layout_width="match_parent"
+                            android:layout_height="0dp"
+                            android:layout_marginTop="@dimen/detail_inner_margin_small"
+                            android:hint="@string/edit_hint_type_actuator"
+                            android:inputType="textNoSuggestions"
+                            android:maxLength="50"
+                            android:nextFocusDown="@id/sp_actuator_addedit_network"
+                            android:text='@{actuator.type ?? ""}'
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@id/tv_actuator_addedit_type_label" />
+
+                        <TextView
+                            android:id="@+id/tv_actuator_addedit_network_label"
+                            style="@style/Theme.Dot.TextDataBold"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/detail_inner_margin_big"
+                            android:text="@string/edit_label_element_network"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@id/ed_actuator_addedit_type" />
+
+                        <Spinner
+                            android:id="@+id/sp_actuator_addedit_network"
+                            android:layout_width="match_parent"
+                            android:layout_height="0dp"
+                            android:layout_marginTop="@dimen/detail_inner_margin_small"
+                            app:entryList="@{networks}"
+                            app:selectedPosition="@{networkSelected}"
+                            android:enabled="@{editionMode ? false : true}"
+                            android:clickable="@{editionMode ? false : true}"
+                            android:focusable="true"
+                            android:nextFocusUp="@id/ed_actuator_addedit_type"
+                            android:nextFocusDown="@id/sp_actuator_addedit_data_type"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@id/tv_actuator_addedit_network_label"
+                            app:selectionListener="@{(position) -> presenter.networkSelected(position)}"
+                            tools:visibility="visible" />
+
+                        <TextView
+                            android:id="@+id/tv_actuator_addedit_data_type_label"
+                            style="@style/Theme.Dot.TextDataBold"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/detail_inner_margin_big"
+                            android:text="@string/edit_label_element_data_type"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@id/sp_actuator_addedit_network" />
+
+                        <Spinner
+                            android:id="@+id/sp_actuator_addedit_data_type"
+                            android:layout_width="match_parent"
+                            android:layout_height="0dp"
+                            android:layout_marginTop="@dimen/detail_inner_margin_small"
+                            android:entries="@array/edit_array_element_data_type"
+                            android:enabled="@{editionMode ? false : true}"
+                            android:clickable="@{editionMode ? false : true}"
+                            android:focusable="true"
+                            android:nextFocusUp="@id/sp_actuator_addedit_network"
+                            android:nextFocusDown="@id/cb_actuator_addedit_show_in_main_dashboard"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@id/tv_actuator_addedit_data_type_label"
+                            app:selectionListener="@{(position) -> presenter.dataTypeSelected(position)}" />
+
+                        <CheckBox
+                            android:id="@+id/cb_actuator_addedit_show_in_main_dashboard"
+                            style="@style/Theme.Dot.TextDataBold"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/detail_inner_margin_small"
+                            android:text="@string/edit_label_show_in_main_dashboard"
+                            android:checked="@{(actuator != null)  ? actuator.showInMainDashboard : false}"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@id/sp_actuator_addedit_data_type" />
+
+                        <ImageButton
+                            android:id="@+id/ib_actuator_addedit_image_picker"
+                            android:layout_width="@dimen/edit_icon_size"
+                            android:layout_height="@dimen/edit_icon_size"
+                            android:layout_marginTop="@dimen/detail_inner_margin_small"
+                            android:layout_marginEnd="@dimen/detail_inner_margin_small"
+                            android:adjustViewBounds="true"
+                            android:background="@drawable/selector_icon"
+                            android:contentDescription="@string/content_description_pick_image"
+                            android:nextFocusUp="@id/cb_actuator_addedit_show_in_main_dashboard"
+                            android:onClick="@{(v) -> presenter.pickImage()}"
+                            android:scaleType="fitXY"
+                            app:errorResource="@{@drawable/error}"
+                            app:imageUrl="@{imagePicked}"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@id/cb_actuator_addedit_show_in_main_dashboard"
+                            app:loadingResource="@{@drawable/loading}"
+                            app:pickResource="@{@drawable/pick}"
+                            tools:srcCompat="@drawable/pick" />
+
+                        <ImageButton
+                            android:id="@+id/ib_actuator_addedit_image_clear"
+                            android:layout_width="@dimen/edit_icon_size"
+                            android:layout_height="@dimen/edit_icon_size"
+                            android:layout_marginEnd="@dimen/detail_inner_margin_small"
+                            android:adjustViewBounds="true"
+                            android:background="@drawable/selector_icon"
+                            android:contentDescription="@string/content_description_clear_image"
+                            android:nextFocusUp="@id/cb_actuator_addedit_show_in_main_dashboard"
+                            android:onClick="@{(v) -> presenter.cancelImagePicked()}"
+                            android:scaleType="fitXY"
+                            android:tint="@color/primaryTextColor"
+                            android:visibility="@{((imagePicked != null) &amp;&amp; (!imagePicked.isEmpty())) ? View.VISIBLE : View.GONE }"
+                            app:layout_constraintBottom_toBottomOf="@id/ib_actuator_addedit_image_picker"
+                            app:layout_constraintEnd_toStartOf="@id/tv_actuator_addedit_pick_image_label"
+                            app:layout_constraintStart_toEndOf="@id/ib_actuator_addedit_image_picker"
+                            app:layout_constraintTop_toTopOf="@id/ib_actuator_addedit_image_picker"
+                            app:srcCompat="@drawable/cancel" />
+
+                        <TextView
+                            android:id="@+id/tv_actuator_addedit_pick_image_label"
+                            style="@style/Theme.Dot.TextDataBold"
+                            android:layout_width="0dp"
+                            android:layout_height="0dp"
+                            android:gravity="center_vertical"
+                            android:text="@{((imagePicked != null) &amp;&amp; (!imagePicked.isEmpty())) ? @string/edit_hint_image_picked : @string/edit_hint_image_pick}"
+                            android:textAlignment="gravity"
+                            app:layout_constraintBottom_toBottomOf="@id/ib_actuator_addedit_image_picker"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toEndOf="@id/ib_actuator_addedit_image_clear"
+                            app:layout_constraintTop_toTopOf="@id/ib_actuator_addedit_image_picker"
+                            tools:text="@string/edit_hint_image_picked" />
+
+                        <ImageButton
+                            android:id="@+id/ib_actuator_addedit_location_picker"
+                            android:layout_width="@dimen/edit_icon_size"
+                            android:layout_height="@dimen/edit_icon_size"
+                            android:layout_marginTop="@dimen/detail_inner_margin_small"
+                            android:layout_marginEnd="@dimen/detail_inner_margin_small"
+                            android:adjustViewBounds="true"
+                            android:background="@drawable/selector_icon"
+                            android:contentDescription="@string/content_description_pick_location"
+                            android:onClick="@{(v) -> presenter.pickLocation()}"
+                            android:scaleType="fitXY"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@id/ib_actuator_addedit_image_picker"
+                            app:srcCompat="@drawable/pick_location" />
+
+                        <ImageButton
+                            android:id="@+id/ib_actuator_addedit_location_clear"
+                            android:layout_width="@dimen/edit_icon_size"
+                            android:layout_height="@dimen/edit_icon_size"
+                            android:layout_marginEnd="@dimen/detail_inner_margin_small"
+                            android:adjustViewBounds="true"
+                            android:background="@drawable/selector_icon"
+                            android:contentDescription="@string/content_description_clear_location"
+                            android:nextFocusUp="@id/sp_actuator_addedit_data_type"
+                            android:onClick="@{(v) -> presenter.cancelLocationPicked()}"
+                            android:scaleType="fitXY"
+                            android:tint="@color/primaryTextColor"
+                            android:visibility="@{((imagePicked != null) &amp;&amp; (!imagePicked.isEmpty())) ? View.VISIBLE : View.GONE }"
+                            app:layout_constraintBottom_toBottomOf="@id/ib_actuator_addedit_location_picker"
+                            app:layout_constraintEnd_toStartOf="@id/tv_actuator_addedit_pick_location_label"
+                            app:layout_constraintStart_toEndOf="@id/ib_actuator_addedit_location_picker"
+                            app:layout_constraintTop_toTopOf="@id/ib_actuator_addedit_location_picker"
+                            app:srcCompat="@drawable/cancel" />
+
+                        <TextView
+                            android:id="@+id/tv_actuator_addedit_pick_location_label"
+                            style="@style/Theme.Dot.TextDataBold"
+                            android:layout_width="0dp"
+                            android:layout_height="0dp"
+                            android:gravity="center_vertical"
+                            android:text="@{(locationPicked != null) ? @string/edit_hint_location_picked : @string/edit_hint_location_pick}"
+                            android:textAlignment="gravity"
+                            app:layout_constraintBottom_toBottomOf="@id/ib_actuator_addedit_location_picker"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toEndOf="@id/ib_actuator_addedit_location_clear"
+                            app:layout_constraintTop_toTopOf="@id/ib_actuator_addedit_location_picker"
+                            tools:text="@string/edit_hint_location_picked" />
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                    <FrameLayout
+                        android:id="@+id/fl_actuator_addedit_general_options_separator"
+                        android:layout_width="0dp"
+                        android:layout_height="1dp"
+                        android:layout_marginStart="@dimen/detail_inner_margin_big"
+                        android:layout_marginTop="@dimen/detail_inner_margin_big"
+                        android:layout_marginEnd="@dimen/detail_inner_margin_big"
+                        android:layout_marginBottom="@dimen/detail_inner_margin_big"
+                        android:background="@color/primaryTextColor"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/cl_actuator_addedit_general_options" />
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/cl_actuator_addedit_http_options"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_marginStart="@dimen/detail_inner_margin_big"
+                        android:layout_marginTop="@dimen/detail_inner_margin_big"
+                        android:layout_marginEnd="@dimen/detail_inner_margin_big"
+                        android:visibility="@{networkTypeSelected.equals(NetworkType.HTTP.ordinal()) ? View.VISIBLE : View.GONE }"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/fl_actuator_addedit_general_options_separator"
+                        tools:visibility="gone">
+
+                        <TextView
+                            android:id="@+id/tv_actuator_addedit_http_variables_label"
+                            style="@style/Theme.Dot.TextTitle"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/edit_label_http_variables"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <TextView
+                            android:id="@+id/tv_actuator_addedit_http_relativeurl_label"
+                            style="@style/Theme.Dot.TextDataBold"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/detail_inner_margin_big"
+                            android:text="@string/edit_label_http_relative_url"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@id/tv_actuator_addedit_http_variables_label" />
+
+                        <EditText
+                            android:id="@+id/ed_actuator_addedit_http_relativeurl"
+                            style="@style/Theme.Dot.Edittext"
+                            android:layout_width="match_parent"
+                            android:layout_height="0dp"
+                            android:layout_marginTop="@dimen/detail_inner_margin_small"
+                            android:gravity="bottom"
+                            android:hint="@string/edit_hint_http_relative_url"
+                            android:inputType="textNoSuggestions"
+                            android:maxLength="200"
+                            android:text='@{actuator.httpRelativeUrl ?? ""}'
+                            android:nextFocusDown="@id/sp_actuator_addedit_http_method"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@id/tv_actuator_addedit_http_relativeurl_label" />
+
+                        <TextView
+                            android:id="@+id/tv_actuator_addedit_http_method_label"
+                            style="@style/Theme.Dot.TextDataBold"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/detail_inner_margin_small"
+                            android:text="@string/edit_label_element_http_method"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@id/ed_actuator_addedit_http_relativeurl" />
+
+                        <Spinner
+                            android:id="@+id/sp_actuator_addedit_http_method"
+                            android:layout_width="match_parent"
+                            android:layout_height="0dp"
+                            android:layout_marginTop="@dimen/detail_inner_margin_small"
+                            android:entries="@array/edit_array_element_http_method"
+                            android:focusable="true"
+                            android:nextFocusUp="@id/sp_actuator_addedit_network"
+                            android:nextFocusDown="@id/ed_actuator_addedit_http_newheader_name"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@id/tv_actuator_addedit_http_method_label"
+                            tools:visibility="visible" />
+
+                        <TextView
+                            android:id="@+id/tv_actuator_addedit_http_headers_label"
+                            style="@style/Theme.Dot.TextDataBold"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/detail_inner_margin_small"
+                            android:text="@string/edit_label_http_headers"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@id/sp_actuator_addedit_http_method" />
+
+                        <EditText
+                            android:id="@+id/ed_actuator_addedit_http_newheader_name"
+                            style="@style/Theme.Dot.Edittext"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/detail_inner_margin_small"
+                            android:gravity="bottom"
+                            android:hint="@string/edit_hint_http_header_name"
+                            android:inputType="textNoSuggestions"
+                            android:maxLength="100"
+                            android:nextFocusUp="@id/sp_actuator_addedit_http_method"
+                            app:layout_constraintEnd_toStartOf="@+id/tv_actuator_addedit_http_newheader_equal"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@id/tv_actuator_addedit_http_headers_label" />
+
+                        <TextView
+                            android:id="@+id/tv_actuator_addedit_http_newheader_equal"
+                            style="@style/Theme.Dot.TextDataBold"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/detail_inner_margin_small"
+                            android:text="@string/edit_hint_http_header_equal"
+                            app:layout_constraintBottom_toBottomOf="@id/ed_actuator_addedit_http_newheader_name"
+                            app:layout_constraintEnd_toStartOf="@+id/ed_actuator_addedit_http_newheader_value"
+                            app:layout_constraintStart_toEndOf="@+id/ed_actuator_addedit_http_newheader_name"
+                            app:layout_constraintTop_toTopOf="@id/ed_actuator_addedit_http_newheader_name" />
+
+                        <EditText
+                            android:id="@+id/ed_actuator_addedit_http_newheader_value"
+                            style="@style/Theme.Dot.Edittext"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="@dimen/edit_icon_size"
+                            android:gravity="bottom"
+                            android:hint="@string/edit_hint_http_header_value"
+                            android:inputType="textNoSuggestions"
+                            android:maxLength="100"
+                            android:nextFocusUp="@id/sp_actuator_addedit_http_method"
+                            app:layout_constraintBottom_toBottomOf="@id/ed_actuator_addedit_http_newheader_name"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toEndOf="@+id/tv_actuator_addedit_http_newheader_equal"
+                            app:layout_constraintTop_toTopOf="@id/ed_actuator_addedit_http_newheader_name" />
+
+                        <ImageButton
+                            android:id="@+id/ib_actuator_addedit_newheader_add"
+                            android:layout_width="@dimen/edit_icon_size"
+                            android:layout_height="@dimen/edit_icon_size"
+                            android:layout_marginStart="1dp"
+                            android:adjustViewBounds="true"
+                            android:background="@drawable/selector_icon"
+                            android:contentDescription="@string/content_description_pick_location"
+                            android:onClick="@{(v) -> presenter.addHttpHeader()}"
+                            android:scaleType="fitXY"
+                            android:tint="@color/primaryTextColor"
+                            android:nextFocusUp="@id/sp_actuator_addedit_http_method"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toEndOf="@+id/ed_actuator_addedit_http_newheader_value"
+                            app:layout_constraintTop_toTopOf="@id/ed_actuator_addedit_http_newheader_name"
+                            app:srcCompat="@drawable/create" />
+
+                        <androidx.recyclerview.widget.RecyclerView
+                            android:id="@+id/rv_actuator_addedit_heasers_set"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:nestedScrollingEnabled="false"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@id/ed_actuator_addedit_http_newheader_name">
+
+                        </androidx.recyclerview.widget.RecyclerView>
+
+                        <TextView
+                            android:id="@+id/tv_actuator_addedit_http_mime_type_label"
+                            style="@style/Theme.Dot.TextDataBold"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/detail_inner_margin_big"
+                            android:text="@string/edit_label_http_mime_type"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@id/rv_actuator_addedit_heasers_set" />
+
+                        <EditText
+                            android:id="@+id/ed_actuator_addedit_http_mime_type"
+                            style="@style/Theme.Dot.Edittext"
+                            android:layout_width="match_parent"
+                            android:layout_height="0dp"
+                            android:layout_marginTop="@dimen/detail_inner_margin_small"
+                            android:gravity="bottom"
+                            android:hint="@string/edit_hint_http_mime_type"
+                            android:inputType="textNoSuggestions"
+                            android:maxLength="50"
+                            android:text='@{actuator.httpMimeType ?? ""}'
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@id/tv_actuator_addedit_http_mime_type_label" />
+
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/cl_actuator_addedit_mqtt_options"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_marginStart="@dimen/detail_inner_margin_big"
+                        android:layout_marginTop="@dimen/detail_inner_margin_big"
+                        android:layout_marginEnd="@dimen/detail_inner_margin_big"
+                        android:visibility="@{networkTypeSelected.equals(NetworkType.MQTT.ordinal()) ? View.VISIBLE : View.GONE }"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/fl_actuator_addedit_general_options_separator"
+                        tools:visibility="gone">
+
+                        <TextView
+                            android:id="@+id/tv_actuator_addedit_mqtt_variables_label"
+                            style="@style/Theme.Dot.TextTitle"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/edit_label_mqtt_variables"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <TextView
+                            android:id="@+id/tv_actuator_addedit_mqtt_topic_label"
+                            style="@style/Theme.Dot.TextDataBold"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/detail_inner_margin_big"
+                            android:text="@string/edit_label_mqtt_topic_publish"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@id/tv_actuator_addedit_mqtt_variables_label" />
+
+                        <EditText
+                            android:id="@+id/ed_actuator_addedit_mqtt_topic"
+                            style="@style/Theme.Dot.Edittext"
+                            android:layout_width="match_parent"
+                            android:layout_height="0dp"
+                            android:layout_marginTop="@dimen/detail_inner_margin_small"
+                            android:gravity="bottom"
+                            android:hint="@string/edit_hint_mqtt_topic_publish"
+                            android:inputType="textNoSuggestions"
+                            android:maxLength="100"
+                            android:nextFocusDown="@id/sp_actuator_addedit_mqtt_qos"
+                            android:text='@{actuator.mqttTopicToPublish ?? ""}'
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@id/tv_actuator_addedit_mqtt_topic_label" />
+
+                        <TextView
+                            android:id="@+id/tv_actuator_addedit_mqtt_qos_label"
+                            style="@style/Theme.Dot.TextDataBold"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/detail_inner_margin_big"
+                            android:text="@string/edit_label_mqtt_qos_level"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@id/ed_actuator_addedit_mqtt_topic" />
+
+                        <Spinner
+                            android:id="@+id/sp_actuator_addedit_mqtt_qos"
+                            android:layout_width="match_parent"
+                            android:layout_height="0dp"
+                            android:layout_marginTop="@dimen/detail_inner_margin_small"
+                            android:entries="@array/edit_array_mqtt_qos_level"
+                            android:focusable="true"
+                            android:nextFocusUp="@id/ed_actuator_addedit_mqtt_topic"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@id/tv_actuator_addedit_mqtt_qos_label"
+                            tools:visibility="visible" />
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                    <androidx.constraintlayout.widget.Barrier
+                        android:id="@+id/network_barrier"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:barrierDirection="bottom"
+                        app:constraint_referenced_ids="cl_actuator_addedit_http_options,cl_actuator_addedit_mqtt_options" />
+
+                    <FrameLayout
+                        android:id="@+id/fl_actuator_addedit_network_options_separator"
+                        android:layout_width="0dp"
+                        android:layout_height="1dp"
+                        android:layout_marginStart="@dimen/detail_inner_margin_big"
+                        android:layout_marginTop="@dimen/detail_inner_margin_big"
+                        android:layout_marginEnd="@dimen/detail_inner_margin_big"
+                        android:layout_marginBottom="@dimen/detail_inner_margin_big"
+                        android:background="@color/primaryTextColor"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/network_barrier" />
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/cl_actuator_addedit_message_options"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_marginStart="@dimen/detail_inner_margin_big"
+                        android:layout_marginTop="@dimen/detail_inner_margin_big"
+                        android:layout_marginEnd="@dimen/detail_inner_margin_big"
+                        android:visibility="visible"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/fl_actuator_addedit_network_options_separator"
+                        tools:visibility="gone">
+
+                        <TextView
+                            android:id="@+id/tv_actuator_addedit_message_variables_label"
+                            style="@style/Theme.Dot.TextTitle"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/edit_label_message_variables"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <TextView
+                            android:id="@+id/tv_actuator_addedit_message_format_label"
+                            style="@style/Theme.Dot.TextDataBold"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/detail_inner_margin_big"
+                            android:text="@string/edit_label_message_format"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@id/tv_actuator_addedit_message_variables_label" />
+
+                        <EditText
+                            android:id="@+id/ed_actuator_addedit_message_format"
+                            style="@style/Theme.Dot.Edittext"
+                            android:layout_width="match_parent"
+                            android:layout_height="0dp"
+                            android:layout_marginTop="@dimen/detail_inner_margin_small"
+                            android:hint="@string/edit_hint_message_format"
+                            android:inputType="textMultiLine"
+                            android:maxLength="500"
+                            android:gravity="top|start"
+                            android:minLines="20"
+                            android:text='@{actuator.dataFormatMessageToSend ?? ""}'
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@id/tv_actuator_addedit_message_format_label" />
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                    <FrameLayout
+                        android:id="@+id/fl_actuator_addedit_message_options_separator"
+                        android:layout_width="0dp"
+                        android:layout_height="1dp"
+                        android:layout_marginStart="@dimen/detail_inner_margin_big"
+                        android:layout_marginTop="@dimen/detail_inner_margin_big"
+                        android:layout_marginEnd="@dimen/detail_inner_margin_big"
+                        android:layout_marginBottom="@dimen/detail_inner_margin_big"
+                        android:background="@color/primaryTextColor"
+                        android:visibility="@{((dataTypeSelected.equals(DataType.DECIMAL.ordinal())) || (dataTypeSelected.equals(DataType.INTEGER.ordinal()))) ? View.VISIBLE : View.GONE }"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/cl_actuator_addedit_message_options" />
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/cl_actuator_addedit_data_integer_options"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_marginStart="@dimen/detail_inner_margin_big"
+                        android:layout_marginTop="@dimen/detail_inner_margin_big"
+                        android:layout_marginEnd="@dimen/detail_inner_margin_big"
+                        android:visibility="@{dataTypeSelected.equals(DataType.INTEGER.ordinal()) ? View.VISIBLE : View.GONE }"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/fl_actuator_addedit_message_options_separator"
+                        tools:visibility="gone">
+
+                        <TextView
+                            android:id="@+id/tv_actuator_addedit_data_integer_variables_label"
+                            style="@style/Theme.Dot.TextTitle"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/edit_label_integer_variables"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <TextView
+                            android:id="@+id/tv_actuator_addedit_integer_unit_label"
+                            style="@style/Theme.Dot.TextDataBold"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/detail_inner_margin_big"
+                            android:text="@string/edit_label_unit"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@id/tv_actuator_addedit_data_integer_variables_label" />
+
+                        <EditText
+                            android:id="@+id/ed_actuator_addedit_integer_unit"
+                            style="@style/Theme.Dot.Edittext"
+                            android:layout_width="match_parent"
+                            android:layout_height="0dp"
+                            android:layout_marginTop="@dimen/detail_inner_margin_small"
+                            android:gravity="bottom"
+                            android:hint="@string/edit_hint_unit"
+                            android:inputType="textNoSuggestions"
+                            android:maxLength="20"
+                            android:text='@{actuator.dataUnit ?? ""}'
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@id/tv_actuator_addedit_integer_unit_label" />
+
+                        <TextView
+                            android:id="@+id/tv_actuator_addedit_integer_minimum_label"
+                            style="@style/Theme.Dot.TextDataBold"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/detail_inner_margin_big"
+                            android:text="@string/edit_label_data_minimum"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@id/ed_actuator_addedit_integer_unit" />
+
+                        <EditText
+                            android:id="@+id/ed_actuator_addedit_integer_minimum"
+                            style="@style/Theme.Dot.Edittext"
+                            android:layout_width="match_parent"
+                            android:layout_height="0dp"
+                            android:layout_marginTop="@dimen/detail_inner_margin_small"
+                            android:gravity="bottom"
+                            android:hint="@string/edit_hint_data_minimum"
+                            android:inputType="number|numberSigned"
+                            android:maxLength="10"
+                            android:text='@{(actuator.dataNumberMinimum != null) ? Integer.valueOf(actuator.dataNumberMinimum.intValue()).toString() : ""}'
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@id/tv_actuator_addedit_integer_minimum_label" />
+
+                        <TextView
+                            android:id="@+id/tv_actuator_addedit_integer_maximum_label"
+                            style="@style/Theme.Dot.TextDataBold"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/detail_inner_margin_big"
+                            android:text="@string/edit_label_data_maximum"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@id/ed_actuator_addedit_integer_minimum" />
+
+                        <EditText
+                            android:id="@+id/ed_actuator_addedit_integer_maximum"
+                            style="@style/Theme.Dot.Edittext"
+                            android:layout_width="match_parent"
+                            android:layout_height="0dp"
+                            android:layout_marginTop="@dimen/detail_inner_margin_small"
+                            android:gravity="bottom"
+                            android:hint="@string/edit_hint_data_maximum"
+                            android:inputType="number|numberSigned"
+                            android:maxLength="10"
+                            android:text='@{(actuator.dataNumberMaximum != null) ? Integer.valueOf(actuator.dataNumberMaximum.intValue()).toString() : ""}'
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@id/tv_actuator_addedit_integer_maximum_label" />
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/cl_actuator_addedit_data_decimal_options"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_marginStart="@dimen/detail_inner_margin_big"
+                        android:layout_marginTop="@dimen/detail_inner_margin_big"
+                        android:layout_marginEnd="@dimen/detail_inner_margin_big"
+                        android:visibility="@{dataTypeSelected.equals(DataType.DECIMAL.ordinal()) ? View.VISIBLE : View.GONE }"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/fl_actuator_addedit_message_options_separator"
+                        tools:visibility="visible">
+
+                        <TextView
+                            android:id="@+id/tv_actuator_addedit_data_decimal_variables_label"
+                            style="@style/Theme.Dot.TextTitle"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/edit_label_decimal_variables"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <TextView
+                            android:id="@+id/tv_actuator_addedit_decimal_unit_label"
+                            style="@style/Theme.Dot.TextDataBold"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/detail_inner_margin_big"
+                            android:text="@string/edit_label_unit"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@id/tv_actuator_addedit_data_decimal_variables_label" />
+
+                        <EditText
+                            android:id="@+id/ed_actuator_addedit_decimal_unit"
+                            style="@style/Theme.Dot.Edittext"
+                            android:layout_width="match_parent"
+                            android:layout_height="0dp"
+                            android:layout_marginTop="@dimen/detail_inner_margin_small"
+                            android:gravity="bottom"
+                            android:hint="@string/edit_hint_unit"
+                            android:inputType="textNoSuggestions"
+                            android:maxLength="20"
+                            android:text='@{actuator.dataUnit ?? ""}'
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@id/tv_actuator_addedit_decimal_unit_label" />
+
+                        <TextView
+                            android:id="@+id/tv_actuator_addedit_decimal_minimum_label"
+                            style="@style/Theme.Dot.TextDataBold"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/detail_inner_margin_big"
+                            android:text="@string/edit_label_data_minimum"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@id/ed_actuator_addedit_decimal_unit" />
+
+                        <EditText
+                            android:id="@+id/ed_actuator_addedit_decimal_minimum"
+                            style="@style/Theme.Dot.Edittext"
+                            android:layout_width="match_parent"
+                            android:layout_height="0dp"
+                            android:layout_marginTop="@dimen/detail_inner_margin_small"
+                            android:gravity="bottom"
+                            android:hint="@string/edit_hint_data_minimum"
+                            android:inputType="numberDecimal|numberSigned"
+                            android:maxLength="10"
+                            android:text='@{(actuator.dataNumberMinimum != null) ? actuator.dataNumberMinimum.toString() : ""}'
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@id/tv_actuator_addedit_decimal_minimum_label" />
+
+                        <TextView
+                            android:id="@+id/tv_actuator_addedit_decimal_maximum_label"
+                            style="@style/Theme.Dot.TextDataBold"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/detail_inner_margin_big"
+                            android:text="@string/edit_label_data_maximum"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@id/ed_actuator_addedit_decimal_minimum" />
+
+                        <EditText
+                            android:id="@+id/ed_actuator_addedit_decimal_maximum"
+                            style="@style/Theme.Dot.Edittext"
+                            android:layout_width="match_parent"
+                            android:layout_height="0dp"
+                            android:layout_marginTop="@dimen/detail_inner_margin_small"
+                            android:gravity="bottom"
+                            android:hint="@string/edit_hint_data_maximum"
+                            android:inputType="numberDecimal|numberSigned"
+                            android:maxLength="10"
+                            android:text='@{(actuator.dataNumberMaximum != null) ? actuator.dataNumberMaximum.toString() : ""}'
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@id/tv_actuator_addedit_decimal_maximum_label" />
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+            </ScrollView>
+
+        </FrameLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+</layout>

@@ -1,0 +1,265 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools" >
+
+    <data>
+        <import type="android.view.View"/>
+        <import type="com.arejas.dashboardofthings.utils.Enumerators"/>
+        <variable
+            name="actuator"
+            type="com.arejas.dashboardofthings.domain.entities.extended.ActuatorExtended" />
+        <variable
+            name="presenter"
+            type="com.arejas.dashboardofthings.presentation.ui.helpers.ActuatorDetailsListener" />
+    </data>
+
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/srl_refresh_layout">
+
+        <androidx.core.widget.NestedScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior" >
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <include
+                    android:id="@+id/actuator_details_loading_layout"
+                    layout="@layout/layout_loading"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_margin="@dimen/list_side_outer_margin"
+                    android:orientation="vertical"/>
+
+                <include
+                    android:id="@+id/actuator_details_error_layout"
+                    layout="@layout/layout_error"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_margin="@dimen/list_side_outer_margin"
+                    android:orientation="vertical"/>
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/actuator_details_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:id="@+id/cl_actuator_detail_problems"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/detail_inner_margin_big"
+                        android:layout_marginStart="@dimen/detail_inner_margin_small"
+                        android:layout_marginEnd="@dimen/detail_inner_margin_small"
+                        android:contentDescription="@string/content_description_element_problems"
+                        app:elementName="@{actuator.name}"
+                        app:elementType="@{actuator.type}"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        style="@style/Theme.Dot.TextTitleAlert"
+                        android:visibility="@{ ((actuator.recentErrorLogs != null) &amp;&amp; (actuator.recentErrorLogs > 0)) ? View.VISIBLE : View.GONE }"
+                        android:text='@{((actuator.recentErrorLogs != null) &amp;&amp; (actuator.recentErrorLogs > 0)) ? @plurals/error_log_number(actuator.recentErrorLogs) : "" }'
+                        tools:text="There are problems"/>
+
+                    <TextView
+                        android:id="@+id/cl_actuator_detail_title"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/detail_inner_margin_big"
+                        android:layout_marginStart="@dimen/detail_inner_margin_small"
+                        android:layout_marginEnd="@dimen/detail_inner_margin_small"
+                        android:contentDescription="@string/content_description_actuator_type"
+                        android:text="@{actuator.type}"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/cl_actuator_detail_problems"
+                        style="@style/Theme.Dot.TextTitle"
+                        tools:text="Termometer - Temperature"/>
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/cl_actuator_detail_integer_setter"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/detail_inner_margin_big"
+                        android:layout_marginTop="@dimen/detail_inner_margin_small"
+                        android:layout_marginEnd="@dimen/detail_inner_margin_small"
+                        android:layout_marginBottom="@dimen/detail_inner_margin_big"
+                        android:visibility="@{ ((actuator.dataType != null) &amp;&amp; (actuator.dataType.equals(Enumerators.DataType.INTEGER))) ? View.VISIBLE : View.GONE }"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/cl_actuator_detail_title"
+                        tools:visibility="gone">
+
+                        <EditText
+                            android:id="@+id/et_actuator_detail_integer_value"
+                            android:layout_width="0dp"
+                            android:layout_height="0dp"
+                            style="@style/Theme.Dot.Edittext"
+                            android:inputType="number|numberSigned"
+                            android:hint="@string/actuator_integer_hint"
+                            android:maxLength="10"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toStartOf="@id/ib_actuator_detail_integer_set"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <ImageButton
+                            android:id="@+id/ib_actuator_detail_integer_set"
+                            android:layout_width="@dimen/card_icon_size"
+                            android:layout_height="@dimen/card_icon_size"
+                            android:background="@android:color/transparent"
+                            android:onClick="@{(v) -> presenter.sendInteger()}"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toEndOf="@id/et_actuator_detail_integer_value"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:srcCompat="@drawable/send"
+                            android:focusable="true"
+                            android:contentDescription="@string/content_description_actuator_send" />
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/cl_actuator_detail_decimal_setter"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/detail_inner_margin_big"
+                        android:layout_marginTop="@dimen/detail_inner_margin_small"
+                        android:layout_marginEnd="@dimen/detail_inner_margin_small"
+                        android:layout_marginBottom="@dimen/detail_inner_margin_big"
+                        android:visibility="@{ ((actuator.dataType != null) &amp;&amp; (actuator.dataType.equals(Enumerators.DataType.DECIMAL))) ? View.VISIBLE : View.GONE }"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/cl_actuator_detail_title"
+                        tools:visibility="gone">
+
+                        <EditText
+                            android:id="@+id/et_actuator_detail_decimal_value"
+                            android:layout_width="0dp"
+                            android:layout_height="0dp"
+                            style="@style/Theme.Dot.Edittext"
+                            android:inputType="numberDecimal|numberSigned"
+                            android:hint="@string/actuator_decimal_hint"
+                            android:focusable="true"
+                            android:maxLength="10"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toStartOf="@id/ib_actuator_detail_decimal_set"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <ImageButton
+                            android:id="@+id/ib_actuator_detail_decimal_set"
+                            android:layout_width="@dimen/card_icon_size"
+                            android:layout_height="@dimen/card_icon_size"
+                            android:background="@android:color/transparent"
+                            android:onClick="@{(v) -> presenter.sendFloat()}"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toEndOf="@id/et_actuator_detail_decimal_value"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:srcCompat="@drawable/send"
+                            android:focusable="true"
+                            android:contentDescription="@string/content_description_actuator_send" />
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/cl_actuator_detail_boolean_setter"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/detail_inner_margin_big"
+                        android:layout_marginTop="@dimen/detail_inner_margin_small"
+                        android:layout_marginEnd="@dimen/detail_inner_margin_small"
+                        android:layout_marginBottom="@dimen/detail_inner_margin_big"
+                        android:visibility="@{ ((actuator.dataType != null) &amp;&amp; (actuator.dataType.equals(Enumerators.DataType.BOOLEAN))) ? View.VISIBLE : View.GONE }"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/cl_actuator_detail_title">
+
+                        <Button
+                            android:id="@+id/tb_actuator_boolean_set_false"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            android:text="@string/actuator_send_boolean_false"
+                            android:onClick="@{(v) -> presenter.sendBooleanFalse()}"
+                            android:contentDescription="@string/content_description_actuator_sendfalse" />
+
+                        <Button
+                            android:id="@+id/tb_actuator_boolean_set_true"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintStart_toEndOf="@id/tb_actuator_boolean_set_false"
+                            app:layout_constraintTop_toTopOf="parent"
+                            android:text="@string/actuator_send_boolean_true"
+                            android:onClick="@{(v) -> presenter.sendBooleanTrue()}"
+                            android:contentDescription="@string/content_description_actuator_sendtrue" />
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/cl_actuator_detail_string_setter"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/detail_inner_margin_big"
+                        android:layout_marginTop="@dimen/detail_inner_margin_small"
+                        android:layout_marginEnd="@dimen/detail_inner_margin_small"
+                        android:layout_marginBottom="@dimen/detail_inner_margin_big"
+                        android:visibility="@{ ((actuator.dataType != null) &amp;&amp; (actuator.dataType.equals(Enumerators.DataType.STRING))) ? View.VISIBLE : View.GONE }"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/cl_actuator_detail_title"
+                        tools:visibility="gone">
+
+                        <EditText
+                            android:id="@+id/et_actuator_detail_string_value"
+                            android:layout_width="0dp"
+                            android:layout_height="0dp"
+                            style="@style/Theme.Dot.Edittext"
+                            android:inputType="textNoSuggestions"
+                            android:hint="@string/actuator_string_hint"
+                            android:maxLength="100"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toStartOf="@id/ib_actuator_detail_string_set"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <ImageButton
+                            android:id="@+id/ib_actuator_detail_string_set"
+                            android:layout_width="@dimen/card_icon_size"
+                            android:layout_height="@dimen/card_icon_size"
+                            android:background="@android:color/transparent"
+                            android:onClick="@{(v) -> presenter.sendString()}"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toEndOf="@id/et_actuator_detail_string_value"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:srcCompat="@drawable/send"
+                            android:focusable="true"
+                            android:contentDescription="@string/content_description_actuator_send" />
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+            </FrameLayout>
+
+        </androidx.core.widget.NestedScrollView>
+
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+</layout>

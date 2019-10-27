@@ -347,6 +347,24 @@ public class DotRepository {
 
     public LiveData<Resource<List<ActuatorExtended>>> getListOfActuatorsMainDashboard() {
         try {
+            dbExecutorManagement.execute(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        List<Actuator> data = dotDatabase.actuatorsDao().getAllInstant();
+                        data.size();
+                        Enumerators.ElementType[] elementTypes = new Enumerators.ElementType[1];
+                        elementTypes[0] = Enumerators.ElementType.ACTUATOR;
+                        Enumerators.LogLevel[] logLevels = new Enumerators.LogLevel[2];
+                        logLevels[0] = Enumerators.LogLevel.WARN;
+                        logLevels[1] = Enumerators.LogLevel.ERROR;
+                        List<ActuatorExtended> data2 = dotDatabase.actuatorsDao().getAllExtendedInstant(elementTypes, logLevels);
+                        data2.size();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
             if (this.actuatorListMainDashboard == null) {
                 Enumerators.ElementType[] elementTypes = new Enumerators.ElementType[1];
                 elementTypes[0] = Enumerators.ElementType.ACTUATOR;

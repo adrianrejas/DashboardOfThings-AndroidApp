@@ -62,7 +62,7 @@
                 app:layout_constraintTop_toBottomOf="@id/iv_sensor_card"
                 style="@style/Theme.Dot.TextTitleAlert"
                 android:visibility="@{ ((sensor.recentErrorLogs != null) &amp;&amp; (sensor.recentErrorLogs > 0)) ? View.VISIBLE : View.GONE }"
-                android:text="@{@plurals/error_log_number(sensor.recentErrorLogs)}"
+                android:text="@{@plurals/error_log_number_short(sensor.recentErrorLogs, sensor.recentErrorLogs)}"
                 tools:text="There are problems"/>
 
             <TextView

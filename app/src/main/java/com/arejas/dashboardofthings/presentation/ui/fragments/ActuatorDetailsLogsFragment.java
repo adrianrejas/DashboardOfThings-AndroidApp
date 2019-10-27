@@ -16,10 +16,10 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.arejas.dashboardofthings.R;
 import com.arejas.dashboardofthings.databinding.CardLogBinding;
-import com.arejas.dashboardofthings.databinding.FragmentMainlogsBinding;
+import com.arejas.dashboardofthings.databinding.FragmentActuatorDetailsLogsBinding;
 import com.arejas.dashboardofthings.domain.entities.database.Log;
 import com.arejas.dashboardofthings.domain.entities.result.Resource;
-import com.arejas.dashboardofthings.presentation.interfaces.viewmodels.MainDashboardViewModel;
+import com.arejas.dashboardofthings.presentation.interfaces.viewmodels.ActuatorDetailsViewModel;
 import com.arejas.dashboardofthings.presentation.interfaces.viewmodels.factories.ViewModelFactory;
 
 import java.util.List;
@@ -29,35 +29,55 @@ import javax.inject.Inject;
 
 import dagger.android.support.AndroidSupportInjection;
 
-public class MainLogsFragment extends Fragment {
+public class ActuatorDetailsLogsFragment extends Fragment {
+    /**
+     * The fragment argument representing the item ID that this fragment
+     * represents.
+     */
+    public static final String ACTUATOR_ID = "actuator_id";
 
-    FragmentMainlogsBinding uiBinding;
+    FragmentActuatorDetailsLogsBinding uiBinding;
 
     @Inject
     ViewModelFactory viewModelFactory;
 
-    private MainDashboardViewModel mainnetwork_addeditViewModel;
+    private ActuatorDetailsViewModel actuatorDetailsViewModel;
 
+    public Integer actuatorId;
+    
     private LiveData<Resource<List<Log>>> currentListShown;
     private LinearLayoutManager llm_linear;
-    private MainLogsFragment.LogsListAdapter mAdapter;
+    private ActuatorDetailsLogsFragment.LogsListAdapter mAdapter;
 
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
 
+        if (getArguments().containsKey(ACTUATOR_ID)) {
+            actuatorId = getArguments().getInt(ACTUATOR_ID);
+        }
+    }
+    
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         // Inject dependencies
         AndroidSupportInjection.inject(this);
-        // Get the movie activity view model and observe the changes in the details
-        mainnetwork_addeditViewModel = ViewModelProviders.of(Objects.requireNonNull(getActivity()), viewModelFactory).get(MainDashboardViewModel.class);
-        setList(true, false);
+        if (actuatorId != null) {
+            // Get the movie activity view model and observe the changes in the details
+            actuatorDetailsViewModel = ViewModelProviders.of(Objects.requireNonNull(getActivity()), viewModelFactory).get(ActuatorDetailsViewModel.class);
+            actuatorDetailsViewModel.setActuatorId(actuatorId);
+            setList(true, false);
+        } else {
+            showError();
+        }
     }
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
                              @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        uiBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_mainlogs, container, false);
+        uiBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_actuator_details_logs, container, false);
         // Configure adapter for recycler view
         configureListAdapter();
         // Set action of refreshing list when refreshing gesture detected
@@ -81,7 +101,7 @@ public class MainLogsFragment extends Fragment {
             currentListShown.removeObservers(this);
             currentListShown = null;
         }
-        currentListShown = mainnetwork_addeditViewModel.getLastConfigurationLogs(refreshData);
+        currentListShown = actuatorDetailsViewModel.getLogsForActuator(refreshData);
         if (currentListShown != null) {
             currentListShown.observe(this, listResource -> {
                 if (listResource == null) {
@@ -115,11 +135,11 @@ public class MainLogsFragment extends Fragment {
     private void configureListAdapter() {
         // Configure recycler view with a grid layout
         llm_linear = new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false);
-        uiBinding.logsMainListListLayout.mainList.setLayoutManager(llm_linear);
+        uiBinding.logsActuatorDetailsListLayout.mainList.setLayoutManager(llm_linear);
 
         // Configure adapter for recycler view
-        mAdapter = new MainLogsFragment.LogsListAdapter();
-        uiBinding.logsMainListListLayout.mainList.setAdapter(mAdapter);
+        mAdapter = new ActuatorDetailsLogsFragment.LogsListAdapter();
+        uiBinding.logsActuatorDetailsListLayout.mainList.setAdapter(mAdapter);
     }
 
     /**
@@ -127,11 +147,11 @@ public class MainLogsFragment extends Fragment {
      */
     private void showError() {
         if (uiBinding != null) {
-            uiBinding.logsMainListListLayout.listLayout.setVisibility(View.GONE);
-            uiBinding.logsMainListLoadingLayout.loadingLayout.setVisibility(View.GONE);
-            uiBinding.logsMainListErrorLayout.errorLayout.setVisibility(View.VISIBLE);
-            uiBinding.logsMainListNoElementsLayout.noElementsLayout.setVisibility(View.GONE);
-            uiBinding.logsMainListErrorLayout.tvError.setText(getString(R.string.error_in_list));
+            uiBinding.logsActuatorDetailsListLayout.listLayout.setVisibility(View.GONE);
+            uiBinding.logsActuatorDetailsLoadingLayout.loadingLayout.setVisibility(View.GONE);
+            uiBinding.logsActuatorDetailsErrorLayout.errorLayout.setVisibility(View.VISIBLE);
+            uiBinding.logsActuatorDetailsNoElementsLayout.noElementsLayout.setVisibility(View.GONE);
+            uiBinding.logsActuatorDetailsErrorLayout.tvError.setText(getString(R.string.error_in_list));
         }
     }
 
@@ -140,10 +160,10 @@ public class MainLogsFragment extends Fragment {
      */
     private void showLoading() {
         if (uiBinding != null) {
-            uiBinding.logsMainListListLayout.listLayout.setVisibility(View.GONE);
-            uiBinding.logsMainListLoadingLayout.loadingLayout.setVisibility(View.VISIBLE);
-            uiBinding.logsMainListErrorLayout.errorLayout.setVisibility(View.GONE);
-            uiBinding.logsMainListNoElementsLayout.noElementsLayout.setVisibility(View.GONE);
+            uiBinding.logsActuatorDetailsListLayout.listLayout.setVisibility(View.GONE);
+            uiBinding.logsActuatorDetailsLoadingLayout.loadingLayout.setVisibility(View.VISIBLE);
+            uiBinding.logsActuatorDetailsErrorLayout.errorLayout.setVisibility(View.GONE);
+            uiBinding.logsActuatorDetailsNoElementsLayout.noElementsLayout.setVisibility(View.GONE);
         }
     }
 
@@ -152,10 +172,10 @@ public class MainLogsFragment extends Fragment {
      */
     private void showNoElements() {
         if (uiBinding != null) {
-            uiBinding.logsMainListListLayout.listLayout.setVisibility(View.GONE);
-            uiBinding.logsMainListLoadingLayout.loadingLayout.setVisibility(View.GONE);
-            uiBinding.logsMainListErrorLayout.errorLayout.setVisibility(View.GONE);
-            uiBinding.logsMainListNoElementsLayout.noElementsLayout.setVisibility(View.VISIBLE);
+            uiBinding.logsActuatorDetailsListLayout.listLayout.setVisibility(View.GONE);
+            uiBinding.logsActuatorDetailsLoadingLayout.loadingLayout.setVisibility(View.GONE);
+            uiBinding.logsActuatorDetailsErrorLayout.errorLayout.setVisibility(View.GONE);
+            uiBinding.logsActuatorDetailsNoElementsLayout.noElementsLayout.setVisibility(View.VISIBLE);
         }
     }
 
@@ -164,14 +184,14 @@ public class MainLogsFragment extends Fragment {
      */
     private void showList() {
         if (uiBinding != null) {
-            uiBinding.logsMainListListLayout.listLayout.setVisibility(View.VISIBLE);
-            uiBinding.logsMainListLoadingLayout.loadingLayout.setVisibility(View.GONE);
-            uiBinding.logsMainListErrorLayout.errorLayout.setVisibility(View.GONE);
-            uiBinding.logsMainListNoElementsLayout.noElementsLayout.setVisibility(View.GONE);
+            uiBinding.logsActuatorDetailsListLayout.listLayout.setVisibility(View.VISIBLE);
+            uiBinding.logsActuatorDetailsLoadingLayout.loadingLayout.setVisibility(View.GONE);
+            uiBinding.logsActuatorDetailsErrorLayout.errorLayout.setVisibility(View.GONE);
+            uiBinding.logsActuatorDetailsNoElementsLayout.noElementsLayout.setVisibility(View.GONE);
         }
     }
 
-    class LogsListAdapter extends RecyclerView.Adapter<MainLogsFragment.LogsListAdapter.LogListViewHolder> {
+    class LogsListAdapter extends RecyclerView.Adapter<ActuatorDetailsLogsFragment.LogsListAdapter.LogListViewHolder> {
 
         private List<Log> mData;
 
@@ -184,15 +204,15 @@ public class MainLogsFragment extends Fragment {
         }
 
         @Override
-        public MainLogsFragment.LogsListAdapter.LogListViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        public ActuatorDetailsLogsFragment.LogsListAdapter.LogListViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             LayoutInflater inflater = LayoutInflater.from(parent.getContext());
             CardLogBinding binding = DataBindingUtil.inflate(inflater, R.layout.card_log,
                     parent, false);
-            return new MainLogsFragment.LogsListAdapter.LogListViewHolder(binding);
+            return new ActuatorDetailsLogsFragment.LogsListAdapter.LogListViewHolder(binding);
         }
 
         @Override
-        public void onBindViewHolder(final MainLogsFragment.LogsListAdapter.LogListViewHolder holder, int position) {
+        public void onBindViewHolder(final ActuatorDetailsLogsFragment.LogsListAdapter.LogListViewHolder holder, int position) {
             if ((mData != null) && (mData.size() > position)) {
                 holder.itemView.setTag(position);
                 holder.binding.setLog(mData.get(position));

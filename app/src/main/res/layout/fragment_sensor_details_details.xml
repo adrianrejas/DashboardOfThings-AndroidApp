@@ -71,7 +71,7 @@
                         app:layout_constraintTop_toTopOf="parent"
                         style="@style/Theme.Dot.TextTitleAlert"
                         android:visibility="@{ (((sensor.recentErrorLogs != null)) &amp;&amp; (sensor.recentErrorLogs > 0)) ? View.VISIBLE : View.GONE }"
-                        android:text='(((sensor.recentErrorLogs != null) &amp;&amp; (sensor.recentErrorLogs > 0)) ? @plurals/error_log_number(sensor.recentErrorLogs) : ""}'
+                        android:text='@{ ((sensor.recentErrorLogs != null) &amp;&amp; (sensor.recentErrorLogs > 0)) ? @plurals/error_log_number(sensor.recentErrorLogs, sensor.recentErrorLogs) : ""}'
                         tools:text="There are problems"/>
 
                     <TextView

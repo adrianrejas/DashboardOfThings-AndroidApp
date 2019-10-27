@@ -549,7 +549,7 @@ public class SensorAddEditActivity extends AppCompatActivity implements AddEditS
                 case MQTT:
                     String mqttTopic = uiBinding.edSensorAddeditMqttTopic.getText().toString().trim();
                     if (mqttTopic.isEmpty()) {
-                        ToastHelper.showToast(getString(R.string.edit_toast_check_http_baseurl));
+                        ToastHelper.showToast(getString(R.string.edit_toast_check_mqtt_topic));
                         return false;
                     }
                     break;
