@@ -151,6 +151,22 @@ public class SensorListActivity extends AppCompatActivity implements View.OnClic
 
         // Load sensor list
         setList(true, false);
+
+        // If sensor ID passed at the beginning and in two panel mode, load the sensor in the details area
+        if ((getIntent() != null) && (getIntent().getExtras() != null) &&
+                (getIntent().getExtras().containsKey(SensorDetailsFragment.SENSOR_ID))) {
+            int sensorIdToLoadAtInit = getIntent().getIntExtra(SensorDetailsFragment.SENSOR_ID, -1);
+            if (mTwoPane) {
+                Bundle arguments = new Bundle();
+                arguments.putInt(SensorDetailsFragment.SENSOR_ID, sensorIdToLoadAtInit);
+                arguments.putBoolean(SensorDetailsFragment.TWO_PANE, true);
+                SensorDetailsFragment fragment = new SensorDetailsFragment();
+                fragment.setArguments(arguments);
+                getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.sensor_detail_container, fragment)
+                        .commit();
+            }
+        }
     }
 
     @Override

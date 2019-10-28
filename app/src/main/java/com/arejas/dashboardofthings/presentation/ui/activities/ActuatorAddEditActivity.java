@@ -29,7 +29,6 @@ import com.arejas.dashboardofthings.utils.Enumerators;
 import com.arejas.dashboardofthings.utils.Utils;
 import com.sucho.placepicker.AddressData;
 import com.sucho.placepicker.Constants;
-import com.sucho.placepicker.MapType;
 import com.sucho.placepicker.PlacePicker;
 
 import java.util.HashMap;
@@ -300,9 +299,9 @@ public class ActuatorAddEditActivity extends AppCompatActivity implements AddEdi
             actuatorAddEditViewModel.setActuatorBeingEdited(actuatorToUse);
             if (actuatorToUse != null) {
                 imagePicked = actuatorToUse.getImageUri();
-                if ((actuatorToUse.getLocaltionLong() != null) && (actuatorToUse.getLocationLat() != null)) {
+                if ((actuatorToUse.getLocationLong() != null) && (actuatorToUse.getLocationLat() != null)) {
                     locationPicked = new AddressData(actuatorToUse.getLocationLat(),
-                            actuatorToUse.getLocaltionLong(), null);
+                            actuatorToUse.getLocationLong(), null);
 
                 } else {
                     locationPicked = null;
@@ -352,7 +351,7 @@ public class ActuatorAddEditActivity extends AppCompatActivity implements AddEdi
         actuatorToConfigure.setImageUri((imagePicked != null) ? imagePicked : null);
         if (locationPicked != null) {
             actuatorToConfigure.setLocationLat(locationPicked.getLatitude());
-            actuatorToConfigure.setLocaltionLong(locationPicked.getLongitude());
+            actuatorToConfigure.setLocationLong(locationPicked.getLongitude());
         }
         actuatorToConfigure.setShowInMainDashboard(uiBinding.cbActuatorAddeditShowInMainDashboard.isChecked());
         switch (networkToUse.getNetworkType()) {
@@ -567,13 +566,7 @@ public class ActuatorAddEditActivity extends AppCompatActivity implements AddEdi
     @Override
     public void pickLocation() {
         try {
-            PlacePicker.IntentBuilder builder = new PlacePicker.IntentBuilder()
-                    .showLatLong(true)  // Show Coordinates in the Activity
-                    .setMarkerImageImageColor(R.color.colorPrimary)
-                    .setPrimaryTextColor(R.color.primaryTextColor) // Change text color of Shortened Address
-                    .setSecondaryTextColor(R.color.secondaryTextColor) // Change text color of full Address
-                    .setMapType(MapType.NORMAL)
-                    .onlyCoordinates(true);  //Get only Coordinates from Place Picker
+            PlacePicker.IntentBuilder builder = Utils.getIntentBuilderForLocationPicker();
             if (locationPicked != null) {
                 builder.setLatLong(locationPicked.getLatitude(), locationPicked.getLongitude());
             }

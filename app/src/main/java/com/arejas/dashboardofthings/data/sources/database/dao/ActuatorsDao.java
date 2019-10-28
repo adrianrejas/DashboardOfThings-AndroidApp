@@ -29,7 +29,7 @@ public abstract class ActuatorsDao {
     @Query("SELECT * FROM actuators WHERE showInMainDashboard=1")
     public abstract LiveData<List<Actuator>> getAllToBeShownInMainDashboard();
 
-    @Query("SELECT * FROM actuators WHERE locationLat IS NOT NULL AND localtionLong IS NOT NULL")
+    @Query("SELECT * FROM actuators WHERE locationLat IS NOT NULL AND locationLong IS NOT NULL")
     public abstract LiveData<List<Actuator>> getAllLocated();
 
     @Query("SELECT * FROM actuators WHERE id=:id LIMIT 1")
@@ -74,7 +74,7 @@ public abstract class ActuatorsDao {
             "(SELECT COUNT(`logs`.elementId) FROM `logs` WHERE `logs`.elementId=actuators.id " +
             "AND `logs`.elementType IN(:elementTypes) AND `logs`.logLevel IN(:logLevels) " +
             "AND `logs`.dateRegistered >= CAST(strftime('%s', 'now') AS LONG)*1000-300000) " +
-            "AS recentErrorLogs FROM actuators, networks WHERE locationLat IS NOT NULL AND localtionLong IS NOT NULL")
+            "AS recentErrorLogs FROM actuators, networks WHERE locationLat IS NOT NULL AND locationLong IS NOT NULL")
     public abstract LiveData<List<ActuatorExtended>> getAllExtendedLocated(Enumerators.ElementType[] elementTypes,
                                                                               Enumerators.LogLevel[] logLevels);
 

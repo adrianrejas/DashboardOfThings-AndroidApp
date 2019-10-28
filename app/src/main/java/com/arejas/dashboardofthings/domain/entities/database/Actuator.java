@@ -59,7 +59,7 @@ public class Actuator implements Parcelable {
 
     private Double locationLat;
 
-    private Double localtionLong;
+    private Double locationLong;
 
     private Boolean showInMainDashboard;
 
@@ -108,9 +108,9 @@ public class Actuator implements Parcelable {
             locationLat = in.readDouble();
         }
         if (in.readByte() == 0) {
-            localtionLong = null;
+            locationLong = null;
         } else {
-            localtionLong = in.readDouble();
+            locationLong = in.readDouble();
         }
         showInMainDashboard = in.readByte() != 0;
     }
@@ -263,12 +263,12 @@ public class Actuator implements Parcelable {
         this.locationLat = lLocationLat;
     }
 
-    public Double getLocaltionLong() {
-        return localtionLong;
+    public Double getLocationLong() {
+        return locationLong;
     }
 
-    public void setLocaltionLong(Double lLocaltionLong) {
-        this.localtionLong = lLocaltionLong;
+    public void setLocationLong(Double lLocaltionLong) {
+        this.locationLong = lLocaltionLong;
     }
 
     public Boolean isShowInMainDashboard() {
@@ -332,11 +332,11 @@ public class Actuator implements Parcelable {
             parcel.writeByte((byte) 1);
             parcel.writeDouble(locationLat);
         }
-        if (localtionLong == null) {
+        if (locationLong == null) {
             parcel.writeByte((byte) 0);
         } else {
             parcel.writeByte((byte) 1);
-            parcel.writeDouble(localtionLong);
+            parcel.writeDouble(locationLong);
         }
         parcel.writeByte((byte) (showInMainDashboard ? 1 : 0));
     }

@@ -28,7 +28,6 @@ import com.arejas.dashboardofthings.utils.Enumerators;
 import com.arejas.dashboardofthings.utils.Utils;
 import com.sucho.placepicker.AddressData;
 import com.sucho.placepicker.Constants;
-import com.sucho.placepicker.MapType;
 import com.sucho.placepicker.PlacePicker;
 
 import java.util.HashMap;
@@ -299,9 +298,9 @@ public class SensorAddEditActivity extends AppCompatActivity implements AddEditS
             sensorAddEditViewModel.setSensorBeingEdited(sensorToUse);
             if (sensorToUse != null) {
                 imagePicked = sensorToUse.getImageUri();
-                if ((sensorToUse.getLocaltionLong() != null) && (sensorToUse.getLocationLat() != null)) {
+                if ((sensorToUse.getLocationLong() != null) && (sensorToUse.getLocationLat() != null)) {
                     locationPicked = new AddressData(sensorToUse.getLocationLat(),
-                            sensorToUse.getLocaltionLong(), null);
+                            sensorToUse.getLocationLong(), null);
 
                 } else {
                     locationPicked = null;
@@ -355,7 +354,7 @@ public class SensorAddEditActivity extends AppCompatActivity implements AddEditS
         sensorToConfigure.setImageUri((imagePicked != null) ? imagePicked : null);
         if (locationPicked != null) {
             sensorToConfigure.setLocationLat(locationPicked.getLatitude());
-            sensorToConfigure.setLocaltionLong(locationPicked.getLongitude());
+            sensorToConfigure.setLocationLong(locationPicked.getLongitude());
         }
         sensorToConfigure.setShowInMainDashboard(uiBinding.cbSensorAddeditShowInMainDashboard.isChecked());
         switch (networkToUse.getNetworkType()) {
@@ -726,13 +725,7 @@ public class SensorAddEditActivity extends AppCompatActivity implements AddEditS
     @Override
     public void pickLocation() {
         try {
-            PlacePicker.IntentBuilder builder = new PlacePicker.IntentBuilder()
-                    .showLatLong(true)  // Show Coordinates in the Activity
-                    .setMarkerImageImageColor(R.color.colorPrimary)
-                    .setPrimaryTextColor(R.color.primaryTextColor) // Change text color of Shortened Address
-                    .setSecondaryTextColor(R.color.secondaryTextColor) // Change text color of full Address
-                    .setMapType(MapType.NORMAL)
-                    .onlyCoordinates(true);  //Get only Coordinates from Place Picker
+            PlacePicker.IntentBuilder builder = Utils.getIntentBuilderForLocationPicker();
             if (locationPicked != null) {
                 builder.setLatLong(locationPicked.getLatitude(), locationPicked.getLongitude());
             }

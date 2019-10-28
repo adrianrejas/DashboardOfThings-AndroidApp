@@ -1,5 +1,5 @@
 <resources>
-    <bool name="twoPanelMode">false</bool>
+    <bool name="twoPanelMode">true</bool>
 
     <!-- Fonts and text -->
     <dimen name="font_size_standard">20dp</dimen>

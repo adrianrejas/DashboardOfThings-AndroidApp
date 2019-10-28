@@ -12,6 +12,10 @@
     <string name="title_actuator_addedit">Add/edit actuator</string>
     <string name="title_activity_map">Map</string>
 
+    <string name="network">Network</string>
+    <string name="sensor">Sensor</string>
+    <string name="actuator">Actuator</string>
+
     <string name="main_navigation_dashboard">Main dashboard</string>
     <string name="main_navigation_networks">Networks</string>
     <string name="main_navigation_sensors">Sensors</string>
@@ -70,6 +74,9 @@
     <string name="toast_actuator_send_failed">Failed to send actuator data.</string>
     <string name="toast_actuator_printdata_error">Error preparing the data to be printed.</string>
     <string name="toast_create_first_network">Before creating a sensor or an actuator, you must create a network to link to it.</string>
+    <string name="toast_map_failed">Failure at managing the map</string>
+    <string name="toast_map_actuators_failed">Failed to load the actuators for the map</string>
+    <string name="toast_map_sensors_failed">Failed to load the sensors for the map</string>
 
     <string name="loading">Loading ...</string>
     <string name="no_elements_in_list">There are no elements in the list shown.</string>
@@ -100,6 +107,14 @@
         <item>Last month</item>
         <item>Last year</item>
     </string-array>
+
+    <string name="map_element_spinner">Name: %s; Type: %s</string>
+
+    <string name="data_fancy_name">&lt;b>Name:&lt;/b> %s</string>
+    <string name="data_fancy_type">&lt;b>Type:&lt;/b> %s</string>
+    <string name="data_fancy_data_type">&lt;b>Data type:&lt;/b> %s</string>
+    <string name="data_fancy_network_type">&lt;b>Network type:&lt;/b> %s</string>
+    <string name="data_fancy_currentValue">&lt;b>Current value:&lt;/b> %s</string>
 
     <string name="boolean_active">Active</string>
     <string name="boolean_not_active">Not active</string>
@@ -349,19 +364,10 @@
     <string name="content_description_clear_location">Clear the location picked for using with the element</string>
     <string name="content_description_http_clear_header">Clear the selected header</string>
 
-    <!-- Preference Titles -->
-    <string name="messages_header">Messages</string>
-    <string name="sync_header">Sync</string>
+    <!-- Preferences -->
+    <string name="control_service_header">Control service</string>
+    <string name="launch_on_startup_header">Launch service in startup</string>
+    <string name="close_service_with_foreground">Close the service when the foreground app is closed.</string>
 
-    <!-- Messages Preferences -->
-    <string name="signature_title">Your signature</string>
-    <string name="reply_title">Default reply action</string>
-
-    <!-- Sync Preferences -->
-    <string name="sync_title">Sync email periodically</string>
-    <string name="attachment_title">Download incoming attachments</string>
-    <string name="attachment_summary_on">Automatically download attachments for incoming emails
-    </string>
-    <string name="attachment_summary_off">Only download attachments when manually requested</string>
     <string name="options_icon">⋮</string>
 </resources>

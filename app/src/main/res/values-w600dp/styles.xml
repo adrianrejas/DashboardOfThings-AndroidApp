@@ -1,0 +1,135 @@
+<!-- File created by the Android Action Bar Style Generator
+
+     Copyright (C) 2012 readyState Software Ltd
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+  
+          http://www.apache.org/licenses/LICENSE-2.0
+  
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+-->
+
+<resources>
+
+    <!-- CHANGE: Defining a set of styles derived from AppCompat -->
+
+    <style name="Theme.Dot" parent="@style/Theme.Design.Light.NoActionBar">
+        <item name="colorPrimary">@color/primaryColor</item>
+        <item name="colorPrimaryDark">@color/primaryDarkColor</item>
+        <item name="colorAccent">@color/secondaryColor</item>
+        <item name="android:fontFamily">sans-serif</item>
+        <item name="android:textStyle">normal</item>
+        <item name="android:textSize">@dimen/font_size_standard</item>
+        <item name="android:textColor">@color/primaryTextColor</item>
+        <item name="android:textColorLink">@color/secondaryColor</item>
+        <item name="android:windowActionBarOverlay">false</item>
+    </style>
+
+    <style name="Theme.Dot.Detail" parent="@style/Theme.AppCompat.Light.Dialog">
+        <item name="colorPrimary">@color/primaryColor</item>
+        <item name="colorPrimaryDark">@color/primaryDarkColor</item>
+        <item name="colorAccent">@color/secondaryColor</item>
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+        <item name="android:fontFamily">sans-serif</item>
+        <item name="android:textStyle">normal</item>
+        <item name="android:textSize">@dimen/font_size_standard</item>
+        <item name="android:textColor">@color/primaryTextColor</item>
+        <item name="android:textColorLink">@color/secondaryColor</item>
+        <item name="android:windowNoTitle">true</item>
+    </style>
+
+    <style name="Theme.Dot.CreateEdit" parent="@style/Theme.AppCompat.Light.Dialog">
+        <item name="colorPrimary">@color/primaryColor</item>
+        <item name="colorPrimaryDark">@color/primaryDarkColor</item>
+        <item name="colorAccent">@color/secondaryColor</item>
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+        <item name="android:fontFamily">sans-serif</item>
+        <item name="android:textStyle">normal</item>
+        <item name="android:textSize">@dimen/font_size_standard</item>
+        <item name="android:textColor">@color/primaryTextColor</item>
+        <item name="android:textColorLink">@color/secondaryColor</item>
+        <item name="android:windowNoTitle">true</item>
+    </style>
+
+    <style name="Theme.Dot.TextData" parent="Theme.Dot">
+        <item name="android:textSize">@dimen/font_size_list_text</item>
+        <item name="android:alpha">0.87</item>
+        <item name="android:lineSpacingMultiplier">@fraction/detail_body_line_spacing_multiplier
+        </item>
+    </style>
+
+    <style name="Theme.Dot.TextDataBold" parent="Theme.Dot.TextData">
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="Theme.Dot.TextTitle" parent="Theme.Dot">
+        <item name="android:textSize">@dimen/font_size_list_title</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@color/primaryTextColor</item>
+        <item name="android:alpha">0.87</item>
+    </style>
+
+    <style name="Theme.Dot.TextTitleAlert" parent="Theme.Dot.TextTitle">
+        <item name="android:textColor">@color/logErrorColorText</item>
+    </style>
+
+    <style name="Theme.Dot.TextByline" parent="Theme.Dot">
+        <item name="android:fontFamily">sans-serif-light</item>
+        <item name="android:textSize">@dimen/font_size_list_byline</item>
+        <item name="android:textColor">@color/primaryTextColor</item>
+        <item name="android:alpha">0.60</item>
+    </style>
+
+    <style name="Theme.Dot.Edittext" parent="Theme.Dot">
+        <item name="android:ems">10</item>
+    </style>
+
+    <style name="Theme.Dot.NavDrawer" parent="Theme.Dot">
+        <item name="android:background">@color/primaryColor</item>
+        <item name="android:textColor">@color/secondaryTextColor</item>
+        <item name="android:actionMenuTextColor">@color/secondaryTextColor</item>
+        <item name="colorControlNormal">@color/secondaryTextColor</item>
+    </style>
+
+    <style name="Theme.Dot.ActionBar" parent="Theme.Dot">
+        <item name="android:textColor">@color/secondaryTextColor</item>
+        <item name="android:actionMenuTextColor">@color/secondaryTextColor</item>
+        <item name="colorControlNormal">@color/secondaryTextColor</item>
+    </style>
+
+    <style name="Theme.Dot.ActionBar.Light" parent="Theme.Dot">
+        <item name="android:textColor">@color/primaryTextColor</item>
+        <item name="android:actionMenuTextColor">@color/primaryTextColor</item>
+        <item name="colorControlNormal">@color/primaryTextColor</item>
+    </style>
+
+    <style name="Theme.Dot.ActionBar.TextTitle" parent="Theme.Dot.ActionBar">
+        <item name="android:fontFamily">sans-serif-condensed</item>
+        <item name="android:textSize">@dimen/font_size_list_title_actionbar</item>
+        <item name="android:alpha">0.87</item>
+    </style>
+
+    <style name="Theme.Dot.ActionBar.TextByline" parent="Theme.Dot.ActionBar">
+        <item name="android:fontFamily">sans-serif-medium</item>
+        <item name="android:textSize">@dimen/font_size_list_byline_actionbar</item>
+        <item name="android:alpha">0.60</item>
+    </style>
+
+    <style name="Theme.Dot.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="Theme.Dot.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <style name="Theme.Dot.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
+</resources>

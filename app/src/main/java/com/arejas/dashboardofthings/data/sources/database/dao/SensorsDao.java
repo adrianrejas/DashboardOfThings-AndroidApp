@@ -30,7 +30,7 @@ public abstract class SensorsDao {
     @Query("SELECT * FROM sensors WHERE showInMainDashboard=1")
     public abstract LiveData<List<Sensor>> getAllToBeShownInMainDashboard();
 
-    @Query("SELECT * FROM sensors WHERE locationLat IS NOT NULL AND localtionLong IS NOT NULL")
+    @Query("SELECT * FROM sensors WHERE locationLat IS NOT NULL AND locationLong IS NOT NULL")
     public abstract LiveData<List<Sensor>> getAllLocated();
 
     @Query("SELECT * FROM sensors WHERE id=:id LIMIT 1")
@@ -64,7 +64,7 @@ public abstract class SensorsDao {
             "AS recentErrorLogs " +
             "FROM sensors " +
             "INNER JOIN networks ON sensors.networkId=networks.id " +
-            "WHERE locationLat IS NOT NULL AND localtionLong IS NOT NULL")
+            "WHERE locationLat IS NOT NULL AND locationLong IS NOT NULL")
     public abstract LiveData<List<SensorExtended>> getAllExtendedLocated(Enumerators.ElementType[] elementTypes,
                                                                          Enumerators.LogLevel[] logLevels);
 

@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "bd3fe0dd98c1215132262e62acfe8f1d",
+    "identityHash": "c5357e1d3bbf2d41fcc9dc4b5b1acbf4",
     "entities": [
       {
         "tableName": "networks",
@@ -134,7 +134,7 @@
       },
       {
         "tableName": "sensors",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `name` TEXT, `type` TEXT, `imageUri` TEXT, `networkId` INTEGER, `httpRelativeUrl` TEXT, `httpHeaders` TEXT, `httpSecondsBetweenRequests` INTEGER, `mqttTopicToSubscribe` TEXT, `mqttQosLevel` INTEGER, `messageType` INTEGER, `dataType` INTEGER, `xmlOrJsonNode` TEXT, `rawRegularExpression` TEXT, `dataUnit` TEXT, `thresholdAboveCritical` REAL, `thresholdAboveWarning` REAL, `thresholdBelowCritical` REAL, `thresholdBelowWarning` REAL, `thresholdEqualsWarning` TEXT, `thresholdEqualsCritical` TEXT, `locationLat` REAL, `localtionLong` REAL, `showInMainDashboard` INTEGER, FOREIGN KEY(`networkId`) REFERENCES `networks`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE )",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `name` TEXT, `type` TEXT, `imageUri` TEXT, `networkId` INTEGER, `httpRelativeUrl` TEXT, `httpHeaders` TEXT, `httpSecondsBetweenRequests` INTEGER, `mqttTopicToSubscribe` TEXT, `mqttQosLevel` INTEGER, `messageType` INTEGER, `dataType` INTEGER, `xmlOrJsonNode` TEXT, `rawRegularExpression` TEXT, `dataUnit` TEXT, `thresholdAboveCritical` REAL, `thresholdAboveWarning` REAL, `thresholdBelowCritical` REAL, `thresholdBelowWarning` REAL, `thresholdEqualsWarning` TEXT, `thresholdEqualsCritical` TEXT, `locationLat` REAL, `locationLong` REAL, `showInMainDashboard` INTEGER, FOREIGN KEY(`networkId`) REFERENCES `networks`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE )",
         "fields": [
           {
             "fieldPath": "id",
@@ -269,8 +269,8 @@
             "notNull": false
           },
           {
-            "fieldPath": "localtionLong",
-            "columnName": "localtionLong",
+            "fieldPath": "locationLong",
+            "columnName": "locationLong",
             "affinity": "REAL",
             "notNull": false
           },
@@ -313,7 +313,7 @@
       },
       {
         "tableName": "actuators",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `name` TEXT, `type` TEXT, `imageUri` TEXT, `networkId` INTEGER, `httpRelativeUrl` TEXT, `httpMethod` INTEGER, `httpHeaders` TEXT, `httpMimeType` TEXT, `mqttTopicToPublish` TEXT, `mqttQosLevel` INTEGER, `dataType` INTEGER, `dataNumberMinimum` REAL, `dataNumberMaximum` REAL, `dataFormatMessageToSend` TEXT, `dataUnit` TEXT, `locationLat` REAL, `localtionLong` REAL, `showInMainDashboard` INTEGER, FOREIGN KEY(`networkId`) REFERENCES `networks`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE )",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `name` TEXT, `type` TEXT, `imageUri` TEXT, `networkId` INTEGER, `httpRelativeUrl` TEXT, `httpMethod` INTEGER, `httpHeaders` TEXT, `httpMimeType` TEXT, `mqttTopicToPublish` TEXT, `mqttQosLevel` INTEGER, `dataType` INTEGER, `dataNumberMinimum` REAL, `dataNumberMaximum` REAL, `dataFormatMessageToSend` TEXT, `dataUnit` TEXT, `locationLat` REAL, `locationLong` REAL, `showInMainDashboard` INTEGER, FOREIGN KEY(`networkId`) REFERENCES `networks`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE )",
         "fields": [
           {
             "fieldPath": "id",
@@ -418,8 +418,8 @@
             "notNull": false
           },
           {
-            "fieldPath": "localtionLong",
-            "columnName": "localtionLong",
+            "fieldPath": "locationLong",
+            "columnName": "locationLong",
             "affinity": "REAL",
             "notNull": false
           },
@@ -590,7 +590,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'bd3fe0dd98c1215132262e62acfe8f1d')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'c5357e1d3bbf2d41fcc9dc4b5b1acbf4')"
     ]
   }
 }

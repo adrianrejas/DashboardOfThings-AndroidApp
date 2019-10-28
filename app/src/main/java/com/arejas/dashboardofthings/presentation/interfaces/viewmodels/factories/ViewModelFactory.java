@@ -15,6 +15,7 @@ import com.arejas.dashboardofthings.presentation.interfaces.viewmodels.ActuatorA
 import com.arejas.dashboardofthings.presentation.interfaces.viewmodels.ActuatorDetailsViewModel;
 import com.arejas.dashboardofthings.presentation.interfaces.viewmodels.ActuatorListViewModel;
 import com.arejas.dashboardofthings.presentation.interfaces.viewmodels.MainDashboardViewModel;
+import com.arejas.dashboardofthings.presentation.interfaces.viewmodels.MapViewModel;
 import com.arejas.dashboardofthings.presentation.interfaces.viewmodels.NetworkAddEditViewModel;
 import com.arejas.dashboardofthings.presentation.interfaces.viewmodels.NetworkDetailsViewModel;
 import com.arejas.dashboardofthings.presentation.interfaces.viewmodels.NetworkListViewModel;
@@ -47,6 +48,7 @@ public class ViewModelFactory extends ViewModelProvider.NewInstanceFactory {
     private ActuatorListViewModel actuatorListViewModel;
     private ActuatorDetailsViewModel actuatorDetailsViewModel;
     private ActuatorAddEditViewModel actuatorAddEditViewModel;
+    private MapViewModel mapViewModel;
 
     @Inject
     public ViewModelFactory(@NonNull Application application,
@@ -65,7 +67,7 @@ public class ViewModelFactory extends ViewModelProvider.NewInstanceFactory {
         networkListViewModelSingleton();
         sensorListViewModelSingleton();
         actuatorListViewModelSingleton();
-        this.networkDetailsViewModel = null;
+        mapViewModelSingleton();
     }
 
     @Override
@@ -91,6 +93,8 @@ public class ViewModelFactory extends ViewModelProvider.NewInstanceFactory {
             return (T) actuatorDetailsViewModelSingleton();
         } else if (modelClass.isAssignableFrom(ActuatorAddEditViewModel.class)) {
             return (T) actuatorAddEditViewModelSingleton();
+        } else if (modelClass.isAssignableFrom(MapViewModel.class)) {
+            return (T) mapViewModelSingleton();
         } else {
             throw new ClassCastException("No view model class recognized");
         }
@@ -161,6 +165,13 @@ public class ViewModelFactory extends ViewModelProvider.NewInstanceFactory {
         if (actuatorAddEditViewModel == null)
             actuatorAddEditViewModel = new ActuatorAddEditViewModel(application, networkManagementUseCase, actuatorManagementUseCase);
         return actuatorAddEditViewModel;
+    }
+
+    private MapViewModel mapViewModelSingleton() {
+        if (mapViewModel == null)
+            mapViewModel = new MapViewModel(application, sensorManagementUseCase,
+                    actuatorManagementUseCase);
+        return mapViewModel;
     }
 
 }

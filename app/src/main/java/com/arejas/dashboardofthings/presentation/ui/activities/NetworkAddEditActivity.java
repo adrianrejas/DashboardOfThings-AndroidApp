@@ -473,7 +473,7 @@ public class NetworkAddEditActivity extends AppCompatActivity implements AddEdit
     public void pickHttpCert() {
         Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
         intent.addCategory(Intent.CATEGORY_OPENABLE);
-        intent.setType("file/*");
+        intent.setType("*/*");
         startActivityForResult(Intent.createChooser(intent, getString(R.string.edit_hint_http_cert_pick)), REQUEST_PICK_HTTP_CERT);
     }
 
@@ -487,7 +487,7 @@ public class NetworkAddEditActivity extends AppCompatActivity implements AddEdit
     public void pickMqttCert() {
         Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
         intent.addCategory(Intent.CATEGORY_OPENABLE);
-        intent.setType("file/*");
+        intent.setType("*/*");
         startActivityForResult(Intent.createChooser(intent, getString(R.string.edit_hint_mqtt_cert_pick)), REQUEST_PICK_MQTT_CERT);
     }
 

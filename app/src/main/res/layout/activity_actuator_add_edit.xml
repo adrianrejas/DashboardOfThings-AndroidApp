@@ -315,7 +315,7 @@
                             android:onClick="@{(v) -> presenter.cancelLocationPicked()}"
                             android:scaleType="fitXY"
                             android:tint="@color/primaryTextColor"
-                            android:visibility="@{((imagePicked != null) &amp;&amp; (!imagePicked.isEmpty())) ? View.VISIBLE : View.GONE }"
+                            android:visibility="@{(locationPicked != null) ? View.VISIBLE : View.GONE }"
                             app:layout_constraintBottom_toBottomOf="@id/ib_actuator_addedit_location_picker"
                             app:layout_constraintEnd_toStartOf="@id/tv_actuator_addedit_pick_location_label"
                             app:layout_constraintStart_toEndOf="@id/ib_actuator_addedit_location_picker"

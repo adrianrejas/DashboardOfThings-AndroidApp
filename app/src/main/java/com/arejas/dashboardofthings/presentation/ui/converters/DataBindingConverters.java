@@ -481,6 +481,15 @@ public class DataBindingConverters {
         }
     }
 
+    @BindingAdapter({"dataText", "envoltureText"})
+    public static void loadFancyText(TextView view, String dataText, String envoltureText) {
+        if ((dataText != null) && (envoltureText != null)) {
+            view.setText(Utils.fromHtml(String.format(envoltureText, dataText)));
+        } else {
+            view.setText("-");
+        }
+    }
+
     @BindingAdapter({"actuatorList"})
     public static void loadListOfActuators(TextView view, List<Actuator> dataList) {
         // If not null, compose the list and set it.

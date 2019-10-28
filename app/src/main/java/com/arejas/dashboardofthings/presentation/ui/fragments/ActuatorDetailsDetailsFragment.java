@@ -176,7 +176,7 @@ public class ActuatorDetailsDetailsFragment extends Fragment implements Actuator
         try {
             if ((currentInfoShown != null) && (currentInfoShown.getValue() != null) &&
                     (currentInfoShown.getValue().getStatus().equals(Resource.Status.SUCCESS))){
-                String data = uiBinding.etActuatorDetailDecimalValue.getText().toString();
+                String data = uiBinding.etActuatorDetailIntegerValue.getText().toString();
                 Actuator actuator = currentInfoShown.getValue().getData();
                 Float comparingData = Float.valueOf(data);
                 if ((actuator.getDataNumberMinimum() != null) && (actuator.getDataNumberMaximum() != null)) {

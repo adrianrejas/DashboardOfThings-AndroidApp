@@ -142,6 +142,22 @@ public class ActuatorListActivity extends AppCompatActivity implements View.OnCl
 
         // Load actuator list
         setList(true, false);
+
+        // If actuator ID passed at the beginning and in two panel mode, load the actuator in the details area
+        if ((getIntent() != null) && (getIntent().getExtras() != null) &&
+                (getIntent().getExtras().containsKey(ActuatorDetailsFragment.ACTUATOR_ID))) {
+            int actuatorIdToLoadAtInit = getIntent().getIntExtra(ActuatorDetailsFragment.ACTUATOR_ID, -1);
+            if (mTwoPane) {
+                Bundle arguments = new Bundle();
+                arguments.putInt(ActuatorDetailsFragment.ACTUATOR_ID, actuatorIdToLoadAtInit);
+                arguments.putBoolean(ActuatorDetailsFragment.TWO_PANE, true);
+                ActuatorDetailsFragment fragment = new ActuatorDetailsFragment();
+                fragment.setArguments(arguments);
+                getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.actuator_detail_container, fragment)
+                        .commit();
+            }
+        }
     }
 
     @Override

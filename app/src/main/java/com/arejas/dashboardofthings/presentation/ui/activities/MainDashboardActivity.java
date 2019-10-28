@@ -3,6 +3,7 @@ package com.arejas.dashboardofthings.presentation.ui.activities;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -26,6 +27,12 @@ import com.arejas.dashboardofthings.presentation.ui.fragments.MainHistoryFragmen
 import com.arejas.dashboardofthings.presentation.ui.fragments.MainLogsFragment;
 import com.arejas.dashboardofthings.presentation.ui.fragments.MainSensorsFragment;
 import com.arejas.dashboardofthings.presentation.ui.fragments.MainStatusFragment;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.InterstitialAd;
+import com.google.android.gms.ads.MobileAds;
+import com.google.android.gms.ads.initialization.InitializationStatus;
+import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
 import com.google.android.material.navigation.NavigationView;
 
 import javax.inject.Inject;
@@ -116,6 +123,16 @@ public class MainDashboardActivity extends AppCompatActivity {
         MainDashboardFragmentAdapter fragmentAdapter = new MainDashboardFragmentAdapter(getSupportFragmentManager(), this);
         uiBinding.vpTabViewerMaindashboard.setAdapter(fragmentAdapter);
         uiBinding.tlTabsMaindashboard.setupWithViewPager(uiBinding.vpTabViewerMaindashboard);
+
+        MobileAds.initialize(this, new OnInitializationCompleteListener() {
+            @Override
+            public void onInitializationComplete(InitializationStatus initializationStatus) {
+                Log.d("ADS", "Anuncios cargados");
+            }
+        });
+        AdView mAdView = (AdView) findViewById(R.id.ad_maindashboard);
+        AdRequest adRequest = new AdRequest.Builder().build();
+        mAdView.loadAd(adRequest);
     }
 
     @Override
