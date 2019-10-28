@@ -30,6 +30,8 @@ import java.util.Map;
 
 import javax.inject.Inject;
 
+import dagger.android.AndroidInjection;
+
 public class ControlService extends Service {
 
     Map<Integer, NetworkInterfaceHelper> networkHelpers;
@@ -51,6 +53,7 @@ public class ControlService extends Service {
     public int onStartCommand(Intent intent, int flags, int startId) {
         startForeground(NotificationsHelper.FOREGROUND_SERVICE_NOTIFICATION_ID,
                 NotificationsHelper.showNotificationForegroundService(getApplicationContext()));
+        AndroidInjection.inject(this);
         initializeNetworkHelpers();
         initializeSubscriptionsToNetworksAndSensorsManagementChanges();
         initializeSubscriptionsToActuatorDataUpdates();

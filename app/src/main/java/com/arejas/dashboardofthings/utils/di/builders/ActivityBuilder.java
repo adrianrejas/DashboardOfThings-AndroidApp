@@ -12,6 +12,7 @@ import com.arejas.dashboardofthings.presentation.ui.activities.SensorAddEditActi
 import com.arejas.dashboardofthings.presentation.ui.activities.SensorDetailsActivity;
 import com.arejas.dashboardofthings.presentation.ui.activities.SensorListActivity;
 import com.arejas.dashboardofthings.presentation.ui.activities.SettingsActivity;
+import com.arejas.dashboardofthings.presentation.ui.widget.SelectSensorForWidgetActivity;
 
 import dagger.Module;
 import dagger.android.ContributesAndroidInjector;
@@ -54,5 +55,8 @@ public abstract class ActivityBuilder {
 
     @ContributesAndroidInjector
     abstract SettingsActivity binSettingsActivity();
+
+    @ContributesAndroidInjector
+    abstract SelectSensorForWidgetActivity binSelectSensorForWidgetActivity();
 
 }

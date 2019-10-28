@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools" >
+
+    <data>
+        <import type="android.view.View"/>
+        <variable
+            name="sensor"
+            type="com.arejas.dashboardofthings.domain.entities.extended.SensorExtended" />
+    </data>
+    
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:focusable="true"
+        android:background="@drawable/selector_layout">
+
+        <ImageView
+            android:id="@+id/iv_sensor_widget_selection"
+            android:layout_width="@dimen/listitem_image_size"
+            android:layout_height="@dimen/listitem_image_size"
+            android:layout_margin="@dimen/detail_inner_margin_small"
+            android:adjustViewBounds="true"
+            android:contentDescription="@string/content_description_sensor_image"
+            android:scaleType="centerCrop"
+            app:imageUrl="@{sensor.imageUri}"
+            app:errorResource="@{@drawable/error}"
+            app:loadingResource="@{@drawable/loading}"
+            app:alternativeResource="@{@drawable/picture}"
+            app:layout_constraintEnd_toStartOf="@id/cl_sensor_info_widget_selection"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            tools:src="@drawable/error" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/cl_sensor_info_widget_selection"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/detail_inner_margin_small"
+            android:layout_marginEnd="@dimen/detail_inner_margin_small"
+            android:layout_marginBottom="@dimen/detail_inner_margin_small"
+            app:layout_constraintStart_toEndOf="@id/iv_sensor_widget_selection"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent">
+
+            <TextView
+                android:id="@+id/tv_sensor_name_widget_selection"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/detail_inner_margin_extra_small"
+                android:contentDescription="@string/content_description_sensor_name"
+                app:elementName="@{sensor.name}"
+                app:elementProblems="@{sensor.recentErrorLogs}"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toTopOf="@id/tv_sensor_type_widget_selection"
+                style="@style/Theme.Dot.TextTitle"
+                tools:text="Local sensor daskhjfalkds fjlkadsjflk adslkfajsdlkfjaldskjflkasdjf lkasdjflkadsj flakds fadsf"/>
+
+            <TextView
+                android:id="@+id/tv_sensor_type_widget_selection"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/detail_inner_margin_small"
+                android:contentDescription="@string/content_description_sensor_type"
+                app:sensorType="@{sensor.type}"
+                app:elementProblems="@{sensor.recentErrorLogs}"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tv_sensor_name_widget_selection"
+                app:layout_constraintBottom_toBottomOf="parent"
+                style="@style/Theme.Dot.TextData"
+                tools:text="NORMAL" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+    
+</layout>

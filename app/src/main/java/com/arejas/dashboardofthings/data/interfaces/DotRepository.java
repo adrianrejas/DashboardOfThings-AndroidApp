@@ -20,8 +20,11 @@ import com.arejas.dashboardofthings.domain.entities.extended.NetworkExtended;
 import com.arejas.dashboardofthings.domain.entities.extended.SensorExtended;
 import com.arejas.dashboardofthings.domain.entities.result.LiveDataResource;
 import com.arejas.dashboardofthings.domain.entities.result.Resource;
+import com.arejas.dashboardofthings.domain.entities.widget.SensorWidgetItem;
 import com.arejas.dashboardofthings.presentation.ui.notifications.NotificationsHelper;
+import com.arejas.dashboardofthings.presentation.ui.widget.SensorWidget;
 import com.arejas.dashboardofthings.utils.Enumerators;
+import com.arejas.dashboardofthings.utils.functional.Consumer;
 import com.arejas.dashboardofthings.utils.rx.RxHelper;
 
 import org.jetbrains.annotations.NotNull;
@@ -499,6 +502,24 @@ public class DotRepository {
         return result;
     }
 
+    public void requestSensorReloadInstant(int id) {
+        try {
+            dbExecutorManagement.execute(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        Sensor sensor = dotDatabase.sensorsDao().findByIdInstant(id);
+                        RxHelper.publishSensorReloadRequest(sensor);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     public LiveData<Resource> updateActuatorData(@NotNull Actuator actuator, @NotNull String data) {
         MutableLiveData<Resource> result = new MutableLiveData<>();
         result.postValue(Resource.loading(null));
@@ -640,6 +661,42 @@ public class DotRepository {
             return new LiveDataResource<List<Log>>(() -> this.dotDatabase.logsDao().getLastHundredLogsForElementId(id, elementType));
         } catch (Exception e) {
             return null;
+        }
+    }
+
+    public void getSensorInfoForWidget(int id, Consumer<SensorWidgetItem> consumer) {
+        try {
+            dbExecutorManagement.execute(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        SensorWidgetItem sensorInfo = dotDatabase.sensorsDao().findByIdForWidgetInstant(id);
+                        consumer.accept(sensorInfo);
+                    } catch (Exception e) {
+                        consumer.accept(null);
+                    }
+                }
+            });
+        } catch (Exception e) {
+            consumer.accept(null);
+        }
+    }
+
+    public void getSensorInfoForWidgets(int[] ids, Consumer<List<SensorWidgetItem>> consumer) {
+        try {
+            dbExecutorManagement.execute(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        List<SensorWidgetItem> sensorInfoList = dotDatabase.sensorsDao().getAllForWidgetsInstant(ids);
+                        consumer.accept(sensorInfoList);
+                    } catch (Exception e) {
+                        consumer.accept(null);
+                    }
+                }
+            });
+        } catch (Exception e) {
+            consumer.accept(null);
         }
     }
 

@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.arejas.dashboardofthings">
-
     <!--
          The ACCESS_COARSE/FINE_LOCATION permissions are not required to use
          Google Maps Android API v2, but you must specify either coarse or fine
@@ -24,12 +23,29 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Dot">
 
+        <receiver android:name=".presentation.ui.widget.SensorWidget">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/sensor_widget_info" />
+        </receiver>
         <receiver
             android:name=".domain.services.BootDeviceReceiver"
             android:enabled="true"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
+            </intent-filter>
+        </receiver>
+        <receiver
+            android:name=".presentation.ui.widget.SensorWidgetButtonBroadcast"
+            android:enabled="true"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.arejas.dashboardofthings.presentation.ui.widget.ACTION_REQUEST_SENSOR_RELOAD"/>
             </intent-filter>
         </receiver>
 
@@ -45,6 +61,10 @@
             android:name=".data.sources.network.http.HttpSensorRequestJobService"
             android:enabled="true"
             android:exported="true" />
+        <service
+            android:name=".presentation.ui.widget.SensorWidgetService"
+            android:exported="true"
+            android:permission="android.permission.BIND_JOB_SERVICE" />
 
         <activity
             android:name=".presentation.ui.activities.MainDashboardActivity"
@@ -60,16 +80,15 @@
             android:name=".presentation.ui.activities.NetworkListActivity"
             android:label="@string/title_network_list"
             android:launchMode="singleTop"
-            android:theme="@style/Theme.Dot"></activity>
+            android:theme="@style/Theme.Dot" />
         <activity
             android:name=".presentation.ui.activities.NetworkDetailsActivity"
             android:label="@string/title_network_detail"
-            android:theme="@style/Theme.Dot.Detail">
-        </activity>
+            android:theme="@style/Theme.Dot.Detail" />
         <activity
             android:name=".presentation.ui.activities.NetworkAddEditActivity"
             android:label="@string/title_network_addedit"
-            android:theme="@style/Theme.Dot.CreateEdit"></activity>
+            android:theme="@style/Theme.Dot.CreateEdit" />
         <activity
             android:name=".presentation.ui.activities.SensorListActivity"
             android:label="@string/title_sensor_list"
@@ -78,12 +97,11 @@
         <activity
             android:name=".presentation.ui.activities.SensorDetailsActivity"
             android:label="@string/title_sensor_detail"
-            android:theme="@style/Theme.Dot.Detail">
-        </activity>
+            android:theme="@style/Theme.Dot.Detail" />
         <activity
             android:name=".presentation.ui.activities.SensorAddEditActivity"
             android:label="@string/title_sensor_addedit"
-            android:theme="@style/Theme.Dot.CreateEdit"></activity>
+            android:theme="@style/Theme.Dot.CreateEdit" />
         <activity
             android:name=".presentation.ui.activities.ActuatorListActivity"
             android:label="@string/title_actuator_list"
@@ -92,12 +110,11 @@
         <activity
             android:name=".presentation.ui.activities.ActuatorDetailsActivity"
             android:label="@string/title_actuator_detail"
-            android:theme="@style/Theme.Dot.Detail">
-        </activity>
+            android:theme="@style/Theme.Dot.Detail" />
         <activity
             android:name=".presentation.ui.activities.ActuatorAddEditActivity"
             android:label="@string/title_actuator_addedit"
-            android:theme="@style/Theme.Dot.CreateEdit"></activity>
+            android:theme="@style/Theme.Dot.CreateEdit" />
         <activity
             android:name=".presentation.ui.activities.MapActivity"
             android:label="@string/title_activity_map"
@@ -108,6 +125,12 @@
             android:label="@string/title_activity_settings"
             android:launchMode="singleTop"
             android:theme="@style/Theme.Dot" />
+        <activity android:name=".presentation.ui.widget.SelectSensorForWidgetActivity"
+            android:label="@string/title_activity_select_sensor_for_widget"
+            android:launchMode="singleTop"
+            android:theme="@style/Theme.Dot">
+
+        </activity>
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
              (See the file "res/values/google_maps_api.xml").
@@ -118,10 +141,10 @@
         -->
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="@string/google_maps_key" /> <!-- Sample AdMob App ID: ca-app-pub-3940256099942544~3347511713 -->
+            android:value="@string/google_maps_key" />
         <meta-data
             android:name="com.google.android.gms.ads.APPLICATION_ID"
-            android:value="ca-app-pub-3940256099942544~3347511713" />
+            android:value="ca-app-pub-3940256099942544~3347511713" /> <!-- Sample AdMob App ID: ca-app-pub-3940256099942544~3347511713 -->
     </application>
 
 </manifest>

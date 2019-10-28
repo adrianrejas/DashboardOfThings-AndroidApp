@@ -4,7 +4,10 @@ import androidx.lifecycle.LiveData;
 
 import com.arejas.dashboardofthings.domain.entities.database.Sensor;
 import com.arejas.dashboardofthings.domain.entities.extended.SensorExtended;
+import com.arejas.dashboardofthings.domain.entities.result.LiveDataResource;
 import com.arejas.dashboardofthings.domain.entities.result.Resource;
+import com.arejas.dashboardofthings.domain.entities.widget.SensorWidgetItem;
+import com.arejas.dashboardofthings.utils.functional.Consumer;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -25,5 +28,11 @@ public interface SensorManagementUseCase extends BaseUseCase {
     public LiveData<Resource> updateSensor(@NotNull Sensor sensor);
 
     public LiveData<Resource> deleteSensor(@NotNull Sensor sensor);
+
+    public void getSensorInfoForWidget(@NotNull int id, Consumer<SensorWidgetItem> consumer);
+
+    public void getSensorInfoForWidgets(@NotNull int[] ids, Consumer<List<SensorWidgetItem>> consumer);
+
+    public void requestSensorReload(@NotNull int id);
     
 }

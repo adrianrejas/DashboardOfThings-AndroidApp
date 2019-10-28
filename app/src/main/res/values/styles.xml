@@ -53,6 +53,19 @@
         <item name="android:alpha">0.87</item>
     </style>
 
+    <style name="Theme.Dot.TextTitleWidget" parent="Theme.Dot.TextTitle">
+        <item name="android:textSize">@dimen/font_size_list_title_widget</item>
+    </style>
+
+    <style name="Theme.Dot.TextDataWidget" parent="Theme.Dot.TextData">
+        <item name="android:textSize">@dimen/font_size_list_text_widget</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="Theme.Dot.TextDataValueWidget" parent="Theme.Dot.TextDataWidget">
+        <item name="android:textSize">@dimen/font_size_list_text_data_widget</item>
+    </style>
+
     <style name="Theme.Dot.TextTitleAlert" parent="Theme.Dot.TextTitle">
         <item name="android:textColor">@color/logErrorColorText</item>
     </style>

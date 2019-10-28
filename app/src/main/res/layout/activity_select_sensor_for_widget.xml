@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context="com.arejas.dashboardofthings.presentation.ui.activities.ActuatorListActivity">
+
+        <com.google.android.material.appbar.AppBarLayout
+            android:id="@+id/appbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:theme="@style/ThemeOverlay.AppCompat.Light"
+            android:elevation="@dimen/toolbar_elevation">
+
+            <androidx.appcompat.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+                app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+                android:layout_marginLeft="@dimen/list_toolbar_side_margin"
+                android:layout_marginRight="@dimen/list_toolbar_side_margin"
+                android:layout_width="match_parent"
+                android:layout_height="?actionBarSize"
+                android:layout_gravity="top"
+                android:background="?colorPrimary">
+
+            </androidx.appcompat.widget.Toolbar>
+
+        </com.google.android.material.appbar.AppBarLayout>
+
+        <FrameLayout
+            android:id="@+id/frameLayout"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/appbar"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+            <include
+                android:id="@+id/select_sensor_widget_loading_layout"
+                layout="@layout/layout_loading"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="@dimen/list_side_outer_margin"
+                android:orientation="vertical"/>
+
+            <include
+                android:id="@+id/select_sensor_widget_error_layout"
+                layout="@layout/layout_error"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="@dimen/list_side_outer_margin"
+                android:orientation="vertical"/>
+
+            <include
+                android:id="@+id/select_sensor_widget_no_elements_layout"
+                layout="@layout/layout_no_elements"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="@dimen/list_side_outer_margin"
+                android:orientation="vertical"/>
+
+            <include
+                android:id="@+id/select_sensor_widget_list_layout"
+                layout="@layout/layout_list"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="@dimen/list_side_outer_margin"
+                android:orientation="vertical"/>
+
+        </FrameLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>

@@ -334,6 +334,7 @@
     <string name="no_elements_content_description">There are no elements in the list shown.</string>
     <string name="error_content_description">Error</string>
     <string name="title_activity_settings">Settings</string>
+    <string name="title_activity_select_sensor_for_widget">Select sensor</string>
 
     <string name="content_description_element_problems">Warning or error logs detected in the last minutes for this element</string>
     <string name="content_description_sensor_image">Image representing the sensor</string>
@@ -367,7 +368,19 @@
     <!-- Preferences -->
     <string name="control_service_header">Control service</string>
     <string name="launch_on_startup_header">Launch service in startup</string>
-    <string name="close_service_with_foreground">Close the service when the foreground app is closed.</string>
+    <string name="launch_on_startup_key">launch_startup</string>
+    <string name="close_service_with_foreground_header">Close the service when the foreground app is closed.</string>
+    <string name="close_service_with_foreground_key">close_service_foreground</string>
+    <string name="preference_sensor_id_for_widget">widget_%d_sensor_selected</string>
+    <string name="preference_unit_used_for_widget">widget_%d_unit_used</string>
+    <string name="preference_data_type_used_for_widget">widget_%d_data_type_used</string>
+    <string name="preference_widget_id_for_sensor">sensor_%d_widget_selected</string>
 
     <string name="options_icon">⋮</string>
+
+    <string name="add_widget">Sensor widget</string>
+    <string name="widget_select_sensor">Sensor must be selected</string>
+    <string name="widget_error_sensor">Error loading the sensor</string>
+    <string name="widget_sensor_type">Sensor type: %s</string>
+
 </resources>

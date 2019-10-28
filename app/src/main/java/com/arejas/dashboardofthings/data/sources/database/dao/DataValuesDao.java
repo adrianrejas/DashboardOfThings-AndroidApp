@@ -33,6 +33,9 @@ public abstract class DataValuesDao {
     @Query("SELECT * FROM `values` WHERE sensorId=:id ORDER BY dateReceived DESC LIMIT 1")
     public abstract LiveData<DataValue> findLastForSensorId(int id);
 
+    @Query("SELECT * FROM `values` WHERE sensorId=:id ORDER BY dateReceived DESC LIMIT 1")
+    public abstract DataValue findLastForSensorIdInstant(int id);
+
     @Query("SELECT `values`.id, `values`.sensorId, `values`.value, " +
             "MAX(`values`.dateReceived) AS dateReceived FROM `values` WHERE sensorId IN(:ids) GROUP BY `values`.sensorId")
     public abstract LiveData<List<DataValue>> findLastForSensorIds(int[] ids);

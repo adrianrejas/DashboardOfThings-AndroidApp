@@ -4,13 +4,19 @@
     <!-- Fonts and text -->
     <dimen name="font_size_standard">20dp</dimen>
     <dimen name="font_size_list_text">18sp</dimen>
-    <dimen name="font_size_list_title">18sp</dimen>
+    <dimen name="font_size_list_title">22sp</dimen>
+    <dimen name="font_size_list_text_widget">18sp</dimen>
+    <dimen name="font_size_list_title_widget">24sp</dimen>
+    <dimen name="font_size_list_text_data_widget">36sp</dimen>
     <dimen name="font_size_list_byline">12sp</dimen>
     <dimen name="font_size_list_title_navview">32sp</dimen>
     <dimen name="font_size_list_title_actionbar">36sp</dimen>
     <dimen name="font_size_list_byline_actionbar">16sp</dimen>
     <item name="detail_body_line_spacing_multiplier" format="float" type="fraction">1.25</item>
     <dimen name="space_between_paragraps">8sp</dimen>
+
+    <dimen name="widget_outer_margin">16dp</dimen>
+    <dimen name="widget_inner_margin">8dp</dimen>
 
     <!-- list -->
     <dimen name="list_side_outer_margin">8dp</dimen>
@@ -31,9 +37,10 @@
     <dimen name="detail_body_top_margin">16dp</dimen>
     <dimen name="detail_Collapsing_toolbar_size">256dp</dimen>
     <dimen name="detail_Collapsing_toolbar_bottom_margin">48dp</dimen>
-    <string name="detail_photo_aspect_ratio">H,1.5:1</string>
+    <string name="detail_photo_aspect_ratio">H,4:1</string>
     <dimen name="fab_margin">24dp</dimen>
     <dimen name="edit_icon_size">50dp</dimen>
+    <dimen name="widget_icon_size">75dp</dimen>
 
     <!-- elevations -->
     <dimen name="toolbar_elevation">8dp</dimen>
@@ -53,5 +60,11 @@
     <!-- Proportions -->
     <string name="card_image_proportion">H,1.5:1</string>
     <dimen name="app_bar_height">200dp</dimen>
+
+    <!--
+Refer to App Widget Documentation for margin information
+http://developer.android.com/guide/topics/appwidgets/index.html#CreatingLayout
+    -->
+    <dimen name="widget_margin">8dp</dimen>
 
 </resources>

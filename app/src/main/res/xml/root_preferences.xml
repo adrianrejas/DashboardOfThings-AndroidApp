@@ -19,12 +19,12 @@
     <PreferenceCategory app:title="@string/control_service_header">
 
         <SwitchPreferenceCompat
-            app:key="launch_startup"
+            app:key="@string/launch_on_startup_key"
             app:title="@string/launch_on_startup_header" />
 
         <SwitchPreferenceCompat
-            app:key="close_with_foreground"
-            app:title="@string/close_service_with_foreground" />
+            app:key="@string/close_service_with_foreground_key"
+            app:title="@string/close_service_with_foreground_header" />
 
     </PreferenceCategory>
 

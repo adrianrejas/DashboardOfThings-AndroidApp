@@ -1,0 +1,147 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/rl_widget_parent"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/primaryColor"
+    android:padding="@dimen/widget_outer_margin"
+    tools:ignore="Overdraw">
+
+    <LinearLayout
+        android:id="@+id/ll_widget_info"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:orientation="vertical"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_above="@id/rl_widget_buttons">
+
+        <TextView
+            android:id="@+id/tv_widget_sensor_name"
+            style="@style/Theme.Dot.TextTitleWidget"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:singleLine="false"
+            android:textAlignment="center"
+            android:textColor="@color/secondaryTextColor"
+            tools:text="Sensor name" />
+
+        <TextView
+            android:id="@+id/tv_widget_sensor_type"
+            style="@style/Theme.Dot.TextDataWidget"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/detail_inner_margin_big"
+            android:textAlignment="textStart"
+            android:textColor="@color/secondaryTextColor"
+            tools:text="Sensor type" />
+
+        <TextView
+            android:id="@+id/tv_widget_sensor_data"
+            style="@style/Theme.Dot.TextDataValueWidget"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/detail_inner_margin_big"
+            android:textAlignment="center"
+            android:textColor="@color/secondaryTextColor"
+            tools:text="49.56 ºC" />
+
+    </LinearLayout>
+
+    <RelativeLayout
+        android:id="@+id/rl_widget_buttons"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/widget_inner_margin"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentBottom="true">
+
+        <ImageButton
+            android:id="@+id/bt_widget_refresh_data"
+            android:layout_width="@dimen/widget_icon_size"
+            android:layout_height="@dimen/widget_icon_size"
+            android:src="@drawable/refresh_widget"
+            android:background="@null"
+            android:layout_alignParentStart="true"/>
+
+        <ImageButton
+            android:id="@+id/bt_widget_select_sensor"
+            android:layout_width="@dimen/widget_icon_size"
+            android:layout_height="@dimen/widget_icon_size"
+            android:src="@drawable/select_sensor_widget"
+            android:layout_alignParentEnd="true"
+            android:background="@null"
+            tools:ignore="RelativeOverlap" />
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/rl_widget_loading"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentStart="true"
+        android:layout_above="@id/rl_widget_buttons"
+        android:visibility="gone"
+        tools:visibility="gone">
+
+        <ProgressBar
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_centerInParent="true"
+            android:scaleType="fitCenter"
+            tools:ignore="ContentDescription" />
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/rl_widget_select_sensor"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentStart="true"
+        android:layout_above="@id/rl_widget_buttons"
+        tools:visibility="visible">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            style="@style/Theme.Dot.TextDataValueWidget"
+            android:layout_marginTop="@dimen/detail_inner_margin_big"
+            android:textAlignment="center"
+            android:textColor="@color/secondaryTextColor"
+            android:text="@string/widget_select_sensor"
+            tools:ignore="ContentDescription" />
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/rl_widget_error_sensor"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentStart="true"
+        android:layout_above="@id/rl_widget_buttons"
+        android:visibility="visible">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            style="@style/Theme.Dot.TextDataValueWidget"
+            android:layout_marginTop="@dimen/detail_inner_margin_big"
+            android:textAlignment="center"
+            android:textColor="@color/secondaryTextColor"
+            android:text="@string/widget_error_sensor"
+            tools:ignore="ContentDescription" />
+
+    </RelativeLayout>
+
+</RelativeLayout>

@@ -74,4 +74,29 @@ public class Utils {
         return BitmapDescriptorFactory.fromBitmap(bitmap);
     }
 
+    public static String getStringDataToPrint(String value, Enumerators.DataType type, String unit) {
+        String dataToPrint = new String(value);
+        if (type != null) {
+            switch (type) {
+                case INTEGER:
+                    dataToPrint = String.format("%d", Integer.valueOf(value));
+                    break;
+                case DECIMAL:
+                    dataToPrint = String.format("%.2f", Float.valueOf(value));
+                    break;
+                case BOOLEAN:
+                    if (value.equals(Boolean.TRUE.toString())) {
+                        dataToPrint = DotApplication.getContext().getString(R.string.boolean_active);
+                    } else {
+                        dataToPrint = DotApplication.getContext().getString(R.string.boolean_not_active);
+                    }
+                    break;
+            }
+        }
+        if (unit != null) {
+            dataToPrint = dataToPrint.concat(" ").concat(unit);
+        }
+        return dataToPrint;
+    }
+
 }

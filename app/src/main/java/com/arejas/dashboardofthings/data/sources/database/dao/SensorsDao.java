@@ -11,6 +11,8 @@ import androidx.room.Update;
 import com.arejas.dashboardofthings.domain.entities.database.Network;
 import com.arejas.dashboardofthings.domain.entities.database.Sensor;
 import com.arejas.dashboardofthings.domain.entities.extended.SensorExtended;
+import com.arejas.dashboardofthings.domain.entities.widget.SensorWidgetItem;
+import com.arejas.dashboardofthings.presentation.ui.widget.SensorWidget;
 import com.arejas.dashboardofthings.utils.Enumerators;
 
 import java.util.List;
@@ -35,6 +37,24 @@ public abstract class SensorsDao {
 
     @Query("SELECT * FROM sensors WHERE id=:id LIMIT 1")
     public abstract LiveData<Sensor> findById(int id);
+
+    @Query("SELECT * FROM sensors WHERE id=:id LIMIT 1")
+    public abstract Sensor findByIdInstant(int id);
+
+    @Query("SELECT sensors.id AS sensorId, sensors.name AS sensorName, sensors.type AS sensorType, " +
+            "sensors.dataType AS sensorDataType, sensors.dataUnit AS sensorUnit," +
+            "(SELECT `values`.value FROM `values` " +
+            "WHERE  `values`.sensorId=:id ORDER BY dateReceived DESC LIMIT 1) AS lastValueReceived " +
+            "FROM sensors WHERE sensors.id=:id LIMIT 1")
+    public abstract SensorWidgetItem findByIdForWidgetInstant(int id);
+
+    @Query("SELECT sensors.id AS sensorId, sensors.name AS sensorName, sensors.type AS sensorType, " +
+            "sensors.dataType AS sensorDataType, sensors.dataUnit AS sensorUnit, " +
+            "lastValues.value AS lastValueReceived FROM sensors " +
+            "LEFT JOIN (SELECT `values`.sensorId, `values`.value, MAX(`values`.dateReceived) AS dateReceived " +
+            "FROM `values` GROUP BY `values`.sensorId) as lastValues ON lastValues.sensorId = sensors.id " +
+            "WHERE sensors.id IN(:ids)")
+    public abstract List<SensorWidgetItem> getAllForWidgetsInstant(int[] ids);
 
     @Query("SELECT sensors.*, networks.name AS networkName, networks.networkType AS networkType, " +
             "(SELECT COUNT(`logs`.elementId) FROM `logs` WHERE `logs`.elementId=sensors.id " +

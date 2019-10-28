@@ -44,6 +44,8 @@ import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.utils.EntryXComparator;
 import com.google.android.gms.maps.model.Dot;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.text.SimpleDateFormat;
@@ -322,27 +324,7 @@ public class DataBindingConverters {
         // If not null, set release date, with the format specified at the strings XML.
         try {
             if (value != null) {
-                String dataToPrint = new String(value);
-                if (type != null) {
-                    switch (type) {
-                        case INTEGER:
-                            dataToPrint = String.format("%d", Integer.valueOf(value));
-                            break;
-                        case DECIMAL:
-                            dataToPrint = String.format("%.2f", Float.valueOf(value));
-                            break;
-                        case BOOLEAN:
-                            if (value.equals(Boolean.TRUE.toString())) {
-                                dataToPrint = DotApplication.getContext().getString(R.string.boolean_active);
-                            } else {
-                                dataToPrint = DotApplication.getContext().getString(R.string.boolean_not_active);
-                            }
-                            break;
-                    }
-                }
-                if (unit != null) {
-                    dataToPrint = dataToPrint.concat(" ").concat(unit);
-                }
+                String dataToPrint = Utils.getStringDataToPrint(value, type, unit);
                 view.setText(dataToPrint);
             } else {
                 view.setText("-");
