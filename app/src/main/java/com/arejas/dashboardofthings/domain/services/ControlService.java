@@ -60,6 +60,10 @@ public class ControlService extends Service {
 
     @Override
     public void onCreate() {
+
+        startForeground(NotificationsHelper.FOREGROUND_SERVICE_NOTIFICATION_ID,
+                NotificationsHelper.showNotificationForegroundService(getApplicationContext()));
+
         AndroidInjection.inject(this);
 
         this.networkHelpers = new HashMap<>();
@@ -67,11 +71,11 @@ public class ControlService extends Service {
         if (!initiated) {
             dbExecutorManagement.execute(() -> {
                 initializeNetworkHelpers();
+                initializeSubscriptionsToNetworksAndSensorsManagementChanges();
+                initializeSubscriptionsToActuatorDataUpdates();
+                initializeSubscriptionsToSensorReloadRequests();
+                initializeSubscriptionsToDataReceived();
             });
-            initializeSubscriptionsToNetworksAndSensorsManagementChanges();
-            initializeSubscriptionsToActuatorDataUpdates();
-            initializeSubscriptionsToSensorReloadRequests();
-            initializeSubscriptionsToDataReceived();
         }
         initiated = true;
         super.onCreate();
@@ -79,8 +83,6 @@ public class ControlService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        startForeground(NotificationsHelper.FOREGROUND_SERVICE_NOTIFICATION_ID,
-                NotificationsHelper.showNotificationForegroundService(getApplicationContext()));
         return START_STICKY;
     }
 
@@ -106,11 +108,6 @@ public class ControlService extends Service {
     @Override
     public IBinder onBind(Intent intent) {
         return null;
-    }
-
-    public static void startAsForegroundService(Context context) {
-        Intent serviceIntent = new Intent(context, ControlService.class);
-        ContextCompat.startForegroundService(context, serviceIntent);
     }
 
     private void initializeSubscriptionsToNetworksAndSensorsManagementChanges() {

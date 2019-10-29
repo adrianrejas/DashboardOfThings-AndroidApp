@@ -10,7 +10,7 @@ import androidx.room.PrimaryKey;
 import com.arejas.dashboardofthings.utils.Enumerators;
 
 @Entity(tableName = "networks")
-public class Network implements Parcelable {
+public class Network {
 
     @PrimaryKey (autoGenerate = true)
     private Integer id;
@@ -28,42 +28,6 @@ public class Network implements Parcelable {
     private MqttNetworkParameters mqttConfiguration;
 
     public Network() {}
-
-    protected Network(Parcel in) {
-        id = in.readInt();
-        name = in.readString();
-        networkType = Enumerators.NetworkType.valueOf(in.readInt());
-        imageUri = in.readString();
-        httpConfiguration = in.readParcelable(HttpNetworkParameters.class.getClassLoader());
-        mqttConfiguration = in.readParcelable(MqttNetworkParameters.class.getClassLoader());
-    }
-
-    public static final Creator<Network> CREATOR = new Creator<Network>() {
-        @Override
-        public Network createFromParcel(Parcel in) {
-            return new Network(in);
-        }
-
-        @Override
-        public Network[] newArray(int size) {
-            return new Network[size];
-        }
-    };
-
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel parcel, int i) {
-        parcel.writeInt(id);
-        parcel.writeString(name);
-        parcel.writeInt(networkType.ordinal());
-        parcel.writeString(imageUri);
-        parcel.writeParcelable(httpConfiguration, i);
-        parcel.writeParcelable(mqttConfiguration, i);
-    }
 
     public Integer getId() {
         return id;
@@ -113,7 +77,7 @@ public class Network implements Parcelable {
         this.mqttConfiguration = mqttConfiguration;
     }
 
-    public static class HttpNetworkParameters implements Parcelable {
+    public static class HttpNetworkParameters {
 
         private String httpBaseUrl;
 
@@ -128,43 +92,6 @@ public class Network implements Parcelable {
         private String certAuthorityUri;
 
         public HttpNetworkParameters() {}
-
-        protected HttpNetworkParameters(Parcel in) {
-            httpBaseUrl = in.readString();
-            httpAauthenticationType = Enumerators.HttpAuthenticationType.valueOf(in.readInt());
-            httpUsername = in.readString();
-            httpPassword = in.readString();
-            byte tmpBUsesSsl = in.readByte();
-            httpUseSsl = tmpBUsesSsl == 0 ? null : tmpBUsesSsl == 1;
-            certAuthorityUri = in.readString();
-        }
-
-        public static final Creator<HttpNetworkParameters> CREATOR = new Creator<HttpNetworkParameters>() {
-            @Override
-            public HttpNetworkParameters createFromParcel(Parcel in) {
-                return new HttpNetworkParameters(in);
-            }
-
-            @Override
-            public HttpNetworkParameters[] newArray(int size) {
-                return new HttpNetworkParameters[size];
-            }
-        };
-
-        @Override
-        public int describeContents() {
-            return 0;
-        }
-
-        @Override
-        public void writeToParcel(Parcel parcel, int i) {
-            parcel.writeString(httpBaseUrl);
-            parcel.writeInt(httpAauthenticationType.ordinal());
-            parcel.writeString(httpUsername);
-            parcel.writeString(httpPassword);
-            parcel.writeByte((byte) (httpUseSsl == null ? 0 : httpUseSsl ? 1 : 2));
-            parcel.writeString(certAuthorityUri);
-        }
 
         public String getHttpBaseUrl() {
             return httpBaseUrl;
@@ -216,7 +143,7 @@ public class Network implements Parcelable {
         
     }
 
-    public static class MqttNetworkParameters implements Parcelable {
+    public static class MqttNetworkParameters {
 
         private String mqttBrokerUrl;
 
@@ -237,68 +164,6 @@ public class Network implements Parcelable {
         private String mqttCertAuthorityUri;
 
         public MqttNetworkParameters() {}
-
-        protected MqttNetworkParameters(Parcel in) {
-            mqttBrokerUrl = in.readString();
-            mqttClientId = in.readString();
-            mqttUsername = in.readString();
-            mqttPassword = in.readString();
-            byte tmpBCleanSession = in.readByte();
-            mqttCleanSession = tmpBCleanSession == 0 ? null : tmpBCleanSession == 1;
-            if (in.readByte() == 0) {
-                mqttConnTimeout = null;
-            } else {
-                mqttConnTimeout = in.readInt();
-            }
-            if (in.readByte() == 0) {
-                mqttKeepaliveInterval = null;
-            } else {
-                mqttKeepaliveInterval = in.readInt();
-            }
-            byte tmpBUsesSsl = in.readByte();
-            mqttUseSsl = tmpBUsesSsl == 0 ? null : tmpBUsesSsl == 1;
-            mqttCertAuthorityUri = in.readString();
-        }
-
-        public static final Creator<MqttNetworkParameters> CREATOR = new Creator<MqttNetworkParameters>() {
-            @Override
-            public MqttNetworkParameters createFromParcel(Parcel in) {
-                return new MqttNetworkParameters(in);
-            }
-
-            @Override
-            public MqttNetworkParameters[] newArray(int size) {
-                return new MqttNetworkParameters[size];
-            }
-        };
-
-        @Override
-        public int describeContents() {
-            return 0;
-        }
-
-        @Override
-        public void writeToParcel(Parcel parcel, int i) {
-            parcel.writeString(mqttBrokerUrl);
-            parcel.writeString(mqttClientId);
-            parcel.writeString(mqttUsername);
-            parcel.writeString(mqttPassword);
-            parcel.writeByte((byte) (mqttCleanSession == null ? 0 : mqttCleanSession ? 1 : 2));
-            if (mqttConnTimeout == null) {
-                parcel.writeByte((byte) 0);
-            } else {
-                parcel.writeByte((byte) 1);
-                parcel.writeInt(mqttConnTimeout);
-            }
-            if (mqttKeepaliveInterval == null) {
-                parcel.writeByte((byte) 0);
-            } else {
-                parcel.writeByte((byte) 1);
-                parcel.writeInt(mqttKeepaliveInterval);
-            }
-            parcel.writeByte((byte) (mqttUseSsl == null ? 0 : mqttUseSsl ? 1 : 2));
-            parcel.writeString(mqttCertAuthorityUri);
-        }
 
         public String getMqttBrokerUrl() {
             return mqttBrokerUrl;

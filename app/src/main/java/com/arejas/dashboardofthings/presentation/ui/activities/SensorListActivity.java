@@ -194,7 +194,7 @@ public class SensorListActivity extends AppCompatActivity implements View.OnClic
                         SettingsActivity.class));
                 return true;
             case R.id.menu_shutdown_app:
-                Utils.stopControlService();
+                Utils.stopControlService(this);
                 finish();
                 return true;
         }

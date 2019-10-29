@@ -19,7 +19,7 @@ import static androidx.room.ForeignKey.CASCADE;
                 childColumns = "sensorId",
                 onDelete = CASCADE),
         indices = @Index(value = {"sensorId", "dateReceived"}))
-public class DataValue implements Parcelable {
+public class DataValue {
 
     @PrimaryKey(autoGenerate = true)
     private Integer id;
@@ -32,33 +32,6 @@ public class DataValue implements Parcelable {
     private Date dateReceived;
 
     public DataValue() {}
-
-    protected DataValue(Parcel in) {
-        if (in.readByte() == 0) {
-            id = null;
-        } else {
-            id = in.readInt();
-        }
-        if (in.readByte() == 0) {
-            sensorId = null;
-        } else {
-            sensorId = in.readInt();
-        }
-        value = in.readString();
-        dateReceived = new Date(in.readLong());
-    }
-
-    public static final Creator<DataValue> CREATOR = new Creator<DataValue>() {
-        @Override
-        public DataValue createFromParcel(Parcel in) {
-            return new DataValue(in);
-        }
-
-        @Override
-        public DataValue[] newArray(int size) {
-            return new DataValue[size];
-        }
-    };
 
     public Integer getId() {
         return id;
@@ -92,26 +65,4 @@ public class DataValue implements Parcelable {
         this.dateReceived = dateReceived;
     }
 
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel parcel, int i) {
-        if (id == null) {
-            parcel.writeByte((byte) 0);
-        } else {
-            parcel.writeByte((byte) 1);
-            parcel.writeInt(id);
-        }
-        if (sensorId == null) {
-            parcel.writeByte((byte) 0);
-        } else {
-            parcel.writeByte((byte) 1);
-            parcel.writeInt(sensorId);
-        }
-        parcel.writeString(value);
-        parcel.writeLong(dateReceived.getTime());
-    }
 }

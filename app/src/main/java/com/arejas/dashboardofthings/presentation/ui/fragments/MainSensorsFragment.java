@@ -14,6 +14,7 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
 import com.arejas.dashboardofthings.DotApplication;
 import com.arejas.dashboardofthings.R;
@@ -47,7 +48,7 @@ public class MainSensorsFragment extends Fragment {
 
     private LiveData<Resource<List<SensorExtended>>> currentListShown;
     private LiveData<Resource<List<DataValue>>> dataValuesReceivedManaged;
-    private GridLayoutManager glm_grid;
+    private StaggeredGridLayoutManager glm_grid;
     private SensorsListAdapter mAdapter;
 
     @Override
@@ -156,7 +157,7 @@ public class MainSensorsFragment extends Fragment {
         int iElementsPerRow = getResources().getInteger(R.integer.list_maindash_column_count);
 
         // Configure recycler view with a grid layout
-        glm_grid = new GridLayoutManager(getContext(), iElementsPerRow);
+        glm_grid = new StaggeredGridLayoutManager(iElementsPerRow, StaggeredGridLayoutManager.VERTICAL);
         uiBinding.sensorsMainListListLayout.mainList.setLayoutManager(glm_grid);
 
         // Configure adapter for recycler view

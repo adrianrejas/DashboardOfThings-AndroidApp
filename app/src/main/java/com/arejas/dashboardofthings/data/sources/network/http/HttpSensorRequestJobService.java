@@ -14,6 +14,13 @@ import com.google.gson.Gson;
 
 public class HttpSensorRequestJobService extends JobService {
 
+    //TODO
+    /* For passing the database parameters to the job service, right now they are converted in
+     * JSON strings and decoded again when received. This is because using the database entities
+     * as parcelable objects caused problems in some of the devices tested. For now, we're using GSON
+     * for parsing because, although less optimized, is working on every situation. But I'll keep up
+     * researching on this.*/
+
     public static final String NETWORK_OBJECT = "NETWORK_OBJECT";
     public static final String SENSOR_OBJECT = "SENSOR_OBJECT";
 

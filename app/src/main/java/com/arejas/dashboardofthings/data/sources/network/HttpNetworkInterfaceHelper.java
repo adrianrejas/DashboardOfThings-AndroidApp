@@ -47,6 +47,17 @@ public class HttpNetworkInterfaceHelper extends NetworkInterfaceHelper{
         return true;
     }
 
+    //TODO
+    /* For passing the database parameters to the job service, right now they are converted in
+     * JSON strings and decoded again when received. This is because using the database entities
+     * as parcelable objects caused problems in some of the devices tested. For now, we're using GSON
+     * for parsing because, although less optimized, is working on every situation. But I'll keep up
+     * researching on this.*/
+    /*
+    In HTTP cases, when configured a sensor, we take the interval defined for it and configure a
+    Firebase JobDispatcher Job for launching it on a periodical basis. The job dispatcher will send
+    an Intent to the intent service in charge of sensing HTTP requests on a worker thread.
+     */
     @Override
     public boolean configureSensorReceiving(Context context, Sensor sensor) {
         try {

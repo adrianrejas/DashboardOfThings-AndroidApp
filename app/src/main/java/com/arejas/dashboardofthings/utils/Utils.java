@@ -101,14 +101,14 @@ public class Utils {
         return dataToPrint;
     }
 
-    public static void startControlService() {
-        Intent serviceIntent = new Intent(DotApplication.getContext(), ControlService.class);
-        ContextCompat.startForegroundService(DotApplication.getContext(), serviceIntent);
+    public static void startControlService(Context context) {
+        Intent serviceIntent = new Intent(context, ControlService.class);
+        ContextCompat.startForegroundService(context, serviceIntent);
     }
 
-    public static void stopControlService() {
-        Intent serviceIntent = new Intent(DotApplication.getContext(), ControlService.class);
-        DotApplication.getContext().stopService(serviceIntent);
+    public static void stopControlService(Context context) {
+        Intent serviceIntent = new Intent(context, ControlService.class);
+        context.stopService(serviceIntent);
     }
 
 }

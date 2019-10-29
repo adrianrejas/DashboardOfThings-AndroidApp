@@ -178,7 +178,7 @@ public class NetworkListActivity extends AppCompatActivity implements View.OnCli
                         SettingsActivity.class));
                 return true;
             case R.id.menu_shutdown_app:
-                Utils.stopControlService();
+                Utils.stopControlService(this);
                 finish();
                 return true;
         }

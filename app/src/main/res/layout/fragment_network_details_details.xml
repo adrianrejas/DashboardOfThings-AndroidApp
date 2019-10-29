@@ -65,7 +65,7 @@
                         app:layout_constraintTop_toTopOf="parent"
                         style="@style/Theme.Dot.TextTitleAlert"
                         android:visibility="@{ ((network.recentErrorLogs != null) &amp;&amp; (network.recentErrorLogs > 0)) ? View.VISIBLE : View.GONE }"
-                        android:text='@{ (network.recentErrorLogs != null) ? @plurals/error_log_number_short(network.recentErrorLogs) : ""}'
+                        android:text='@{ (network.recentErrorLogs != null) ? @plurals/error_log_number(network.recentErrorLogs, network.recentErrorLogs) : ""}'
                         tools:text="There are problems"/>
 
                     <TextView
@@ -80,8 +80,23 @@
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@id/tv_network_problems_details"
-                        style="@style/Theme.Dot.TextData"
+                        style="@style/Theme.Dot.TextTitle"
                         tools:text="MQTT network"/>
+
+                    <TextView
+                        android:id="@+id/tv_network_url_details"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/detail_inner_margin_small"
+                        android:layout_marginStart="@dimen/detail_inner_margin_small"
+                        android:layout_marginEnd="@dimen/detail_inner_margin_small"
+                        android:contentDescription="@string/content_description_network_type"
+                        app:networkObject="@{network}"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/tv_network_type_details"
+                        style="@style/Theme.Dot.TextData"
+                        tools:text="Base URL: http://demo.com"/>
 
                     <TextView
                         android:id="@+id/tv_network_sensors_details"
@@ -95,7 +110,7 @@
                         app:sensorList="@{sensorList}"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/tv_network_type_details"
+                        app:layout_constraintTop_toBottomOf="@id/tv_network_url_details"
                         tools:text="NORMAL" />
 
                     <TextView

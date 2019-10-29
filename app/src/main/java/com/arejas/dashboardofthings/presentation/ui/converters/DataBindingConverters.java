@@ -170,7 +170,7 @@ public class DataBindingConverters {
         // If not null, set release date, with the format specified at the strings XML.
         try {
             if (date != null) {
-                String dateString = "-";
+                String dateString = DotApplication.getContext().getString(R.string.no_data);
                 Calendar cal1 = Calendar.getInstance();
                 Calendar cal2 = Calendar.getInstance();
                 cal1.setTime(date);
@@ -183,10 +183,10 @@ public class DataBindingConverters {
                 }
                 view.setText(dateString);
             } else {
-                view.setText("-");
+                view.setText(DotApplication.getContext().getString(R.string.no_data));
             }
         } catch (Exception e) {
-            view.setText("-");
+            view.setText(DotApplication.getContext().getString(R.string.no_data));
         }
     }
 
@@ -195,12 +195,12 @@ public class DataBindingConverters {
         try {
             if (name != null) {
                 if (type != null) {
-                    view.setText(name + " - " + type);
+                    view.setText(DotApplication.getContext().getString(R.string.two_elements_toghether, name, type));
                 } else {
                     view.setText(name);
                 }
             } else {
-                view.setText("-");
+                view.setText(DotApplication.getContext().getString(R.string.no_data));
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -212,15 +212,16 @@ public class DataBindingConverters {
         try {
             if (name != null) {
                 if ((elementProblems != null) && (elementProblems > 0)) {
-                    view.setText(name + " - " + DotApplication.getContext().getResources().
-                            getQuantityString(R.plurals.error_log_number_short, elementProblems, elementProblems));
+                    view.setText(DotApplication.getContext().getString(R.string.two_elements_toghether, name,
+                            DotApplication.getContext().getResources().
+                            getQuantityString(R.plurals.error_log_number_short, elementProblems, elementProblems)));
                     view.setTextColor(ContextCompat.getColor(DotApplication.getContext(), R.color.logErrorColorText));
                 } else {
                     view.setText(name);
                     view.setTextColor(ContextCompat.getColor(DotApplication.getContext(), R.color.primaryTextColor));
                 }
             } else {
-                view.setText("-");
+                view.setText(DotApplication.getContext().getString(R.string.no_data));
                 view.setTextColor(ContextCompat.getColor(DotApplication.getContext(), R.color.primaryTextColor));
             }
         } catch (Exception e) {
@@ -239,7 +240,7 @@ public class DataBindingConverters {
                     view.setTextColor(ContextCompat.getColor(DotApplication.getContext(), R.color.primaryTextColor));
                 }
             } else {
-                view.setText("-");
+                view.setText(DotApplication.getContext().getString(R.string.no_data));
                 view.setTextColor(ContextCompat.getColor(DotApplication.getContext(), R.color.primaryTextColor));
             }
         } catch (Exception e) {
@@ -259,7 +260,7 @@ public class DataBindingConverters {
                         view.setText(DotApplication.getContext().getString(R.string.network_type_http));
                         break;
                     default:
-                        view.setText("-");
+                        view.setText(DotApplication.getContext().getString(R.string.no_data));
                         break;
                 }
                 if ((elementProblems != null) && (elementProblems > 0)) {
@@ -268,7 +269,7 @@ public class DataBindingConverters {
                     view.setTextColor(ContextCompat.getColor(DotApplication.getContext(), R.color.primaryTextColor));
                 }
             } else {
-                view.setText("-");
+                view.setText(DotApplication.getContext().getString(R.string.no_data));
                 view.setTextColor(ContextCompat.getColor(DotApplication.getContext(), R.color.primaryTextColor));
             }
         } catch (Exception e) {
@@ -287,7 +288,7 @@ public class DataBindingConverters {
                     view.setTextColor(ContextCompat.getColor(DotApplication.getContext(), R.color.primaryTextColor));
                 }
             } else {
-                view.setText("-");
+                view.setText(DotApplication.getContext().getString(R.string.no_data));
                 view.setTextColor(ContextCompat.getColor(DotApplication.getContext(), R.color.primaryTextColor));
             }
         } catch (Exception e) {
@@ -301,17 +302,48 @@ public class DataBindingConverters {
             if (networkType != null) {
                 switch (networkType) {
                     case MQTT:
-                        view.setText(DotApplication.getContext().getString(R.string.network_type_mqtt));
+                        String dataString = DotApplication.getContext().getString(R.string.data_fancy_type,
+                                DotApplication.getContext().getString(R.string.network_type_mqtt));
+                        view.setText(Utils.fromHtml(dataString));
                         break;
                     case HTTP:
-                        view.setText(DotApplication.getContext().getString(R.string.network_type_http));
+                        String dataString2 = DotApplication.getContext().getString(R.string.data_fancy_type,
+                                DotApplication.getContext().getString(R.string.network_type_http));
+                        view.setText(dataString2);
                         break;
                     default:
-                        view.setText("-");
+                        view.setText(DotApplication.getContext().getString(R.string.no_data));
                         break;
                 }
             } else {
-                view.setText("-");
+                view.setText(DotApplication.getContext().getString(R.string.no_data));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @BindingAdapter({"networkObject"})
+    public static void setNetworkBaseUrl(TextView view, Network networkObject) {
+        try {
+            if (networkObject != null) {
+                switch (networkObject.getNetworkType()) {
+                    case MQTT:
+                        String dataString = DotApplication.getContext().getString(R.string.data_fancy_data_base_url,
+                                networkObject.getMqttConfiguration().getMqttBrokerUrl());
+                        view.setText(Utils.fromHtml(dataString));
+                        break;
+                    case HTTP:
+                        String dataString2 = DotApplication.getContext().getString(R.string.data_fancy_data_base_url,
+                                networkObject.getHttpConfiguration().getHttpBaseUrl());
+                        view.setText(dataString2);
+                        break;
+                    default:
+                        view.setText(DotApplication.getContext().getString(R.string.no_data));
+                        break;
+                }
+            } else {
+                view.setText(DotApplication.getContext().getString(R.string.no_data));
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -327,42 +359,42 @@ public class DataBindingConverters {
                 String dataToPrint = Utils.getStringDataToPrint(value, type, unit);
                 view.setText(dataToPrint);
             } else {
-                view.setText("-");
+                view.setText(DotApplication.getContext().getString(R.string.no_data_value));
             }
         } catch (Exception e) {
             ToastHelper.showToast(DotApplication.getContext().getString(R.string.toast_actuator_printdata_error));
         }
     }
 
-    @BindingAdapter({"dataReceived", "dataType", "thresholdAboveWarning", "thresholdAboveCritical",
-            "thresholdBelowWarning", "thresholdBelowCritical", "thresholdEqualsWarning", "thresholdEqualsCritical"})
+    @BindingAdapter({"dataReceived", "sensorObject", "envoltureText"})
     public static void setSensorState(TextView view, String dataReceived,
-                                      Enumerators.DataType dataType,
-                                      Float thresholdAboveWarning,
-                                      Float thresholdAboveCritical,
-                                      Float thresholdBelowWarning,
-                                      Float thresholdBelowCritical,
-                                      String thresholdEqualsWarning,
-                                      String thresholdEqualsCritical){
+                                      Sensor sensor, String envoltureText){
         try {
             Enumerators.NotificationState state = DataHelper.getNotificationStatus(dataReceived,
-                    dataType, thresholdAboveWarning, thresholdAboveCritical,
-                    thresholdBelowWarning, thresholdBelowCritical,
-                    thresholdEqualsWarning, thresholdEqualsCritical);
+                    sensor.getDataType(), sensor.getThresholdAboveWarning(),
+                    sensor.getThresholdAboveCritical(), sensor.getThresholdBelowWarning(),
+                    sensor.getThresholdBelowCritical(), sensor.getThresholdEqualsWarning(),
+                    sensor.getThresholdEqualsCritical());
             if (state != null) {
+                String dataText = DotApplication.getContext().getString(R.string.no_data);
                 switch (state) {
-                    case NONE:
-                        view.setText(DotApplication.getContext().getString(R.string.sensor_state_critical));
+                    case CRITICAL:
+                        dataText = DotApplication.getContext().getString(R.string.sensor_state_critical);
+                        view.setTextColor(ContextCompat.getColor(DotApplication.getContext(), R.color.logNotificationCriticalColorSolid));
                         break;
                     case WARNING:
-                        view.setText(DotApplication.getContext().getString(R.string.sensor_state_warning));
+                        dataText = DotApplication.getContext().getString(R.string.sensor_state_warning);
+                        view.setTextColor(ContextCompat.getColor(DotApplication.getContext(), R.color.logNotificationWarningColorSolid));
                         break;
-                    case CRITICAL:
-                        view.setText(DotApplication.getContext().getString(R.string.sensor_state_normal));
+                    case NONE:
+                        dataText = DotApplication.getContext().getString(R.string.sensor_state_normal);
+                        view.setTextColor(ContextCompat.getColor(DotApplication.getContext(), R.color.primaryTextColor));
                         break;
                 }
+                view.setText(Utils.fromHtml(String.format(envoltureText, dataText)));
             }
         } catch (Exception e) {
+            view.setText(DotApplication.getContext().getString(R.string.no_data));
             e.printStackTrace();
         }
     }
@@ -463,12 +495,35 @@ public class DataBindingConverters {
         }
     }
 
+    @BindingAdapter({"dataType", "envoltureText"})
+    public static void loadFancyDataType(TextView view, Enumerators.DataType dataType, String envoltureText) {
+        try {
+            String[] typesArray = DotApplication.getContext().getResources().getStringArray(R.array.edit_array_element_data_type);
+            if ((dataType != null) && (envoltureText != null)) {
+                view.setText(Utils.fromHtml(String.format(envoltureText, typesArray[dataType.ordinal()])));
+            } else {
+                view.setText(DotApplication.getContext().getString(R.string.no_data));
+            }
+        } catch (Exception e) {
+            view.setText(Utils.fromHtml(DotApplication.getContext().getString(R.string.no_data)));
+        }
+    }
+
     @BindingAdapter({"dataText", "envoltureText"})
     public static void loadFancyText(TextView view, String dataText, String envoltureText) {
         if ((dataText != null) && (envoltureText != null)) {
             view.setText(Utils.fromHtml(String.format(envoltureText, dataText)));
         } else {
-            view.setText("-");
+            view.setText(DotApplication.getContext().getString(R.string.no_data));
+        }
+    }
+
+    @BindingAdapter({"fancyText"})
+    public static void loadAsHtml(TextView view, String fancyText) {
+        if (fancyText != null) {
+            view.setText(Utils.fromHtml(fancyText));
+        } else {
+            view.setText(DotApplication.getContext().getString(R.string.no_data));
         }
     }
 

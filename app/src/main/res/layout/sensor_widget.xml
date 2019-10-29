@@ -65,6 +65,7 @@
             android:layout_height="@dimen/widget_icon_size"
             android:src="@drawable/refresh_widget"
             android:background="@null"
+            android:contentDescription="@string/content_description_refresh_data"
             android:layout_alignParentStart="true"/>
 
         <ImageButton
@@ -74,6 +75,7 @@
             android:src="@drawable/select_sensor_widget"
             android:layout_alignParentEnd="true"
             android:background="@null"
+            android:contentDescription="@string/content_description_select_widget_sensor"
             tools:ignore="RelativeOverlap" />
 
     </RelativeLayout>

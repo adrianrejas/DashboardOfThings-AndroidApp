@@ -180,7 +180,7 @@ public class MapActivity extends AppCompatActivity implements GoogleMap.OnMyLoca
                         SettingsActivity.class));
                 return true;
             case R.id.menu_shutdown_app:
-                Utils.stopControlService();
+                Utils.stopControlService(this);
                 finish();
                 return true;
         }

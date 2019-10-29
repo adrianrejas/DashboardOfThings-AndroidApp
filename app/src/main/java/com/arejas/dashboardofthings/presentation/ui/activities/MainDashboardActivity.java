@@ -71,7 +71,7 @@ public class MainDashboardActivity extends AppCompatActivity {
         getSupportActionBar().setTitle(R.string.title_activity_maindash);
 
         // Starts control service if not initiated
-        Utils.startControlService();
+        Utils.startControlService(this);
 
         /* Get view model*/
         mainDashboardViewModel = ViewModelProviders.of(this, this.viewModelFactory).get(MainDashboardViewModel.class);
@@ -165,7 +165,7 @@ public class MainDashboardActivity extends AppCompatActivity {
                         SettingsActivity.class));
                 return true;
             case R.id.menu_shutdown_app:
-                Utils.stopControlService();
+                Utils.stopControlService(this);
                 finish();
                 return true;
         }

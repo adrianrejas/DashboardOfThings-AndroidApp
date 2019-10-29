@@ -75,21 +75,52 @@
                         tools:text="There are problems"/>
 
                     <TextView
-                        android:id="@+id/tv_sensor_details_value"
+                        android:id="@+id/tv_sensor_details_type"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/detail_inner_margin_small"
                         android:layout_marginStart="@dimen/detail_inner_margin_small"
                         android:layout_marginEnd="@dimen/detail_inner_margin_small"
-                        android:contentDescription="@string/content_description_sensor_title"
-                        app:sensorValue="@{lastValue}"
-                        app:sensorDataType="@{sensor.dataType}"
-                        app:sensorUnit="@{sensor.dataUnit}"
+                        android:contentDescription="@string/content_description_actuator_type"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@id/tv_sensor_details_problems"
                         style="@style/Theme.Dot.TextData"
-                        tools:text="38 ºC"/>
+                        app:dataText='@{sensor.type}'
+                        app:envoltureText='@{@string/data_fancy_type}'
+                        tools:text="Type: test"/>
+
+                    <TextView
+                        android:id="@+id/tv_sensor_details_connection"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/detail_inner_margin_small"
+                        android:layout_marginStart="@dimen/detail_inner_margin_small"
+                        android:layout_marginEnd="@dimen/detail_inner_margin_small"
+                        android:contentDescription="@string/content_description_element_connection"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/tv_sensor_details_type"
+                        style="@style/Theme.Dot.TextData"
+                        app:dataText='@{sensor.networkName}'
+                        app:envoltureText='@{@string/data_fancy_currentnetwork}'
+                        tools:text="Connected to network: test"/>
+
+                    <TextView
+                        android:id="@+id/tv_sensor_details_dataType"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/detail_inner_margin_small"
+                        android:layout_marginStart="@dimen/detail_inner_margin_small"
+                        android:layout_marginEnd="@dimen/detail_inner_margin_small"
+                        android:contentDescription="@string/content_description_element_datatype"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/tv_sensor_details_connection"
+                        style="@style/Theme.Dot.TextData"
+                        app:dataType='@{sensor.dataType}'
+                        app:envoltureText='@{@string/data_fancy_data_type}'
+                        tools:text="Data type: Boolean"/>
 
                     <TextView
                         android:id="@+id/tv_sensor_details_state"
@@ -99,12 +130,59 @@
                         android:layout_marginStart="@dimen/detail_inner_margin_small"
                         android:layout_marginTop="@dimen/detail_inner_margin_small"
                         android:layout_marginEnd="@dimen/detail_inner_margin_small"
-                        android:contentDescription="@string/content_description_sensor_title"
-                        app:layout_constraintBottom_toTopOf="@id/lc_sensor_details_history_chart"
+                        android:contentDescription="@string/content_description_sensor_state"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/tv_sensor_details_dataType"
+                        app:dataReceived='@{lastValue}'
+                        app:sensorObject='@{sensor}'
+                        app:envoltureText='@{@string/data_fancy_datastate}'
+                        tools:text="Data state: NORMAL" />
+
+                    <TextView
+                        android:id="@+id/tv_sensor_details_value_title"
+                        style="@style/Theme.Dot.TextData"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/detail_inner_margin_small"
+                        android:layout_marginTop="@dimen/detail_inner_margin_small"
+                        android:layout_marginEnd="@dimen/detail_inner_margin_small"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/tv_sensor_details_state"
+                        app:fancyText='@{@string/data_fancy_currentValue}'
+                        tools:text="Current value:" />
+
+                    <TextView
+                        android:id="@+id/tv_sensor_details_value"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/detail_inner_margin_small"
+                        android:layout_marginStart="@dimen/detail_inner_margin_small"
+                        android:layout_marginEnd="@dimen/detail_inner_margin_small"
+                        android:contentDescription="@string/content_description_sensor_value"
+                        app:sensorValue="@{lastValue}"
+                        app:sensorDataType="@{sensor.dataType}"
+                        app:sensorUnit="@{sensor.dataUnit}"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/tv_sensor_details_value_title"
+                        style="@style/Theme.Dot.TextDataValueWidget"
+                        tools:text="38 ºC"/>
+
+                    <TextView
+                        android:id="@+id/tv_sensor_details_history_title"
+                        style="@style/Theme.Dot.TextData"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/detail_inner_margin_small"
+                        android:layout_marginTop="@dimen/detail_inner_margin_small"
+                        android:layout_marginEnd="@dimen/detail_inner_margin_small"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toBottomOf="@id/tv_sensor_details_value"
-                        tools:text="NORMAL" />
+                        app:fancyText='@{@string/data_fancy_history}'
+                        tools:text="Current value:" />
 
                     <com.github.mikephil.charting.charts.LineChart
                         android:id="@+id/lc_sensor_details_history_chart"
@@ -115,10 +193,12 @@
                         android:layout_marginEnd="@dimen/detail_inner_margin_small"
                         app:sensorInfo="@{sensor}"
                         app:data="@{historyData}"
+                        android:contentDescription="@string/content_description_sensor_value"
+                        android:nextFocusDown="@id/sp_sensor_details_history_spinner"
                         app:spinnerHistorySelected="@{historySpinnerSelected}"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/tv_sensor_details_state"
+                        app:layout_constraintTop_toBottomOf="@id/tv_sensor_details_history_title"
                         app:layout_constraintBottom_toTopOf="@id/sp_sensor_details_history_spinner"  />
 
                     <Spinner
@@ -138,6 +218,7 @@
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintHorizontal_bias="0.0"
                         app:layout_constraintStart_toStartOf="parent"
+                        android:contentDescription="@string/content_description_sensor_history_type"
                         app:layout_constraintTop_toBottomOf="@id/lc_sensor_details_history_chart"
                         app:selectionListener="@{(position) -> presenter.onSpinnerItemSelected(position)}"/>
 

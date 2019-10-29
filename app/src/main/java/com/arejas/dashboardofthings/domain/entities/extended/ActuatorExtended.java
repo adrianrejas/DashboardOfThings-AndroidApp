@@ -15,17 +15,6 @@ public class ActuatorExtended extends Actuator {
 
     public ActuatorExtended() {}
 
-    public ActuatorExtended(Parcel in) {
-        super(in);
-        networkName = in.readString();
-        networkType = Enumerators.NetworkType.valueOf(in.readInt());
-        if (in.readByte() == 0) {
-            recentErrorLogs = null;
-        } else {
-            recentErrorLogs = in.readInt();
-        }
-    }
-
     public String getNetworkName() {
         return networkName;
     }
@@ -48,18 +37,5 @@ public class ActuatorExtended extends Actuator {
 
     public void setRecentErrorLogs(Integer recentErrorLogs) {
         this.recentErrorLogs = recentErrorLogs;
-    }
-
-    @Override
-    public void writeToParcel(Parcel parcel, int i) {
-        super.writeToParcel(parcel, i);
-        parcel.writeString(networkName);
-        parcel.writeInt(networkType.ordinal());
-        if (recentErrorLogs == null) {
-            parcel.writeByte((byte) 0);
-        } else {
-            parcel.writeByte((byte) 1);
-            parcel.writeInt(recentErrorLogs);
-        }
     }
 }

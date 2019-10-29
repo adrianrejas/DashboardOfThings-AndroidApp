@@ -16,7 +16,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.arejas.dashboardofthings.R;
 import com.arejas.dashboardofthings.databinding.CardMaindashboardHistoryBinding;
-import com.arejas.dashboardofthings.databinding.FragmentMainsensorsBinding;
+import com.arejas.dashboardofthings.databinding.FragmentMainhistoryBinding;
 import com.arejas.dashboardofthings.domain.entities.database.DataValue;
 import com.arejas.dashboardofthings.domain.entities.database.Sensor;
 import com.arejas.dashboardofthings.domain.entities.extended.SensorExtended;
@@ -38,7 +38,7 @@ import dagger.android.support.AndroidSupportInjection;
 
 public class MainHistoryFragment extends Fragment {
 
-    FragmentMainsensorsBinding uiBinding;
+    FragmentMainhistoryBinding uiBinding;
 
     @Inject
     ViewModelFactory viewModelFactory;
@@ -63,7 +63,7 @@ public class MainHistoryFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater,
                              @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        uiBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_mainsensors, container, false);
+        uiBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_mainhistory, container, false);
         // Configure adapter for recycler view
         configureListAdapter();
         // Set action of refreshing list when refreshing gesture detected
@@ -137,11 +137,11 @@ public class MainHistoryFragment extends Fragment {
 
         // Configure recycler view with a grid layout
         glm_grid = new GridLayoutManager(getContext(), iElementsPerRow);
-        uiBinding.sensorsMainListListLayout.mainList.setLayoutManager(glm_grid);
+        uiBinding.historyMainListListLayout.mainList.setLayoutManager(glm_grid);
 
         // Configure adapter for recycler view
         mAdapter = new MainHistoryFragment.HistoryListAdapter();
-        uiBinding.sensorsMainListListLayout.mainList.setAdapter(mAdapter);
+        uiBinding.historyMainListListLayout.mainList.setAdapter(mAdapter);
     }
 
     /**
@@ -149,11 +149,11 @@ public class MainHistoryFragment extends Fragment {
      */
     private void showError() {
         if (uiBinding != null) {
-            uiBinding.sensorsMainListListLayout.listLayout.setVisibility(View.GONE);
-            uiBinding.sensorsMainListLoadingLayout.loadingLayout.setVisibility(View.GONE);
-            uiBinding.sensorsMainListErrorLayout.errorLayout.setVisibility(View.VISIBLE);
-            uiBinding.sensorsMainListNoElementsLayout.noElementsLayout.setVisibility(View.GONE);
-            uiBinding.sensorsMainListErrorLayout.tvError.setText(getString(R.string.error_in_list));
+            uiBinding.historyMainListListLayout.listLayout.setVisibility(View.GONE);
+            uiBinding.historyMainListLoadingLayout.loadingLayout.setVisibility(View.GONE);
+            uiBinding.historyMainListErrorLayout.errorLayout.setVisibility(View.VISIBLE);
+            uiBinding.historyMainListNoElementsLayout.noElementsLayout.setVisibility(View.GONE);
+            uiBinding.historyMainListErrorLayout.tvError.setText(getString(R.string.error_in_list));
         }
     }
 
@@ -162,10 +162,10 @@ public class MainHistoryFragment extends Fragment {
      */
     private void showLoading() {
         if (uiBinding != null) {
-            uiBinding.sensorsMainListListLayout.listLayout.setVisibility(View.GONE);
-            uiBinding.sensorsMainListLoadingLayout.loadingLayout.setVisibility(View.VISIBLE);
-            uiBinding.sensorsMainListErrorLayout.errorLayout.setVisibility(View.GONE);
-            uiBinding.sensorsMainListNoElementsLayout.noElementsLayout.setVisibility(View.GONE);
+            uiBinding.historyMainListListLayout.listLayout.setVisibility(View.GONE);
+            uiBinding.historyMainListLoadingLayout.loadingLayout.setVisibility(View.VISIBLE);
+            uiBinding.historyMainListErrorLayout.errorLayout.setVisibility(View.GONE);
+            uiBinding.historyMainListNoElementsLayout.noElementsLayout.setVisibility(View.GONE);
         }
     }
 
@@ -174,10 +174,10 @@ public class MainHistoryFragment extends Fragment {
      */
     private void showNoElements() {
         if (uiBinding != null) {
-            uiBinding.sensorsMainListListLayout.listLayout.setVisibility(View.GONE);
-            uiBinding.sensorsMainListLoadingLayout.loadingLayout.setVisibility(View.GONE);
-            uiBinding.sensorsMainListErrorLayout.errorLayout.setVisibility(View.GONE);
-            uiBinding.sensorsMainListNoElementsLayout.noElementsLayout.setVisibility(View.VISIBLE);
+            uiBinding.historyMainListListLayout.listLayout.setVisibility(View.GONE);
+            uiBinding.historyMainListLoadingLayout.loadingLayout.setVisibility(View.GONE);
+            uiBinding.historyMainListErrorLayout.errorLayout.setVisibility(View.GONE);
+            uiBinding.historyMainListNoElementsLayout.noElementsLayout.setVisibility(View.VISIBLE);
         }
     }
 
@@ -186,10 +186,10 @@ public class MainHistoryFragment extends Fragment {
      */
     private void showList() {
         if (uiBinding != null) {
-            uiBinding.sensorsMainListListLayout.listLayout.setVisibility(View.VISIBLE);
-            uiBinding.sensorsMainListLoadingLayout.loadingLayout.setVisibility(View.GONE);
-            uiBinding.sensorsMainListErrorLayout.errorLayout.setVisibility(View.GONE);
-            uiBinding.sensorsMainListNoElementsLayout.noElementsLayout.setVisibility(View.GONE);
+            uiBinding.historyMainListListLayout.listLayout.setVisibility(View.VISIBLE);
+            uiBinding.historyMainListLoadingLayout.loadingLayout.setVisibility(View.GONE);
+            uiBinding.historyMainListErrorLayout.errorLayout.setVisibility(View.GONE);
+            uiBinding.historyMainListNoElementsLayout.noElementsLayout.setVisibility(View.GONE);
         }
     }
 

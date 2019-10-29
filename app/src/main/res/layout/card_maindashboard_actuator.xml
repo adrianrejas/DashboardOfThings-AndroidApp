@@ -29,7 +29,7 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@android:color/white">
+            android:background="@color/CardBackgroundColor">
 
             <ImageView
                 android:id="@+id/iv_actuator_card"
@@ -56,8 +56,6 @@
                 android:layout_marginStart="@dimen/detail_inner_margin_small"
                 android:layout_marginEnd="@dimen/detail_inner_margin_small"
                 android:contentDescription="@string/content_description_element_problems"
-                app:elementName="@{actuator.name}"
-                app:elementType="@{actuator.type}"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/iv_actuator_card"
@@ -82,11 +80,25 @@
                 style="@style/Theme.Dot.TextTitle"
                 tools:text="Termometer - Temperature"/>
 
+            <TextView
+                android:id="@+id/tv_actuator_details_send_title"
+                style="@style/Theme.Dot.TextData"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/detail_inner_margin_small"
+                android:layout_marginTop="@dimen/detail_inner_margin_small"
+                android:layout_marginEnd="@dimen/detail_inner_margin_small"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tv_actuator_title_card"
+                app:fancyText='@{@string/data_fancy_send_data}'
+                tools:text="Current value:" />
+
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/cl_actuator_integer_setter"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/detail_inner_margin_big"
+                android:layout_marginStart="@dimen/detail_inner_margin_small"
                 android:layout_marginTop="@dimen/detail_inner_margin_small"
                 android:layout_marginEnd="@dimen/detail_inner_margin_small"
                 android:layout_marginBottom="@dimen/detail_inner_margin_big"
@@ -94,8 +106,8 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/tv_actuator_title_card"
-                tools:visibility="gone">
+                app:layout_constraintTop_toBottomOf="@id/tv_actuator_details_send_title"
+                tools:visibility="visible">
 
                 <EditText
                     android:id="@+id/et_actuator_integer_value"
@@ -121,6 +133,7 @@
                     app:layout_constraintStart_toEndOf="@id/et_actuator_integer_value"
                     app:layout_constraintTop_toTopOf="parent"
                     app:srcCompat="@drawable/send"
+                    android:scaleType="centerCrop"
                     android:focusable="true"
                     android:contentDescription="@string/content_description_actuator_send" />
 
@@ -130,7 +143,7 @@
                 android:id="@+id/cl_actuator_decimal_setter"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/detail_inner_margin_big"
+                android:layout_marginStart="@dimen/detail_inner_margin_small"
                 android:layout_marginTop="@dimen/detail_inner_margin_small"
                 android:layout_marginEnd="@dimen/detail_inner_margin_small"
                 android:layout_marginBottom="@dimen/detail_inner_margin_big"
@@ -138,7 +151,7 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/tv_actuator_title_card"
+                app:layout_constraintTop_toBottomOf="@id/tv_actuator_details_send_title"
                 tools:visibility="gone">
 
                 <EditText
@@ -165,6 +178,7 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toEndOf="@id/et_actuator_decimal_value"
                     app:layout_constraintTop_toTopOf="parent"
+                    android:scaleType="centerCrop"
                     app:srcCompat="@drawable/send"
                     android:focusable="true"
                     android:contentDescription="@string/content_description_actuator_send" />
@@ -175,7 +189,7 @@
                 android:id="@+id/cl_actuator_boolean_setter"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/detail_inner_margin_big"
+                android:layout_marginStart="@dimen/detail_inner_margin_small"
                 android:layout_marginTop="@dimen/detail_inner_margin_small"
                 android:layout_marginEnd="@dimen/detail_inner_margin_small"
                 android:layout_marginBottom="@dimen/detail_inner_margin_big"
@@ -183,11 +197,11 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/tv_actuator_title_card">
+                app:layout_constraintTop_toBottomOf="@id/tv_actuator_details_send_title">
 
                 <Button
                     android:id="@+id/tb_actuator_boolean_set_false"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -198,7 +212,7 @@
 
                 <Button
                     android:id="@+id/tb_actuator_boolean_set_true"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toEndOf="@id/tb_actuator_boolean_set_false"
@@ -213,7 +227,7 @@
                 android:id="@+id/cl_actuator_string_setter"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/detail_inner_margin_big"
+                android:layout_marginStart="@dimen/detail_inner_margin_small"
                 android:layout_marginTop="@dimen/detail_inner_margin_small"
                 android:layout_marginEnd="@dimen/detail_inner_margin_small"
                 android:layout_marginBottom="@dimen/detail_inner_margin_big"
@@ -221,7 +235,7 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/tv_actuator_title_card"
+                app:layout_constraintTop_toBottomOf="@id/tv_actuator_details_send_title"
                 tools:visibility="gone">
 
                 <EditText
@@ -248,6 +262,7 @@
                     app:layout_constraintStart_toEndOf="@id/et_actuator_string_value"
                     app:layout_constraintTop_toTopOf="parent"
                     app:srcCompat="@drawable/send"
+                    android:scaleType="centerCrop"
                     android:focusable="true"
                     android:contentDescription="@string/content_description_actuator_send" />
 

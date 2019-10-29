@@ -27,6 +27,13 @@ import javax.inject.Named;
  */
 public class HttpRequestIntentService extends IntentService {
 
+    //TODO
+    /* For passing the database parameters to the intent service, right now they are converted in
+    * JSON strings and decoded again when received. This is because using the database entities
+    * as parcelable objects caused problems in some of the devices tested. For now, we're using GSON
+    * for parsing because, although less optimized, is working on every situation. But I'll keep up
+    * researching on this.*/
+
     // IntentService can perform, e.g. ACTION_FETCH_NEW_ITEMS
     private static final String ACTION_SENSOR_REQUEST = "com.arejas.dashboardofthings.data.sources.network.http.action.SENSOR_REQUEST";
     private static final String ACTION_ACTUATOR_COMMNAND = "com.arejas.dashboardofthings.data.sources.network.http.action.ACTUATOR_COMMNAND";

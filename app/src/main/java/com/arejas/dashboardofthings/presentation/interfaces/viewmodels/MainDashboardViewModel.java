@@ -150,7 +150,9 @@ public class MainDashboardViewModel extends AndroidViewModel {
 
     public LiveData<Resource<List<DataValue>>> getLastValuesForSensorId(int id) {
         LiveData<Resource<List<DataValue>>> returningLiveData = mapSensorLastValuesLiveData.get(id);
-        if ((returningLiveData == null) || (!returningLiveData.getValue().getStatus().equals(Resource.Status.SUCCESS))) {
+        if ((returningLiveData == null) ||
+                (returningLiveData.getValue() == null) ||
+                (!returningLiveData.getValue().getStatus().equals(Resource.Status.SUCCESS))) {
             returningLiveData = this.dataManagementUseCase.getLastValuesForSensorId(id);
             if (returningLiveData != null)
                 mapSensorLastValuesLiveData.put(id, returningLiveData);
@@ -160,7 +162,9 @@ public class MainDashboardViewModel extends AndroidViewModel {
 
     public LiveData<Resource<List<DataValue>>> getAvgLastOneDayValuesForSensorId(int id) {
         LiveData<Resource<List<DataValue>>> returningLiveData = mapSensorLastHourLiveData.get(id);
-        if ((returningLiveData == null) || (!returningLiveData.getValue().getStatus().equals(Resource.Status.SUCCESS))) {
+        if ((returningLiveData == null) ||
+                (returningLiveData.getValue() == null) ||
+                (!returningLiveData.getValue().getStatus().equals(Resource.Status.SUCCESS))) {
             returningLiveData = this.dataManagementUseCase.getAvgLastOneDayValuesForSensorId(id);
             if (returningLiveData != null)
                 mapSensorLastHourLiveData.put(id, returningLiveData);
@@ -170,7 +174,9 @@ public class MainDashboardViewModel extends AndroidViewModel {
 
     public LiveData<Resource<List<DataValue>>> getAvgLastOneWeekValuesForSensorId(int id) {
         LiveData<Resource<List<DataValue>>> returningLiveData = mapSensorLastWeekLiveData.get(id);
-        if ((returningLiveData == null) || (!returningLiveData.getValue().getStatus().equals(Resource.Status.SUCCESS))) {
+        if ((returningLiveData == null) ||
+                (returningLiveData.getValue() == null) ||
+                (!returningLiveData.getValue().getStatus().equals(Resource.Status.SUCCESS))) {
             returningLiveData = this.dataManagementUseCase.getAvgLastOneWeekValuesForSensorId(id);
             if (returningLiveData != null)
                 mapSensorLastWeekLiveData.put(id, returningLiveData);
@@ -180,7 +186,9 @@ public class MainDashboardViewModel extends AndroidViewModel {
 
     public LiveData<Resource<List<DataValue>>> getAvgLastOneMonthValuesForSensorId(int id) {
         LiveData<Resource<List<DataValue>>> returningLiveData = mapSensorLastMonthLiveData.get(id);
-        if ((returningLiveData == null) || (!returningLiveData.getValue().getStatus().equals(Resource.Status.SUCCESS))) {
+        if ((returningLiveData == null) ||
+                (returningLiveData.getValue() == null) ||
+                (!returningLiveData.getValue().getStatus().equals(Resource.Status.SUCCESS))) {
             returningLiveData = this.dataManagementUseCase.getAvgLastOneMonthValuesForSensorId(id);
             if (returningLiveData != null)
                 mapSensorLastMonthLiveData.put(id, returningLiveData);
@@ -190,7 +198,9 @@ public class MainDashboardViewModel extends AndroidViewModel {
 
     public LiveData<Resource<List<DataValue>>> getAvgLastOneYearValuesForSensorId(int id) {
         LiveData<Resource<List<DataValue>>> returningLiveData = mapSensorLastYearLiveData.get(id);
-        if ((returningLiveData == null) || (!returningLiveData.getValue().getStatus().equals(Resource.Status.SUCCESS))) {
+        if ((returningLiveData == null) ||
+                (returningLiveData.getValue() == null) ||
+                (!returningLiveData.getValue().getStatus().equals(Resource.Status.SUCCESS))) {
             returningLiveData = this.dataManagementUseCase.getAvgLastOneYearValuesForSensorId(id);
             if (returningLiveData != null)
                 mapSensorLastYearLiveData.put(id, returningLiveData);

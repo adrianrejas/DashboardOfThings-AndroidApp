@@ -31,11 +31,12 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:background="@color/CardBackgroundColor">
 
             <ImageView
                 android:id="@+id/iv_sensor_card"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:adjustViewBounds="true"
                 android:contentDescription="@string/content_description_sensor_image"
@@ -44,6 +45,7 @@
                 app:errorResource="@{@drawable/error}"
                 app:loadingResource="@{@drawable/loading}"
                 android:background="@color/secondaryTextColor"
+                app:layout_constraintDimensionRatio="@string/card_image_proportion"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
@@ -88,14 +90,14 @@
                 android:layout_marginTop="@dimen/detail_inner_margin_small"
                 android:layout_marginStart="@dimen/detail_inner_margin_small"
                 android:layout_marginEnd="@dimen/detail_inner_margin_small"
-                android:contentDescription="@string/content_description_sensor_title"
+                android:contentDescription="@string/content_description_sensor_value"
                 app:sensorValue="@{lastValue}"
                 app:sensorDataType="@{sensor.dataType}"
                 app:sensorUnit="@{sensor.dataUnit}"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/tv_sensor_title_card"
-                style="@style/Theme.Dot.TextData"
+                style="@style/Theme.Dot.TextDataValueWidget"
                 tools:text="38 ºC"/>
 
             <TextView
@@ -107,11 +109,14 @@
                 android:layout_marginTop="@dimen/detail_inner_margin_small"
                 android:layout_marginEnd="@dimen/detail_inner_margin_small"
                 android:layout_marginBottom="@dimen/detail_inner_margin_big"
-                android:contentDescription="@string/content_description_sensor_title"
+                android:contentDescription="@string/content_description_sensor_state"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@id/ib_sensor_refresh_card"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/tv_sensor_value_card"
+                app:dataReceived='@{lastValue}'
+                app:sensorObject='@{sensor}'
+                app:envoltureText='@{@string/data_fancy_datastate}'
                 tools:text="NORMAL" />
 
             <ImageButton
@@ -120,10 +125,11 @@
                 android:layout_height="@dimen/card_icon_size"
                 android:background="@drawable/selector_icon"
                 android:onClick="@{(v) -> presenter.requestReload()}"
+                android:scaleType="centerCrop"
+                android:contentDescription="@string/content_description_refresh_data"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@id/tv_sensor_state_card"
-                app:layout_constraintTop_toBottomOf="@id/tv_sensor_value_card"
                 app:srcCompat="@drawable/refresh" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>

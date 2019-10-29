@@ -34,7 +34,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:visibility="gone"
-            android:background="@android:color/white">
+            android:background="@color/CardBackgroundColor">
 
             <TextView
                 android:id="@+id/tv_history_title_card"
@@ -62,6 +62,8 @@
                 android:layout_marginEnd="@dimen/detail_inner_margin_small"
                 app:sensorInfo="@{sensor}"
                 app:data="@{data}"
+                android:contentDescription="@string/content_description_sensor_value"
+                android:nextFocusDown="@id/lc_history_spinner_card"
                 app:spinnerHistorySelected="@{spinnerSelected}"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -80,6 +82,7 @@
                 android:paddingStart="@dimen/detail_item_padding"
                 android:paddingEnd="@dimen/detail_item_padding"
                 style="@style/Theme.Dot.TextData"
+                android:contentDescription="@string/content_description_sensor_history_type"
                 android:entries="@array/history_options_aray"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"

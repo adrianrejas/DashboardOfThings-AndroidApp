@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- detail -->
+    <string name="detail_photo_aspect_ratio">H,3.5:1</string>
+    <integer name="list_maindash_column_count">2</integer>
+    <integer name="list_maindash_history_column_count">2</integer>
+</resources>

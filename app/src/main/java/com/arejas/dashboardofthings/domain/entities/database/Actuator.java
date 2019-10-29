@@ -21,7 +21,7 @@ import static androidx.room.ForeignKey.CASCADE;
                 childColumns = "networkId",
                 onDelete = CASCADE),
         indices = @Index(value = "networkId"))
-public class Actuator implements Parcelable {
+public class Actuator {
 
     @PrimaryKey(autoGenerate = true)
     private Integer id;
@@ -64,68 +64,6 @@ public class Actuator implements Parcelable {
     private Boolean showInMainDashboard;
 
     public Actuator() {}
-
-    protected Actuator(Parcel in) {
-        if (in.readByte() == 0) {
-            id = null;
-        } else {
-            id = in.readInt();
-        }
-        name = in.readString();
-        type = in.readString();
-        imageUri = in.readString();
-        if (in.readByte() == 0) {
-            networkId = null;
-        } else {
-            networkId = in.readInt();
-        }
-        httpRelativeUrl = in.readString();
-        httpMethod = Enumerators.HttpMethod.valueOf(in.readInt());
-        int size = in.readInt();
-        for(int i = 0; i < size; i++){
-            String key = in.readString();
-            String value = in.readString();
-            httpHeaders.put(key,value);
-        }
-        mqttTopicToPublish = in.readString();
-        dataType = Enumerators.DataType.valueOf(in.readInt());
-        if (in.readByte() == 0) {
-            dataNumberMinimum = null;
-        } else {
-            dataNumberMinimum = in.readFloat();
-        }
-        if (in.readByte() == 0) {
-            dataNumberMaximum = null;
-        } else {
-            dataNumberMaximum = in.readFloat();
-        }
-        dataFormatMessageToSend = in.readString();
-        httpMimeType = in.readString();
-        dataUnit = in.readString();
-        if (in.readByte() == 0) {
-            locationLat = null;
-        } else {
-            locationLat = in.readDouble();
-        }
-        if (in.readByte() == 0) {
-            locationLong = null;
-        } else {
-            locationLong = in.readDouble();
-        }
-        showInMainDashboard = in.readByte() != 0;
-    }
-
-    public static final Creator<Actuator> CREATOR = new Creator<Actuator>() {
-        @Override
-        public Actuator createFromParcel(Parcel in) {
-            return new Actuator(in);
-        }
-
-        @Override
-        public Actuator[] newArray(int size) {
-            return new Actuator[size];
-        }
-    };
 
     public Integer getId() {
         return id;
@@ -279,65 +217,4 @@ public class Actuator implements Parcelable {
         this.showInMainDashboard = bShowInMainDashboard;
     }
 
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel parcel, int i) {
-        if (id == null) {
-            parcel.writeByte((byte) 0);
-        } else {
-            parcel.writeByte((byte) 1);
-            parcel.writeInt(id);
-        }
-        parcel.writeString(name);
-        parcel.writeString(type);
-        parcel.writeString(imageUri);
-        if (networkId == null) {
-            parcel.writeByte((byte) 0);
-        } else {
-            parcel.writeByte((byte) 1);
-            parcel.writeInt(networkId);
-        }
-        parcel.writeString(httpRelativeUrl);
-        parcel.writeInt(httpMethod.ordinal());
-        parcel.writeInt(httpHeaders.size());
-        for(Map.Entry<String,String> entry : httpHeaders.entrySet()){
-            parcel.writeString(entry.getKey());
-            parcel.writeString(entry.getValue());
-        }
-        parcel.writeString(mqttTopicToPublish);
-        parcel.writeInt(mqttQosLevel.ordinal());
-        parcel.writeInt(dataType.ordinal());
-        if (dataNumberMinimum == null) {
-            parcel.writeByte((byte) 0);
-        } else {
-            parcel.writeByte((byte) 1);
-            parcel.writeFloat(dataNumberMinimum);
-        }
-        if (dataNumberMaximum == null) {
-            parcel.writeByte((byte) 0);
-        } else {
-            parcel.writeByte((byte) 1);
-            parcel.writeFloat(dataNumberMaximum);
-        }
-        parcel.writeString(dataFormatMessageToSend);
-        parcel.writeString(httpMimeType);
-        parcel.writeString(dataUnit);
-        if (locationLat == null) {
-            parcel.writeByte((byte) 0);
-        } else {
-            parcel.writeByte((byte) 1);
-            parcel.writeDouble(locationLat);
-        }
-        if (locationLong == null) {
-            parcel.writeByte((byte) 0);
-        } else {
-            parcel.writeByte((byte) 1);
-            parcel.writeDouble(locationLong);
-        }
-        parcel.writeByte((byte) (showInMainDashboard ? 1 : 0));
-    }
 }

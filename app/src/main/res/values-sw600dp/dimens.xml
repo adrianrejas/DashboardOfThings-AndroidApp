@@ -1,0 +1,12 @@
+<resources>
+    <bool name="twoPanelMode">true</bool>
+
+    <!-- detail -->
+    <dimen name="font_size_standard">24dp</dimen>
+    <dimen name="font_size_list_text">18sp</dimen>
+    <dimen name="font_size_list_title">26sp</dimen>
+    <dimen name="font_size_list_byline">12sp</dimen>
+    <integer name="list_maindash_column_count">2</integer>
+    <integer name="list_maindash_history_column_count">1</integer>
+
+</resources>

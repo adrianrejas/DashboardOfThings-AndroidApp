@@ -38,8 +38,8 @@
     <string name="element_details_tab_details">Details</string>
     <string name="element_details_tab_logs">Logs</string>
 
-    <string name="dialog_remove_network">Do you want to remove the selected network?</string>
-    <string name="dialog_remove_sensor">Do you want to remove the selected sensor?</string>
+    <string name="dialog_remove_network">Do you want to remove the selected network? All sensors and actuators related will be also removed.</string>
+    <string name="dialog_remove_sensor">Do you want to remove the selected sensor? All history values received from this sensor will be also removed.</string>
     <string name="dialog_remove_actuator">Do you want to remove the selected actuator?</string>
     <string name="dialog_ok">Ok</string>
     <string name="dialog_cancel">Cancel</string>
@@ -93,8 +93,8 @@
         <item quantity="other">%s warning or error logs applied to this element</item>
     </plurals>
     <plurals name="error_log_number_short">
-        <item quantity="one">%s problematic log</item>
-        <item quantity="other">%s problematic logs</item>
+        <item quantity="one">%s problem</item>
+        <item quantity="other">%s problems</item>
     </plurals>
     <string name="actuator_send_boolean_true">Activate</string>
     <string name="actuator_send_boolean_false">Deactivate</string>
@@ -109,18 +109,27 @@
         <item>Last year</item>
     </string-array>
 
+    <string name="no_data">-</string>
+    <string name="no_data_value">No value available</string>
+    <string name="two_elements_toghether">%s - %s</string>
+
     <string name="map_element_spinner">Name: %s; Type: %s</string>
 
     <string name="data_fancy_name">&lt;b>Name:&lt;/b> %s</string>
     <string name="data_fancy_type">&lt;b>Type:&lt;/b> %s</string>
     <string name="data_fancy_data_type">&lt;b>Data type:&lt;/b> %s</string>
+    <string name="data_fancy_data_base_url">&lt;b>Connection URL:&lt;/b> %s</string>
     <string name="data_fancy_network_type">&lt;b>Network type:&lt;/b> %s</string>
-    <string name="data_fancy_currentValue">&lt;b>Current value:&lt;/b> %s</string>
+    <string name="data_fancy_currentValue">&lt;b>Current value:&lt;/b></string>
+    <string name="data_fancy_currentnetwork">&lt;b>Using network:&lt;/b> %s</string>
+    <string name="data_fancy_datastate">&lt;b>Data state:&lt;/b> %s</string>
+    <string name="data_fancy_history">&lt;b>History:&lt;/b></string>
+    <string name="data_fancy_send_data">&lt;b>Send data:&lt;/b></string>
 
     <string name="boolean_active">Active</string>
     <string name="boolean_not_active">Not active</string>
 
-    <string name="sensor_state_normal">NORMAL</string>
+    <string name="sensor_state_normal">Normal</string>
     <string name="sensor_state_warning">WARNING</string>
     <string name="sensor_state_critical">CRITICAL</string>
 
@@ -340,13 +349,19 @@
     <string name="title_activity_select_sensor_for_widget">Select sensor</string>
 
     <string name="content_description_element_problems">Warning or error logs detected in the last minutes for this element</string>
+    <string name="content_description_element_connection">Network the sensor or actuator is connected</string>
+    <string name="content_description_element_datatype">Network to which the element is connected</string>
     <string name="content_description_sensor_image">Image representing the sensor</string>
     <string name="content_description_sensor_title">Name and type of the sensor</string>
     <string name="content_description_sensor_name">Name of the sensor</string>
     <string name="content_description_sensor_type">Type of the sensor</string>
     <string name="content_description_actuator_name">Name of the actuator</string>
     <string name="content_description_actuator_type">Type of the actuator</string>
+    <string name="content_description_refresh_data">Try to refresh sensor data</string>
+    <string name="content_description_select_widget_sensor">Select the sensor for the widget</string>
     <string name="content_description_sensor_value">Current value of the sensor</string>
+    <string name="content_description_sensor_history">History graph of the sensor</string>
+    <string name="content_description_sensor_history_type">Choose history range</string>
     <string name="content_description_sensor_state">Current state of the sensor</string>
     <string name="content_description_nav_header">Main navigation menu</string>
     <string name="content_description_status_icon">Image representing the status of the sensor</string>

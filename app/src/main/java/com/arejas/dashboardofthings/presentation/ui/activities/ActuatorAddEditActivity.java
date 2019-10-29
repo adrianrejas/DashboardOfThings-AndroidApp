@@ -113,7 +113,7 @@ public class ActuatorAddEditActivity extends AppCompatActivity implements AddEdi
             getSupportActionBar().setTitle(getString(R.string.toolbar_title_new_actuator));
         } else {
             editionMode = true;
-            getSupportActionBar().setTitle(getString(R.string.toolbar_title_edit_sensor));
+            getSupportActionBar().setTitle(getString(R.string.toolbar_title_edit_actuator));
         }
 
         // set listener and edition mode

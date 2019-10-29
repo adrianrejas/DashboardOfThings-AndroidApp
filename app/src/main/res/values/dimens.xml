@@ -37,10 +37,11 @@
     <dimen name="detail_body_top_margin">16dp</dimen>
     <dimen name="detail_Collapsing_toolbar_size">256dp</dimen>
     <dimen name="detail_Collapsing_toolbar_bottom_margin">48dp</dimen>
-    <string name="detail_photo_aspect_ratio">H,4:1</string>
+    <string name="detail_photo_aspect_ratio">H,1.5:1</string>
     <dimen name="fab_margin">24dp</dimen>
     <dimen name="edit_icon_size">50dp</dimen>
     <dimen name="widget_icon_size">75dp</dimen>
+    <dimen name="extra_margin_special_layouts">35dp</dimen>
 
     <!-- elevations -->
     <dimen name="toolbar_elevation">8dp</dimen>
@@ -52,13 +53,13 @@
     <!-- Card format -->
     <dimen name="card_corner_radius">10dp</dimen>
     <dimen name="card_border">1dp</dimen>
-    <dimen name="card_icon_size">50dp</dimen>
+    <dimen name="card_icon_size">40dp</dimen>
 
     <!-- Charts -->
     <dimen name="card_chart_size">250dp</dimen>
 
     <!-- Proportions -->
-    <string name="card_image_proportion">H,1.5:1</string>
+    <string name="card_image_proportion">H,2:1</string>
     <dimen name="app_bar_height">200dp</dimen>
 
     <!--

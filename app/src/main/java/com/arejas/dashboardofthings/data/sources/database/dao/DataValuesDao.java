@@ -48,7 +48,7 @@ public abstract class DataValuesDao {
             "max(`values`.dateReceived) as dateReceived " +
             "FROM `values` " +
             "WHERE sensorId=:id AND dateReceived >= :date " +
-            "GROUP BY strftime('%H', `values`.dateReceived)")
+            "GROUP BY strftime('%H', datetime(`values`.dateReceived/1000, 'unixepoch'))")
     public abstract LiveData<List<DataValue>> getAvgHourValuesForSensorId(int id, Date date);
 
     @Query("SELECT `values`.id, `values`.sensorId, " +
@@ -56,7 +56,7 @@ public abstract class DataValuesDao {
             "max(`values`.dateReceived) as dateReceived " +
             "FROM `values` " +
             "WHERE sensorId=:id AND dateReceived >= :date " +
-            "GROUP BY strftime('%w', `values`.dateReceived)")
+            "GROUP BY strftime('%w', datetime(`values`.dateReceived/1000, 'unixepoch'))")
     public abstract LiveData<List<DataValue>> getAvgWeekdayValuesForSensorId(int id, Date date);
 
     @Query("SELECT `values`.id, `values`.sensorId, " +
@@ -64,7 +64,7 @@ public abstract class DataValuesDao {
             "max(`values`.dateReceived) as dateReceived " +
             "FROM `values` " +
             "WHERE sensorId=:id AND dateReceived >= :date " +
-            "GROUP BY strftime('%d', `values`.dateReceived)")
+            "GROUP BY strftime('%d', datetime(`values`.dateReceived/1000, 'unixepoch'))")
     public abstract LiveData<List<DataValue>> getAvgPerMonthDayValuesForSensorId(int id, Date date);
 
     @Query("SELECT `values`.id, `values`.sensorId, " +
@@ -72,7 +72,7 @@ public abstract class DataValuesDao {
             "max(`values`.dateReceived) as dateReceived " +
             "FROM `values` " +
             "WHERE sensorId=:id AND dateReceived >= :date " +
-            "GROUP BY strftime('%m', `values`.dateReceived)")
+            "GROUP BY strftime('%m', datetime(`values`.dateReceived/1000, 'unixepoch'))")
     public abstract LiveData<List<DataValue>> getAvgPerMonthValuesForSensorId(int id, Date date);
 
     @Query("SELECT * FROM `values` WHERE sensorId=:id AND dateReceived >= date('now','-1 year')")

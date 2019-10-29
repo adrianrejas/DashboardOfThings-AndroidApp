@@ -11,7 +11,7 @@ import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModelProviders;
-import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.arejas.dashboardofthings.R;
@@ -45,7 +45,7 @@ public class MainActuatorsFragment extends Fragment {
 
     private LiveData<Resource<List<ActuatorExtended>>> currentListShown;
     private LiveData<Resource<List<DataValue>>> dataValuesReceivedManaged;
-    private GridLayoutManager glm_grid;
+    private StaggeredGridLayoutManager glm_grid;
     private MainActuatorsFragment.ActuatorsListAdapter mAdapter;
 
     @Override
@@ -127,7 +127,7 @@ public class MainActuatorsFragment extends Fragment {
         int iElementsPerRow = getResources().getInteger(R.integer.list_maindash_column_count);
 
         // Configure recycler view with a grid layout
-        glm_grid = new GridLayoutManager(getContext(), iElementsPerRow);
+        glm_grid = new StaggeredGridLayoutManager(iElementsPerRow, StaggeredGridLayoutManager.VERTICAL);
         uiBinding.actuatorsMainListListLayout.mainList.setLayoutManager(glm_grid);
 
         // Configure adapter for recycler view

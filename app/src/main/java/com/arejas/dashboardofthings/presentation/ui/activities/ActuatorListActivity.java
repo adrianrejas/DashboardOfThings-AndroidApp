@@ -185,7 +185,7 @@ public class ActuatorListActivity extends AppCompatActivity implements View.OnCl
                         SettingsActivity.class));
                 return true;
             case R.id.menu_shutdown_app:
-                Utils.stopControlService();
+                Utils.stopControlService(this);
                 finish();
                 return true;
         }
