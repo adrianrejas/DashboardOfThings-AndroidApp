@@ -101,7 +101,7 @@ public abstract class SensorsDao {
                                                               Enumerators.LogLevel[] logLevels);
 
     @Insert
-    public abstract void insert(Sensor sensor);
+    public abstract long insert(Sensor sensor);
 
     @Insert
     public abstract void insertAll(Sensor... sensors);

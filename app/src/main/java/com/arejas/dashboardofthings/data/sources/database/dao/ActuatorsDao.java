@@ -50,7 +50,8 @@ public abstract class ActuatorsDao {
             "AND `logs`.elementType IN(:elementTypes) AND `logs`.logLevel IN(:logLevels) " +
             "AND `logs`.dateRegistered >= CAST(strftime('%s', 'now') AS LONG)*1000-300000) " +
             "AS recentErrorLogs " +
-            "FROM actuators, networks")
+            "FROM actuators " +
+            "INNER JOIN networks ON actuators.networkId=networks.id ")
     public abstract LiveData<List<ActuatorExtended>> getAllExtended(Enumerators.ElementType[] elementTypes,
                                                                        Enumerators.LogLevel[] logLevels);
 
@@ -59,14 +60,19 @@ public abstract class ActuatorsDao {
             "AND `logs`.elementType IN(:elementTypes) AND `logs`.logLevel IN(:logLevels) " +
             "AND `logs`.dateRegistered >= CAST(strftime('%s', 'now') AS LONG)*1000-300000) " +
             "AS recentErrorLogs " +
-            "FROM actuators, networks")
+            "FROM actuators " +
+            "INNER JOIN networks ON actuators.networkId=networks.id ")
     public abstract List<ActuatorExtended> getAllExtendedInstant(Enumerators.ElementType[] elementTypes,
                                                                     Enumerators.LogLevel[] logLevels);
 
     @Query("SELECT actuators.*, networks.name AS networkName, networks.networkType AS networkType, " +
             "(SELECT COUNT(`logs`.elementId) FROM `logs` WHERE `logs`.elementId=actuators.id " +
-            "AND `logs`.elementType IN(:elementTypes) AND `logs`.logLevel IN(:logLevels)) " +
-            "AS recentErrorLogs FROM actuators, networks WHERE showInMainDashboard=1")
+            "AND `logs`.elementType IN(:elementTypes) AND `logs`.logLevel IN(:logLevels) " +
+            "AND `logs`.dateRegistered >= CAST(strftime('%s', 'now') AS LONG)*1000-300000) " +
+            "AS recentErrorLogs " +
+            "FROM actuators " +
+            "INNER JOIN networks ON actuators.networkId=networks.id " +
+            "WHERE showInMainDashboard=1")
     public abstract LiveData<List<ActuatorExtended>> getAllExtendedToBeShownInMainDashboard(Enumerators.ElementType[] elementTypes,
                                                                                                Enumerators.LogLevel[] logLevels);
 
@@ -74,12 +80,15 @@ public abstract class ActuatorsDao {
             "(SELECT COUNT(`logs`.elementId) FROM `logs` WHERE `logs`.elementId=actuators.id " +
             "AND `logs`.elementType IN(:elementTypes) AND `logs`.logLevel IN(:logLevels) " +
             "AND `logs`.dateRegistered >= CAST(strftime('%s', 'now') AS LONG)*1000-300000) " +
-            "AS recentErrorLogs FROM actuators, networks WHERE locationLat IS NOT NULL AND locationLong IS NOT NULL")
+            "AS recentErrorLogs " +
+            "FROM actuators " +
+            "INNER JOIN networks ON actuators.networkId=networks.id " +
+            "WHERE locationLat IS NOT NULL AND locationLong IS NOT NULL")
     public abstract LiveData<List<ActuatorExtended>> getAllExtendedLocated(Enumerators.ElementType[] elementTypes,
                                                                               Enumerators.LogLevel[] logLevels);
 
     @Insert
-    public abstract void insert(Actuator actuator);
+    public abstract long insert(Actuator actuator);
 
     @Insert
     public abstract void insertAll(Actuator... actuators);

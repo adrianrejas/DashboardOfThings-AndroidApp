@@ -27,6 +27,7 @@ import com.arejas.dashboardofthings.presentation.ui.fragments.MainHistoryFragmen
 import com.arejas.dashboardofthings.presentation.ui.fragments.MainLogsFragment;
 import com.arejas.dashboardofthings.presentation.ui.fragments.MainSensorsFragment;
 import com.arejas.dashboardofthings.presentation.ui.fragments.MainStatusFragment;
+import com.arejas.dashboardofthings.utils.Utils;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.InterstitialAd;
@@ -63,9 +64,14 @@ public class MainDashboardActivity extends AppCompatActivity {
         /* Inject dependencies*/
         AndroidInjection.inject(this);
 
+        // Configure toolbar
         setSupportActionBar(uiBinding.toolbar);
         getSupportActionBar().setHomeAsUpIndicator(R.drawable.navigation);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setTitle(R.string.title_activity_maindash);
+
+        // Starts control service if not initiated
+        Utils.startControlService();
 
         /* Get view model*/
         mainDashboardViewModel = ViewModelProviders.of(this, this.viewModelFactory).get(MainDashboardViewModel.class);
@@ -157,6 +163,10 @@ public class MainDashboardActivity extends AppCompatActivity {
             case R.id.menu_options:
                 startActivity(new Intent(getApplicationContext(),
                         SettingsActivity.class));
+                return true;
+            case R.id.menu_shutdown_app:
+                Utils.stopControlService();
+                finish();
                 return true;
         }
         return super.onOptionsItemSelected(item);

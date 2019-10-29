@@ -25,6 +25,7 @@ import com.arejas.dashboardofthings.presentation.interfaces.viewmodels.SensorLis
 import com.arejas.dashboardofthings.presentation.interfaces.viewmodels.factories.ViewModelFactory;
 import com.arejas.dashboardofthings.presentation.ui.fragments.SensorDetailsFragment;
 import com.arejas.dashboardofthings.presentation.ui.notifications.RemoveSensorDialogFragment;
+import com.arejas.dashboardofthings.utils.Utils;
 import com.google.android.material.navigation.NavigationView;
 
 import android.view.LayoutInflater;
@@ -191,6 +192,10 @@ public class SensorListActivity extends AppCompatActivity implements View.OnClic
             case R.id.menu_options:
                 startActivity(new Intent(getApplicationContext(),
                         SettingsActivity.class));
+                return true;
+            case R.id.menu_shutdown_app:
+                Utils.stopControlService();
+                finish();
                 return true;
         }
         return super.onOptionsItemSelected(item);

@@ -494,13 +494,13 @@ public class SensorAddEditActivity extends AppCompatActivity implements AddEditS
                 sensorToConfigure.setThresholdBelowCritical(null);
                 thresholdEqualsWarning = uiBinding.edSensorAddeditStringWarningEquals.getText().toString().trim();
                 try {
-                    sensorToConfigure.setThresholdEqualsWarning((!thresholdEqualsWarning.isEmpty()) ? Boolean.valueOf(thresholdEqualsWarning).toString() : null);
+                    sensorToConfigure.setThresholdEqualsWarning((!thresholdEqualsWarning.isEmpty()) ? thresholdEqualsWarning : null);
                 } catch (Exception e) {
                     sensorToConfigure.setThresholdEqualsWarning(null);
                 }
                 thresholdEqualsCritical = uiBinding.edSensorAddeditStringCriticalEquals.getText().toString().trim();
                 try {
-                    sensorToConfigure.setThresholdEqualsCritical((!thresholdEqualsCritical.isEmpty()) ? Boolean.valueOf(thresholdEqualsCritical).toString() : null);
+                    sensorToConfigure.setThresholdEqualsCritical((!thresholdEqualsCritical.isEmpty()) ? thresholdEqualsCritical : null);
                 } catch (Exception e) {
                     sensorToConfigure.setThresholdEqualsCritical(null);
                 }
@@ -612,33 +612,33 @@ public class SensorAddEditActivity extends AppCompatActivity implements AddEditS
                     }
                     break;
                 case DECIMAL:
-                    if (!uiBinding.edSensorAddeditIntegerWarningAbove.getText().toString().trim().isEmpty()) {
+                    if (!uiBinding.edSensorAddeditDecimalWarningAbove.getText().toString().trim().isEmpty()) {
                         try {
-                            Float.parseFloat(uiBinding.edSensorAddeditIntegerWarningAbove.getText().toString().trim());
+                            Float.parseFloat(uiBinding.edSensorAddeditDecimalWarningAbove.getText().toString().trim());
                         } catch (Exception e) {
                             ToastHelper.showToast(getString(R.string.edit_toast_check_thresholds_decimal));
                             return false;
                         }
                     }
-                    if (!uiBinding.edSensorAddeditIntegerCriticalAbove.getText().toString().trim().isEmpty()) {
+                    if (!uiBinding.edSensorAddeditDecimalCriticalAbove.getText().toString().trim().isEmpty()) {
                         try {
-                            Float.parseFloat(uiBinding.edSensorAddeditIntegerCriticalAbove.getText().toString().trim());
+                            Float.parseFloat(uiBinding.edSensorAddeditDecimalCriticalAbove.getText().toString().trim());
                         } catch (Exception e) {
                             ToastHelper.showToast(getString(R.string.edit_toast_check_thresholds_decimal));
                             return false;
                         }
                     }
-                    if (!uiBinding.edSensorAddeditIntegerWarningBelow.getText().toString().trim().isEmpty()) {
+                    if (!uiBinding.edSensorAddeditDecimalWarningBelow.getText().toString().trim().isEmpty()) {
                         try {
-                            Float.parseFloat(uiBinding.edSensorAddeditIntegerWarningBelow.getText().toString().trim());
+                            Float.parseFloat(uiBinding.edSensorAddeditDecimalWarningBelow.getText().toString().trim());
                         } catch (Exception e) {
                             ToastHelper.showToast(getString(R.string.edit_toast_check_thresholds_decimal));
                             return false;
                         }
                     }
-                    if (!uiBinding.edSensorAddeditIntegerCriticalBelow.getText().toString().trim().isEmpty()) {
+                    if (!uiBinding.edSensorAddeditDecimalCriticalBelow.getText().toString().trim().isEmpty()) {
                         try {
-                            Float.parseFloat(uiBinding.edSensorAddeditIntegerCriticalBelow.getText().toString().trim());
+                            Float.parseFloat(uiBinding.edSensorAddeditDecimalCriticalBelow.getText().toString().trim());
                         } catch (Exception e) {
                             ToastHelper.showToast(getString(R.string.edit_toast_check_thresholds_decimal));
                             return false;

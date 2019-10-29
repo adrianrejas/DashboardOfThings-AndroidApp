@@ -139,7 +139,8 @@ public class DotRepository {
             @Override
             public void run() {
                 try {
-                    dotDatabase.networksDao().insert(network);
+                    int id = (int) dotDatabase.networksDao().insert(network);
+                    network.setId(id);
                     RxHelper.publishNetworkManagementChange(new Pair<>(network, Enumerators.ElementManagementFunction.CREATE));
                     result.postValue(Resource.success(null));
                 } catch (Exception e) {
@@ -272,7 +273,8 @@ public class DotRepository {
             @Override
             public void run() {
                 try {
-                    dotDatabase.sensorsDao().insert(sensor);
+                    int id = (int) dotDatabase.sensorsDao().insert(sensor);
+                    sensor.setId(id);
                     RxHelper.publishSensorManagementChange(new Pair<>(sensor, Enumerators.ElementManagementFunction.CREATE));
                     result.postValue(Resource.success(null));
                 } catch (Exception e) {
@@ -292,9 +294,6 @@ public class DotRepository {
                 try {
                     dotDatabase.sensorsDao().update(sensor);
                     RxHelper.publishSensorManagementChange(new Pair<>(sensor, Enumerators.ElementManagementFunction.UPDATE));
-                    RxHelper.publishLog(sensor.getId(), Enumerators.ElementType.SENSOR,
-                            sensor.getName(), Enumerators.LogLevel.WARN,
-                            DotApplication.getContext().getString(R.string.log_critical_sensor_scheduling));
                     result.postValue(Resource.success(null));
                 } catch (Exception e) {
                     result.postValue(Resource.error(e, null));
@@ -418,7 +417,8 @@ public class DotRepository {
             @Override
             public void run() {
                 try {
-                    dotDatabase.actuatorsDao().insert(actuator);
+                    int id = (int) dotDatabase.actuatorsDao().insert(actuator);
+                    actuator.setId(id);
                     RxHelper.publishActuatorManagementChange(new Pair<>(actuator, Enumerators.ElementManagementFunction.CREATE));
                     result.postValue(Resource.success(null));
                 } catch (Exception e) {
@@ -472,29 +472,6 @@ public class DotRepository {
         result.postValue(Resource.loading(null));
         try {
             RxHelper.publishSensorReloadRequest(sensor);
-            Random r = new Random();
-            String dataToSend = "";
-            switch (sensor.getDataType()) {
-                case INTEGER:
-                    Integer dataInt = 1 + r.nextInt() * (8 - 1);
-                    dataToSend = dataInt.toString();
-                    break;
-                case STRING:
-                    Integer dataInt3 = 1 + r.nextInt() * (8 - 1);
-                    dataInt3 = 1 + r.nextInt() * (8 - 1);
-                    dataToSend = "DATA:" + dataInt3.toString();
-                    break;
-                case BOOLEAN:
-                    Integer dataInt2 = 1 + r.nextInt() * (8 - 1);
-                    Boolean dataBool = dataInt2 > 4;
-                    dataToSend = dataBool.toString();
-                    break;
-                case DECIMAL:
-                    Float dataFloat = 1 + r.nextFloat() * (8 - 1);
-                    dataToSend = dataFloat.toString();
-                    break;
-            }
-            RxHelper.publishSensorData(sensor.getId(), dataToSend);
             result.postValue(Resource.success(null));
         } catch (Exception e) {
             result.postValue(Resource.error(e, null));
@@ -524,7 +501,7 @@ public class DotRepository {
         MutableLiveData<Resource> result = new MutableLiveData<>();
         result.postValue(Resource.loading(null));
         try {
-            RxHelper.publishActuatorUpdate(new Pair<>(actuator, data));
+            RxHelper.publishActuatorUpdate(actuator, data);
             result.postValue(Resource.success(null));
         } catch (Exception e) {
             result.postValue(Resource.error(e, null));
@@ -633,9 +610,10 @@ public class DotRepository {
 
     public LiveData<Resource<List<Log>>> getLastNotificationLogsInMainDashboard() {
         try {
-            Enumerators.LogLevel[] logLevels = new Enumerators.LogLevel[2];
-            logLevels[0] = Enumerators.LogLevel.NOTIF_WARN;
-            logLevels[1] = Enumerators.LogLevel.NOTIF_CRITICAL;
+            Enumerators.LogLevel[] logLevels = new Enumerators.LogLevel[3];
+            logLevels[0] = Enumerators.LogLevel.NOTIF_NONE;
+            logLevels[1] = Enumerators.LogLevel.NOTIF_WARN;
+            logLevels[2] = Enumerators.LogLevel.NOTIF_CRITICAL;
             return new LiveDataResource<List<Log>>(() -> this.dotDatabase.logsDao().getLastLogForSensorElementsInMainDashboard(logLevels));
         } catch (Exception e) {
             return null;

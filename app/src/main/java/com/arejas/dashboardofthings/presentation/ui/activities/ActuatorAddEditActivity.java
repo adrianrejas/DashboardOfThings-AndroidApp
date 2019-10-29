@@ -450,6 +450,15 @@ public class ActuatorAddEditActivity extends AppCompatActivity implements AddEdi
                         ToastHelper.showToast(getString(R.string.edit_toast_check_http_baseurl));
                         return false;
                     }
+                    Enumerators.HttpMethod httpMethod = Enumerators.HttpMethod.valueOf(
+                            uiBinding.spActuatorAddeditHttpMethod.getSelectedItemPosition());
+                    if (!httpMethod.equals(Enumerators.HttpMethod.GET)) {
+                        String mimeType = uiBinding.edActuatorAddeditHttpMimeType.getText().toString().trim();
+                        if (mimeType.isEmpty()) {
+                            ToastHelper.showToast(getString(R.string.edit_toast_check_http_mimetype));
+                            return false;
+                        }
+                    }
                     break;
                 case MQTT:
                     String mqttTopic = uiBinding.edActuatorAddeditMqttTopic.getText().toString().trim();

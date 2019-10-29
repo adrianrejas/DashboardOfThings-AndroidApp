@@ -9,4 +9,10 @@
         app:showAsAction="never"
         android:focusable="true"/>
 
+    <item
+        android:id="@+id/menu_shutdown_app"
+        android:title="@string/menu_close_application_and_service"
+        app:showAsAction="never"
+        android:focusable="true"/>
+
 </menu>

@@ -13,12 +13,13 @@
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.ACTION_OPEN_DOCUMENT" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
 
     <application
         android:name=".DotApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
-        android:label="@string/title_activity_maindash"
+        android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Dot">
@@ -50,6 +51,10 @@
         </receiver>
 
         <service
+            android:name=".domain.services.ControlService"
+            android:enabled="true"
+            android:exported="true" />
+        <service
             android:name="org.eclipse.paho.android.service.MqttService"
             android:enabled="true"
             android:exported="true" />
@@ -60,7 +65,11 @@
         <service
             android:name=".data.sources.network.http.HttpSensorRequestJobService"
             android:enabled="true"
-            android:exported="true" />
+            android:exported="true" >
+            <intent-filter>
+                <action android:name="com.firebase.jobdispatcher.ACTION_EXECUTE"/>
+            </intent-filter>
+        </service>
         <service
             android:name=".presentation.ui.widget.SensorWidgetService"
             android:exported="true"
@@ -68,6 +77,7 @@
 
         <activity
             android:name=".presentation.ui.activities.MainDashboardActivity"
+            android:label="@string/app_name"
             android:launchMode="singleTop"
             android:theme="@style/Theme.Dot">
             <intent-filter>

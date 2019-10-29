@@ -10,6 +10,7 @@ import com.arejas.dashboardofthings.domain.entities.database.DataValue;
 import com.arejas.dashboardofthings.domain.entities.database.Log;
 import com.arejas.dashboardofthings.domain.entities.database.Network;
 import com.arejas.dashboardofthings.domain.entities.database.Sensor;
+import com.arejas.dashboardofthings.domain.entities.extended.ActuatorSendDataUnit;
 import com.arejas.dashboardofthings.utils.Enumerators;
 
 import org.jetbrains.annotations.NotNull;
@@ -28,7 +29,7 @@ public class RxHelper {
     private static final BehaviorSubject<Pair<Actuator, Enumerators.ElementManagementFunction>> actuatorManagementSubject = BehaviorSubject.create();
 
     // Subject to communicate actuator data updates to Control Service
-    private static final BehaviorSubject<Pair<Actuator, String>> actuatorDataUpdateSubject = BehaviorSubject.create();
+    private static final BehaviorSubject<ActuatorSendDataUnit> actuatorDataUpdateSubject = BehaviorSubject.create();
 
     // Subject to communicate sensor reload requests to Control Service
     private static final BehaviorSubject<Sensor> sensorReloadRequestSubject = BehaviorSubject.create();
@@ -117,20 +118,21 @@ public class RxHelper {
     }
 
     // Receive data values from all sensors
-    public static Disposable subscribeToAllActuatorUpdates(@NonNull Consumer<Pair<Actuator, String>> action) {
+    public static Disposable subscribeToAllActuatorUpdates(@NonNull Consumer<ActuatorSendDataUnit> action) {
         return actuatorDataUpdateSubject.subscribe(action);
     }
 
     // Receive data values from one sensor
     public static Disposable subscribeToOneActuatorUpdates(
-            @NonNull Integer actuatorId, @NonNull Consumer<Pair<Actuator, String>> action) {
+            @NonNull Integer actuatorId, @NonNull Consumer<ActuatorSendDataUnit> action) {
         return actuatorDataUpdateSubject
-                .filter(data -> actuatorId.equals(data.first.getId()))
+                .filter(data -> actuatorId.equals(data.getActuator().getId()))
                 .subscribe(action);
     }
 
     // Send actuator updates to those interested
-    public static void publishActuatorUpdate(@NonNull Pair<Actuator, String> message) {
+    public static void publishActuatorUpdate(@NonNull Actuator actuator, String data) {
+        ActuatorSendDataUnit message = new ActuatorSendDataUnit(actuator, data);
         actuatorDataUpdateSubject.onNext(message);
     }
 

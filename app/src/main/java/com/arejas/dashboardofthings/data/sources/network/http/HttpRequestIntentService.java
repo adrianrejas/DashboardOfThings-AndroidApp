@@ -8,8 +8,10 @@ import com.arejas.dashboardofthings.R;
 import com.arejas.dashboardofthings.domain.entities.database.Actuator;
 import com.arejas.dashboardofthings.domain.entities.database.Network;
 import com.arejas.dashboardofthings.domain.entities.database.Sensor;
+import com.arejas.dashboardofthings.domain.entities.extended.NetworkExtended;
 import com.arejas.dashboardofthings.utils.Enumerators;
 import com.arejas.dashboardofthings.utils.rx.RxHelper;
+import com.google.gson.Gson;
 
 import java.util.concurrent.Executor;
 
@@ -34,10 +36,6 @@ public class HttpRequestIntentService extends IntentService {
     private static final String EXTRA_ACTUATOR = "com.arejas.dashboardofthings.data.sources.network.http.extra.ACTUATOR";
     private static final String EXTRA_DATATOSEND = "com.arejas.dashboardofthings.data.sources.network.http.extra.DATATOSEND";
 
-    @Inject
-    @Named("httpExecutor")
-    Executor httpExecutor;
-
     public HttpRequestIntentService() {
         super("HttpRequestIntentService");
     }
@@ -51,8 +49,11 @@ public class HttpRequestIntentService extends IntentService {
     public static void startActionSensorRequest(Context context, Network network, Sensor sensor) {
         Intent intent = new Intent(context, HttpRequestIntentService.class);
         intent.setAction(ACTION_SENSOR_REQUEST);
-        intent.putExtra(EXTRA_NETWORK, network);
-        intent.putExtra(EXTRA_SENSOR, sensor);
+        Gson gson = new Gson();
+        String networkStr = gson.toJson(network);
+        String sensorStr = gson.toJson(sensor);
+        intent.putExtra(EXTRA_NETWORK, networkStr);
+        intent.putExtra(EXTRA_SENSOR, sensorStr);
         context.startService(intent);
     }
 
@@ -65,32 +66,40 @@ public class HttpRequestIntentService extends IntentService {
     public static void startActionActuatorCommand(Context context,  Network network, Actuator actuator, String dataToSend) {
         Intent intent = new Intent(context, HttpRequestIntentService.class);
         intent.setAction(ACTION_ACTUATOR_COMMNAND);
-        intent.putExtra(EXTRA_NETWORK, network);
-        intent.putExtra(EXTRA_ACTUATOR, actuator);
+        Gson gson = new Gson();
+        String networkStr = gson.toJson(network);
+        String actuatorStr = gson.toJson(actuator);
+        intent.putExtra(EXTRA_NETWORK, networkStr);
+        intent.putExtra(EXTRA_ACTUATOR, actuatorStr);
         intent.putExtra(EXTRA_DATATOSEND, dataToSend);
         context.startService(intent);
     }
 
     @Override
     protected void onHandleIntent(Intent intent) {
-        httpExecutor.execute(new Runnable() {
-            @Override
-            public void run() {
-                if (intent != null) {
-                    final String action = intent.getAction();
-                    if (ACTION_SENSOR_REQUEST.equals(action)) {
-                        final Network network = intent.getParcelableExtra(EXTRA_NETWORK);
-                        final Sensor sensor = intent.getParcelableExtra(EXTRA_SENSOR);
-                        handleActionSensorRequest(network, sensor);
-                    } else if (ACTION_ACTUATOR_COMMNAND.equals(action)) {
-                        final Network network = intent.getParcelableExtra(EXTRA_NETWORK);
-                        final Actuator actuator = intent.getParcelableExtra(EXTRA_ACTUATOR);
-                        final String dataToSend = intent.getStringExtra(EXTRA_DATATOSEND);
-                        handleActionActuatorCommand(network, actuator, dataToSend);
-                    }
+        try {
+            if (intent != null) {
+                final String action = intent.getAction();
+                if (ACTION_SENSOR_REQUEST.equals(action)) {
+                    Gson gson = new Gson();
+                    String networkStr = intent.getExtras().getString(EXTRA_NETWORK);
+                    String sensorStr = intent.getExtras().getString(EXTRA_SENSOR);
+                    Network network = gson.fromJson(networkStr, Network.class);
+                    Sensor sensor = gson.fromJson(sensorStr, Sensor.class);
+                    handleActionSensorRequest(network, sensor);
+                } else if (ACTION_ACTUATOR_COMMNAND.equals(action)) {
+                    Gson gson = new Gson();
+                    String networkStr = intent.getExtras().getString(EXTRA_NETWORK);
+                    String actuatorStr = intent.getExtras().getString(EXTRA_ACTUATOR);
+                    final Network network = gson.fromJson(networkStr, Network.class);
+                    final Actuator actuator = gson.fromJson(actuatorStr, Actuator.class);
+                    final String dataToSend = intent.getStringExtra(EXTRA_DATATOSEND);
+                    handleActionActuatorCommand(network, actuator, dataToSend);
                 }
             }
-        });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     /**

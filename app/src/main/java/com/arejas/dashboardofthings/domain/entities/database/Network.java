@@ -371,7 +371,7 @@ public class Network implements Parcelable {
         public void setMqttCertAuthorityUri(String sCertAuthorityUrl) {
             this.mqttCertAuthorityUri = sCertAuthorityUrl;
         }
-        
+
     }
 
 }

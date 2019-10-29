@@ -17,10 +17,11 @@ import com.firebase.jobdispatcher.Job;
 import com.firebase.jobdispatcher.Lifetime;
 import com.firebase.jobdispatcher.RetryStrategy;
 import com.firebase.jobdispatcher.Trigger;
+import com.google.gson.Gson;
 
 public class HttpNetworkInterfaceHelper extends NetworkInterfaceHelper{
 
-    private static final int MARGIN_WINDOW_PERIODIC_SECONDS = 15;
+    private static final int MARGIN_WINDOW_PERIODIC_SECONDS = 30;
 
     private FirebaseJobDispatcher dispatcher;
 
@@ -50,21 +51,20 @@ public class HttpNetworkInterfaceHelper extends NetworkInterfaceHelper{
     public boolean configureSensorReceiving(Context context, Sensor sensor) {
         try {
             Bundle extras = new Bundle();
-            extras.putParcelable(HttpSensorRequestJobService.NETWORK_OBJECT, getNetwork());
-            extras.putParcelable(HttpSensorRequestJobService.SENSOR_OBJECT, sensor);
+            Gson gson = new Gson();
+            String networkStr = gson.toJson(getNetwork());
+            String sensorStr = gson.toJson(sensor);
+            extras.putString(HttpSensorRequestJobService.NETWORK_OBJECT, networkStr);
+            extras.putString(HttpSensorRequestJobService.SENSOR_OBJECT, sensorStr);
             Job sensorJob = dispatcher.newJobBuilder()
-                    .setService(HttpSensorRequestJobService.class)  // the JobService that will be called
-                    .setTag(Integer.toString(sensor.getId()))       // uniquely identifies the job
-                    .setRecurring(false)                            // recurring job
-                    .setLifetime(Lifetime.UNTIL_NEXT_BOOT)          // don't persist past a device reboot
-                    // start between the configured seconds and an additional margin
+                    .setService(HttpSensorRequestJobService.class)
+                    .setTag(Integer.toString(sensor.getId()))
+                    .setRecurring(true)
+                    .setLifetime(Lifetime.UNTIL_NEXT_BOOT)
                     .setTrigger(Trigger.executionWindow(sensor.getHttpSecondsBetweenRequests(),
                             sensor.getHttpSecondsBetweenRequests() + MARGIN_WINDOW_PERIODIC_SECONDS))
-                    .setReplaceCurrent(true)                       // Overwrite an existing job with the same tag
-                    .setRetryStrategy(dispatcher.newRetryStrategy(RetryStrategy.RETRY_POLICY_LINEAR,    // retry with linear backoff
-                            sensor.getHttpSecondsBetweenRequests(),
-                            sensor.getHttpSecondsBetweenRequests() + MARGIN_WINDOW_PERIODIC_SECONDS))
-                    .setExtras(extras)                              //Send the extras required for the service
+                    .setReplaceCurrent(true)
+                    .setExtras(extras)
                     .build();
             dispatcher.mustSchedule(sensorJob);
             getSensorsRegistered().put(sensor.getId(), sensor);

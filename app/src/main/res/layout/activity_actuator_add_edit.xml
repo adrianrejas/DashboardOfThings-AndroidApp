@@ -644,7 +644,7 @@
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@id/fl_actuator_addedit_network_options_separator"
-                        tools:visibility="gone">
+                        tools:visibility="visible">
 
                         <TextView
                             android:id="@+id/tv_actuator_addedit_message_variables_label"
@@ -677,7 +677,7 @@
                             android:inputType="textMultiLine"
                             android:maxLength="500"
                             android:gravity="top|start"
-                            android:minLines="20"
+                            android:minLines="12"
                             android:text='@{actuator.dataFormatMessageToSend ?? ""}'
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"

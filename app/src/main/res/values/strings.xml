@@ -23,6 +23,7 @@
     <string name="main_navigation_map">Map</string>
 
     <string name="menu_options">Options</string>
+    <string name="menu_close_application_and_service">Shutdown application</string>
     <string name="menu_edit">Edit</string>
     <string name="menu_remove">Remove</string>
     <string name="menu_reload">Reload</string>
@@ -218,9 +219,7 @@
     <string name="edit_hint_message_format">Message to be sent to the network when sending information from the actuator. \n
         The following strings inside the message will be replaced prior to send the message accordingly to the following:\n
          - ${DATA}: Replaced by the value sent by the actuator in the default format.\n
-         - ${DATA(\u003Cformat\u003E)}: Replaced by the value sent by the actuator in the Java String format especified by \u003Cformat\u003E.\n
-         - ${TIMESTAMP}: Replaced by the current timestamp.\n
-         - ${DATE(\u003Cformat\u003E)}: Replaced by the current date in the Java Date format especified by \u003Cformat\u003E.</string>
+         - ${TIMESTAMP}: Replaced by the current timestamp.</string>
     <string name="edit_label_xml_node">XML node to locate data: </string>
     <string name="edit_hint_xml_node">Example: node1.node2.node3</string>
     <string name="edit_label_json_variables">JSON options</string>
@@ -270,6 +269,7 @@
     <string name="edit_toast_check_type">Check type ...</string>
     <string name="edit_toast_check_network_type">Select network type ...</string>
     <string name="edit_toast_check_http_baseurl">Check HTTP base URL ...</string>
+    <string name="edit_toast_check_http_mimetype">Mime type should be set for PUT, POST and PATCH messages ...</string>
     <string name="edit_toast_check_http_auth_type">Select HTTP authentication type ...</string>
     <string name="edit_toast_check_http_username">Select HTTP authentication username ...</string>
     <string name="edit_toast_check_http_password">Select HTTP authentication password ...</string>
@@ -285,7 +285,7 @@
     <string name="edit_toast_check_xml_node">Check XML node ...</string>
     <string name="edit_toast_check_json_node">Check JSON node ...</string>
     <string name="edit_toast_check_message_format">Check message format ...</string>
-    <string name="edit_toast_check_message_format_data">Message format should include ${DATA} or ${DATA(\u003Cformat\u003E)} ...</string>
+    <string name="edit_toast_check_message_format_data">Message format should include ${DATA} ...</string>
     <string name="edit_toast_check_raw_regex">Check raw data regular expression ...</string>
     <string name="edit_toast_check_thresholds_integer">Check threshold values to be integer number ...</string>
     <string name="edit_toast_check_thresholds_decimal">Check threshold values to be decimal number ...</string>

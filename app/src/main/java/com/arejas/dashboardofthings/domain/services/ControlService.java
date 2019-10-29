@@ -1,6 +1,5 @@
 package com.arejas.dashboardofthings.domain.services;
 
-import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
@@ -9,7 +8,11 @@ import android.os.IBinder;
 import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
 import androidx.core.content.ContextCompat;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.Observer;
 
+import com.arejas.dashboardofthings.DotApplication;
+import com.arejas.dashboardofthings.R;
 import com.arejas.dashboardofthings.data.interfaces.DotRepository;
 import com.arejas.dashboardofthings.data.sources.network.HttpNetworkInterfaceHelper;
 import com.arejas.dashboardofthings.data.sources.network.MqttNetworkInterfaceHelper;
@@ -17,8 +20,12 @@ import com.arejas.dashboardofthings.data.sources.network.NetworkInterfaceHelper;
 import com.arejas.dashboardofthings.domain.entities.database.Actuator;
 import com.arejas.dashboardofthings.domain.entities.database.Network;
 import com.arejas.dashboardofthings.domain.entities.database.Sensor;
+import com.arejas.dashboardofthings.domain.entities.extended.NetworkExtended;
+import com.arejas.dashboardofthings.domain.entities.result.Resource;
 import com.arejas.dashboardofthings.presentation.ui.activities.MainDashboardActivity;
 import com.arejas.dashboardofthings.presentation.ui.notifications.NotificationsHelper;
+import com.arejas.dashboardofthings.presentation.ui.notifications.ToastHelper;
+import com.arejas.dashboardofthings.presentation.ui.widget.SensorWidgetService;
 import com.arejas.dashboardofthings.utils.rx.RxHelper;
 
 import org.jetbrains.annotations.NotNull;
@@ -27,8 +34,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.Executor;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 
 import dagger.android.AndroidInjection;
 
@@ -40,6 +49,10 @@ public class ControlService extends Service {
 
     @Inject
     DotRepository dotRepository;
+    @Inject
+    @Named("dbExecutorManagement")
+    Executor dbExecutorManagement;
+
     private List<Network> networks;
     private List<Sensor> sensors;
 
@@ -54,11 +67,32 @@ public class ControlService extends Service {
         startForeground(NotificationsHelper.FOREGROUND_SERVICE_NOTIFICATION_ID,
                 NotificationsHelper.showNotificationForegroundService(getApplicationContext()));
         AndroidInjection.inject(this);
-        initializeNetworkHelpers();
+
+        dbExecutorManagement.execute(() -> {
+            initializeNetworkHelpers();
+        });
         initializeSubscriptionsToNetworksAndSensorsManagementChanges();
         initializeSubscriptionsToActuatorDataUpdates();
         initializeSubscriptionsToSensorReloadRequests();
+        initializeSubscriptionsToDataReceived();
         return START_NOT_STICKY;
+    }
+
+    public void initializeNetworkHelpers() {
+        synchronized (networkHelpersLock) {
+            networks = dotRepository.getListOfNetworksBlocking();
+            if (networks != null) {
+                for (Network network : networks) {
+                    initNetworkHelper(network);
+                }
+            }
+            sensors = dotRepository.getListOfSensorsBlocking();
+            if (sensors != null) {
+                for (Sensor sensor : sensors) {
+                    registerSensorInNetwork(sensor);
+                }
+            }
+        }
     }
 
     @Override
@@ -80,60 +114,58 @@ public class ControlService extends Service {
 
     private void initializeSubscriptionsToNetworksAndSensorsManagementChanges() {
         RxHelper.subscribeToAllNetworskManagementChanges(networkManagementPair -> {
-            switch (networkManagementPair.second) {
-                case CREATE:
-                    initNetworkHelper(networkManagementPair.first);
-                    break;
-                case UPDATE:
-                    restartNetworkHelper(networkManagementPair.first);
-                    break;
-                case DELETE:
-                    closeNetworkHelper(networkManagementPair.first);
-                    break;
+            if (networkManagementPair != null)
+                switch (networkManagementPair.second) {
+                    case CREATE:
+                        initNetworkHelper(networkManagementPair.first);
+                        break;
+                    case UPDATE:
+                        restartNetworkHelper(networkManagementPair.first);
+                        break;
+                    case DELETE:
+                        closeNetworkHelper(networkManagementPair.first);
+                        break;
             }
         });
         RxHelper.subscribeToAllSensorsManagementChanges(sensorManagementPair -> {
-            switch (sensorManagementPair.second) {
-                case CREATE:
-                    registerSensorInNetwork(sensorManagementPair.first);
-                    break;
-                case UPDATE:
-                    restartRegisterSensorInNetwork(sensorManagementPair.first);
-                    break;
-                case DELETE:
-                    unregisterSensorInNetwork(sensorManagementPair.first);
-                    break;
-            }
+            if (sensorManagementPair != null)
+                switch (sensorManagementPair.second) {
+                    case CREATE:
+                        registerSensorInNetwork(sensorManagementPair.first);
+                        break;
+                    case UPDATE:
+                        restartRegisterSensorInNetwork(sensorManagementPair.first);
+                        break;
+                    case DELETE:
+                        unregisterSensorInNetwork(sensorManagementPair.first);
+                        break;
+                }
         });
     }
 
     private void initializeSubscriptionsToActuatorDataUpdates() {
-        RxHelper.subscribeToAllActuatorUpdates(actuatorDataPair -> {
-            sendActuatorUpdateToNetworkHelper(actuatorDataPair.first, actuatorDataPair.second);
+        RxHelper.subscribeToAllActuatorUpdates(message -> {
+            if (message != null)
+                sendActuatorUpdateToNetworkHelper(message.getActuator(), message.getData());
         });
     }
 
     private void initializeSubscriptionsToSensorReloadRequests() {
         RxHelper.subscribeToAllSensorReloadRequests(sensor -> {
-            sendSensorReloadRequestToNetworkHelper(sensor);
+            if (sensor != null)
+                sendSensorReloadRequestToNetworkHelper(sensor);
         });
     }
 
-    public void initializeNetworkHelpers() {
-        synchronized (networkHelpersLock) {
-            networks = dotRepository.getListOfNetworksBlocking();
-            if (networks != null) {
-                for (Network network : networks) {
-                    initNetworkHelper(network);
+    private void initializeSubscriptionsToDataReceived() {
+        RxHelper.subscribeToAllSensorsData(dataValue -> {
+            if (dataValue != null) {
+                int widgetId = SensorWidgetService.getWidgetIdForSensorId(getApplicationContext(), dataValue.getSensorId());
+                if (widgetId != SensorWidgetService.UNKNOWN_ELEMENT_ID) {
+                    SensorWidgetService.startActionUpdateWidgetSetData(getApplicationContext(), widgetId, dataValue.getValue());
                 }
             }
-            sensors = dotRepository.getListOfSensorsBlocking();
-            if (sensors != null) {
-                for (Sensor sensor : sensors) {
-                    registerSensorInNetwork(sensor);
-                }
-            }
-        }
+        });
     }
 
     public void closeNetworkHelpers() {
@@ -166,9 +198,11 @@ public class ControlService extends Service {
                 }
                 if (helper != null) {
                     List<Sensor> initialSensors = new ArrayList<>();
-                    for (Sensor sensor : sensors) {
-                        if (sensor.getNetworkId().equals(network.getId())) {
-                            initialSensors.add(sensor);
+                    if (sensors != null) {
+                        for (Sensor sensor : sensors) {
+                            if (sensor.getNetworkId().equals(network.getId())) {
+                                initialSensors.add(sensor);
+                            }
                         }
                     }
                     helper.initNetworkInterface(getApplicationContext(),

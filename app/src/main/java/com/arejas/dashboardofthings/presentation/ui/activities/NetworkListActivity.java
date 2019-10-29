@@ -25,6 +25,7 @@ import com.arejas.dashboardofthings.presentation.interfaces.viewmodels.NetworkLi
 import com.arejas.dashboardofthings.presentation.interfaces.viewmodels.factories.ViewModelFactory;
 import com.arejas.dashboardofthings.presentation.ui.fragments.NetworkDetailsFragment;
 import com.arejas.dashboardofthings.presentation.ui.notifications.RemoveNetworkDialogFragment;
+import com.arejas.dashboardofthings.utils.Utils;
 import com.google.android.material.navigation.NavigationView;
 
 import android.view.LayoutInflater;
@@ -175,6 +176,10 @@ public class NetworkListActivity extends AppCompatActivity implements View.OnCli
             case R.id.menu_options:
                 startActivity(new Intent(getApplicationContext(),
                         SettingsActivity.class));
+                return true;
+            case R.id.menu_shutdown_app:
+                Utils.stopControlService();
+                finish();
                 return true;
         }
         return super.onOptionsItemSelected(item);

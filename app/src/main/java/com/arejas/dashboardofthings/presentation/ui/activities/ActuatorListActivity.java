@@ -31,6 +31,7 @@ import com.arejas.dashboardofthings.presentation.interfaces.viewmodels.ActuatorL
 import com.arejas.dashboardofthings.presentation.interfaces.viewmodels.factories.ViewModelFactory;
 import com.arejas.dashboardofthings.presentation.ui.fragments.ActuatorDetailsFragment;
 import com.arejas.dashboardofthings.presentation.ui.notifications.RemoveActuatorDialogFragment;
+import com.arejas.dashboardofthings.utils.Utils;
 import com.google.android.material.navigation.NavigationView;
 
 import java.util.List;
@@ -182,6 +183,10 @@ public class ActuatorListActivity extends AppCompatActivity implements View.OnCl
             case R.id.menu_options:
                 startActivity(new Intent(getApplicationContext(),
                         SettingsActivity.class));
+                return true;
+            case R.id.menu_shutdown_app:
+                Utils.stopControlService();
+                finish();
                 return true;
         }
         return super.onOptionsItemSelected(item);

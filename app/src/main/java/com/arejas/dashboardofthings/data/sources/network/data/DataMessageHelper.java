@@ -5,11 +5,13 @@ import android.util.Xml;
 import com.arejas.dashboardofthings.data.format.DataTransformationHelper;
 import com.arejas.dashboardofthings.domain.entities.database.Actuator;
 import com.arejas.dashboardofthings.domain.entities.database.Sensor;
+import com.arejas.dashboardofthings.utils.Enumerators;
 import com.google.common.net.UrlEscapers;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import com.google.gson.JsonPrimitive;
 
 import org.xmlpull.v1.XmlPullParser;
 
@@ -23,23 +25,15 @@ import java.util.regex.Pattern;
 
 public class DataMessageHelper {
     
-    public static final String XML_JSON_NODE_SEPARATOR = ".";
+    public static final String XML_JSON_NODE_SEPARATOR = "\\.";
 
     public static final String XML_NODE_ARRAY_REGEX = "(.*)\\[([0-9]+)\\]$";
     public static final String JSON_NODE_ARRAY_REGEX = "(.*)?\\[([0-9]+)\\]$";
     public static final int XML_JSON_NODE_ARRAY_REGEX_GROUP_NAME = 1;
     public static final int XML_JSON_NODE_ARRAY_REGEX_GROUP_INDEX = 2;
 
-    // Detect ${DATA(<data_format>)} and replaces it with the data formatted according to especified inside round brackets
-    //public static final String ACTUATOR_MESSAGE_DATA_REGEX = "\\$\\{DATA\\(([^\\);]+)\\)\\}";
-    public static final String ACTUATOR_MESSAGE_DATA_REGEX = "%24%7BDATA%28([^\\);]+)%29%7D";
-    // Detect ${DATE(<date_format>)} and replaces it with the current date formatted according to especified inside round brackets
-    //public static final String ACTUATOR_MESSAGE_DATE_REGEX = "\\$\\{DATE\\(([^\\);]+)\\)\\}";
-    public static final String ACTUATOR_MESSAGE_DATE_REGEX = "%24%7BDATE%28([^\\);]+)%29%7D";
-    //public static final String ACTUATOR_MESSAGE_DATA_INDICATOR = "${DATA}";
-    public static final String ACTUATOR_MESSAGE_DATA_INDICATOR = "%24%7BDATA%7D";
-    //public static final String ACTUATOR_MESSAGE_TIMESTAMP_INDICATOR = "${TIMESTAMP}";
-    public static final String ACTUATOR_MESSAGE_TIMESTAMP_INDICATOR = "%24%7BTIMESTAMP%7D";
+    public static final String ACTUATOR_MESSAGE_DATA_INDICATOR = "${DATA}";
+    public static final String ACTUATOR_MESSAGE_TIMESTAMP_INDICATOR = "${TIMESTAMP}";
     
     public static String extractDataFromSensorResponse(String messageBody, Sensor sensor) {
         try {
@@ -64,29 +58,67 @@ public class DataMessageHelper {
             JsonElement jMessageElement = new JsonParser().parse(messageBody);
             JsonObject jsonObject = jMessageElement.getAsJsonObject();
             String[] jsonNodes = sensor.getXmlOrJsonNode().split(XML_JSON_NODE_SEPARATOR);
-            for (String node : jsonNodes) {
-                if (arrayNodePattern.matcher(node).matches()) { // array node
-                    String newNode = arrayNodePattern.matcher(node).group(XML_JSON_NODE_ARRAY_REGEX_GROUP_NAME);
-                    int index = Integer.parseInt(arrayNodePattern.matcher(node).group(XML_JSON_NODE_ARRAY_REGEX_GROUP_INDEX));
+            for (int i = 0; i < jsonNodes.length; i++) {
+                String node = jsonNodes[i];
+                Matcher matcher = arrayNodePattern.matcher(node);
+                if (matcher.find()) {
+                    // Get the group matched using group() method
+                    String newNode = matcher.group(XML_JSON_NODE_ARRAY_REGEX_GROUP_NAME);
+                    int index = Integer.parseInt(matcher.group(XML_JSON_NODE_ARRAY_REGEX_GROUP_INDEX));
                     if ((newNode != null) &&(!newNode.isEmpty())) {
                         JsonArray jsonArray = jsonObject.getAsJsonArray(newNode);
-                        jsonObject = jsonArray.get(index).getAsJsonObject();
+                        if (i == (jsonNodes.length -1)) {
+                            JsonPrimitive primitive = jsonObject.getAsJsonPrimitive(node);
+                            return getJsonPrimitiveAsDotDataType(primitive, sensor.getDataType());
+                        } else {
+                            jsonObject = jsonArray.get(index).getAsJsonObject();
+                        }
                     } else {
                         JsonArray jsonArray = jsonObject.getAsJsonArray();
-                        jsonObject = jsonArray.get(index).getAsJsonObject();
+                        if (i == (jsonNodes.length -1)) {
+                            JsonPrimitive primitive = jsonObject.getAsJsonPrimitive();
+                            return getJsonPrimitiveAsDotDataType(primitive, sensor.getDataType());
+                        } else {
+                            jsonObject = jsonArray.get(index).getAsJsonObject();
+                        }
                     }
                 } else { // normal node
                     if ((node != null) &&(!node.isEmpty())) {
-                        jsonObject = jsonObject.getAsJsonObject(node);
+                        if (i == (jsonNodes.length -1)) {
+                            JsonPrimitive primitive = jsonObject.getAsJsonPrimitive(node);
+                            return getJsonPrimitiveAsDotDataType(primitive, sensor.getDataType());
+                        } else {
+                            jsonObject = jsonObject.getAsJsonObject(node);
+                        }
                     } else {
-                        jsonObject = jsonObject.getAsJsonObject();
+                        if (i == (jsonNodes.length -1)) {
+                            JsonPrimitive primitive = jsonObject.getAsJsonPrimitive();
+                            return getJsonPrimitiveAsDotDataType(primitive, sensor.getDataType());
+                        } else {
+                            jsonObject = jsonObject.getAsJsonObject();
+                        }
                     }
                 }
             }
-            return jsonObject.getAsString();
+            return null;
         } catch (Exception e) {
             return null;
         }
+    }
+
+    public static String getJsonPrimitiveAsDotDataType(JsonPrimitive primitive,
+                                                       Enumerators.DataType type) {
+        switch (type) {
+            case BOOLEAN:
+                return Boolean.valueOf(primitive.getAsBoolean()).toString();
+            case INTEGER:
+                return Integer.valueOf(primitive.getAsInt()).toString();
+            case DECIMAL:
+                return Float.valueOf(primitive.getAsFloat()).toString();
+            case STRING:
+                return primitive.getAsString();
+        }
+        return null;
     }
 
     public static String extractDataFromSensorResponseXML(String messageBody, Sensor sensor) {
@@ -97,10 +129,11 @@ public class DataMessageHelper {
             String nodeToSearch = null;
             String[] xmlNodes = sensor.getXmlOrJsonNode().split(XML_JSON_NODE_SEPARATOR);
             Pattern arrayNodePattern = Pattern.compile(XML_NODE_ARRAY_REGEX);
-            if (arrayNodePattern.matcher(xmlNodes[xmlTreeIndex]).matches()) {
-                nodeToSearch = arrayNodePattern.matcher(xmlNodes[xmlTreeIndex]).group(XML_JSON_NODE_ARRAY_REGEX_GROUP_NAME);
+            Matcher matcher = arrayNodePattern.matcher(xmlNodes[xmlTreeIndex]);
+            if (matcher.find()) {
+                nodeToSearch = matcher.group(XML_JSON_NODE_ARRAY_REGEX_GROUP_NAME);
                 indexToCountNodes = 0;
-                thresholdToCountNodes = Integer.parseInt(arrayNodePattern.matcher(xmlNodes[xmlTreeIndex]).group(XML_JSON_NODE_ARRAY_REGEX_GROUP_INDEX)) + 1;
+                thresholdToCountNodes = Integer.parseInt(matcher.group(XML_JSON_NODE_ARRAY_REGEX_GROUP_INDEX)) + 1;
             } else if (!xmlNodes[xmlTreeIndex].isEmpty()){
                 nodeToSearch = xmlNodes[xmlTreeIndex];
                 indexToCountNodes = 0;
@@ -123,10 +156,11 @@ public class DataMessageHelper {
                                 String result = parser.getText();
                                 return ((result != null) && (!result.isEmpty())) ? result : null;
                             } else {
-                                if (arrayNodePattern.matcher(xmlNodes[xmlTreeIndex]).matches()) {
-                                    nodeToSearch = arrayNodePattern.matcher(xmlNodes[xmlTreeIndex]).group(XML_JSON_NODE_ARRAY_REGEX_GROUP_NAME);
+                                Matcher matcher2 = arrayNodePattern.matcher(xmlNodes[xmlTreeIndex]);
+                                if (matcher2.find()) {
+                                    nodeToSearch = matcher2.group(XML_JSON_NODE_ARRAY_REGEX_GROUP_NAME);
                                     indexToCountNodes = 0;
-                                    thresholdToCountNodes = Integer.parseInt(arrayNodePattern.matcher(xmlNodes[xmlTreeIndex]).group(XML_JSON_NODE_ARRAY_REGEX_GROUP_INDEX)) + 1;
+                                    thresholdToCountNodes = Integer.parseInt(matcher2.group(XML_JSON_NODE_ARRAY_REGEX_GROUP_INDEX)) + 1;
                                 } else if (!xmlNodes[xmlTreeIndex].isEmpty()){
                                     nodeToSearch = xmlNodes[xmlTreeIndex];
                                     indexToCountNodes = 0;
@@ -147,12 +181,11 @@ public class DataMessageHelper {
 
     public static String extractDataFromSensorResponseRAW(String messageBody, Sensor sensor) {
         try {
-            String messageBodyEncoded = URLEncoder.encode(messageBody, "utf-8");
-            String regexEncoded = URLEncoder.encode(sensor.getRawRegularExpression(), "utf-8");
-            Pattern pattertToUse = Pattern.compile(regexEncoded);
-            Matcher patternMatcher = pattertToUse.matcher(messageBodyEncoded);
-            if ((patternMatcher.matches()) && (patternMatcher.groupCount() >= 1)) {
-                return URLDecoder.decode(patternMatcher.group(0), "utf-8");
+            String regex = sensor.getRawRegularExpression();
+            Pattern pattertToUse = Pattern.compile(regex);
+            Matcher patternMatcher = pattertToUse.matcher(messageBody);
+            if (patternMatcher.find()) {
+                return URLDecoder.decode(patternMatcher.group(1), "utf-8");
             }
             return null;
         } catch (Exception e) {
@@ -163,34 +196,9 @@ public class DataMessageHelper {
     public static String formatActuatorMessage(String dataToSend, Actuator actuator) {
         try {
             Date current = new Date();
-            String formattedMessage = URLEncoder.encode(
-                    String.copyValueOf(actuator.getDataFormatMessageToSend().toCharArray()), "utf-8");
+            String formattedMessage = actuator.getDataFormatMessageToSend();
             formattedMessage = formattedMessage.replace(ACTUATOR_MESSAGE_TIMESTAMP_INDICATOR, Long.toString(current.getTime()));
-            Pattern pattertToDetectDate = Pattern.compile(ACTUATOR_MESSAGE_DATE_REGEX);
-            Matcher patternMatcherDate = pattertToDetectDate.matcher(formattedMessage);
-            while ((patternMatcherDate.matches()) && (patternMatcherDate.groupCount() >= 1)) {
-                String dateFormatStr = patternMatcherDate.group(0);
-                SimpleDateFormat dateFormat = new SimpleDateFormat(dateFormatStr);
-                String dataToReplace = URLEncoder.encode(dateFormat.format(current), "utf-8");
-                formattedMessage = patternMatcherDate.replaceFirst(dataToReplace);
-                patternMatcherDate = pattertToDetectDate.matcher(formattedMessage);
-            }
-            Pattern pattertToDetectData = Pattern.compile(ACTUATOR_MESSAGE_DATA_REGEX);
-            Matcher patternMatcherData = pattertToDetectData.matcher(formattedMessage);
-            while ((patternMatcherData.matches()) && (patternMatcherData.groupCount() >= 1)) {
-                String dataFormatStr = patternMatcherData.group(0);
-                dataFormatStr = URLDecoder.decode(dataFormatStr, "utf-8");
-                Object dataToFormat = DataTransformationHelper.getDataFromString(dataToSend, actuator.getDataType());
-                if (dataToFormat == null) {
-                    return null;
-                }
-                String dataToReplace = URLEncoder.encode(String.format(dataFormatStr, dataToFormat), "utf-8");
-                formattedMessage = patternMatcherData.replaceFirst(dataToReplace);
-                formattedMessage = patternMatcherDate.replaceFirst(dataToReplace);
-                patternMatcherData = pattertToDetectData.matcher(formattedMessage);
-            }
-            formattedMessage = formattedMessage.replace(ACTUATOR_MESSAGE_DATA_INDICATOR, URLEncoder.encode(dataToSend, "utf-8"));
-            formattedMessage = URLDecoder.decode(formattedMessage, "utf-8");
+            formattedMessage = formattedMessage.replace(ACTUATOR_MESSAGE_DATA_INDICATOR, dataToSend);
             return formattedMessage;
         } catch (Exception e) {
             return null;
@@ -199,16 +207,7 @@ public class DataMessageHelper {
 
     public static boolean checkDataPrecenseInActuatorMessageFormat(String messageFormat) {
         try {
-            String messageFormatEncoded = URLEncoder.encode(messageFormat, "utf-8");
-            Pattern pattertToDetectData = Pattern.compile(ACTUATOR_MESSAGE_DATA_REGEX);
-            Matcher patternMatcherData = pattertToDetectData.matcher(messageFormatEncoded);
-            if ((patternMatcherData.matches()) && (patternMatcherData.groupCount() >= 1)) {
-                String dataFormatStr = patternMatcherData.group(0);
-                if ((dataFormatStr != null) && (!dataFormatStr.isEmpty())) {
-                    return true;
-                }
-            }
-            if (messageFormatEncoded.contains(ACTUATOR_MESSAGE_DATA_INDICATOR)) {
+            if (messageFormat.contains(ACTUATOR_MESSAGE_DATA_INDICATOR)) {
                 return true;
             }
             return false;

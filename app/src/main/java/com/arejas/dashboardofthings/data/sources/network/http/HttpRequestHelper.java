@@ -100,7 +100,7 @@ public class HttpRequestHelper {
                         context.getString(R.string.log_critical_http_bad_response, response.code()));
             }
         } catch (IllegalArgumentException e) {
-            RxHelper.publishLog(network.getId(), Enumerators.ElementType.NETWORK,
+            RxHelper.publishLog(sensor.getId(), Enumerators.ElementType.SENSOR,
                     sensor.getName(),Enumerators.LogLevel.ERROR,
                     context.getString(R.string.log_critical_wrong_network_conf));
         } catch (SSLException e) {
@@ -182,8 +182,8 @@ public class HttpRequestHelper {
                         context.getString(R.string.log_critical_data_format));
             }
         } catch (IllegalArgumentException e) {
-            RxHelper.publishLog(network.getId(), Enumerators.ElementType.NETWORK,
-                    network.getName(), Enumerators.LogLevel.ERROR,
+            RxHelper.publishLog(actuator.getId(), Enumerators.ElementType.ACTUATOR,
+                    actuator.getName(), Enumerators.LogLevel.ERROR,
                     context.getString(R.string.log_critical_wrong_network_conf));
         } catch (SSLException e) {
             RxHelper.publishLog(network.getId(), Enumerators.ElementType.NETWORK,
@@ -218,12 +218,8 @@ public class HttpRequestHelper {
                                            X509TrustManager trustManager) throws Exception {
         OkHttpClient.Builder clientBuilder = new OkHttpClient.Builder();
         if (usesSslConnection) {
-            if ((socketFactory == null) || (trustManager == null)) {
-                throw new SSLException("");
-            } else {
-                clientBuilder = clientBuilder.connectionSpecs(
-                        Arrays.asList(ConnectionSpec.MODERN_TLS, ConnectionSpec.COMPATIBLE_TLS));
-            }
+            clientBuilder = clientBuilder.connectionSpecs(
+                    Arrays.asList(ConnectionSpec.MODERN_TLS, ConnectionSpec.COMPATIBLE_TLS));
         }
         if (!authenticationType.equals(Enumerators.HttpAuthenticationType.NONE)) {
             clientBuilder.authenticator(new Authenticator() {
@@ -242,15 +238,19 @@ public class HttpRequestHelper {
         if (!URLUtil.isValidUrl(url)){
             throw new MalformedURLException("");
         }
+        requestBuilder.url(url);
+
         if (headers != null) {
             for (String header : headers.keySet()) {
                 requestBuilder.addHeader(header, headers.get(header));
             }
         }
-
-        MediaType type = MediaType.get(mimeType);
-        if ((type == null) && (!httpMethod.equals(Enumerators.HttpMethod.GET))){
-            throw new IllegalArgumentException("");
+        MediaType type = null;
+        if (mimeType != null) {
+            type = MediaType.get(mimeType);
+            if ((type == null) && (!httpMethod.equals(Enumerators.HttpMethod.GET))){
+                throw new IllegalArgumentException("");
+            }
         }
 
         switch (httpMethod) {

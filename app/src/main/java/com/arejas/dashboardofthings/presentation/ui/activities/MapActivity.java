@@ -179,6 +179,10 @@ public class MapActivity extends AppCompatActivity implements GoogleMap.OnMyLoca
                 startActivity(new Intent(getApplicationContext(),
                         SettingsActivity.class));
                 return true;
+            case R.id.menu_shutdown_app:
+                Utils.stopControlService();
+                finish();
+                return true;
         }
         return super.onOptionsItemSelected(item);
     }

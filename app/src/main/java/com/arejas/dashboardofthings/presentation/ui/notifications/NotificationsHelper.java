@@ -32,7 +32,6 @@ public class NotificationsHelper {
 
     public static void processStateNotificationForSensor(Context context, Sensor sensor, Enumerators.NotificationType state) {
         Enumerators.NotificationType currentState = sensorStateNotifications.get(sensor.getId());
-        if (currentState == null) currentState = Enumerators.NotificationType.NONE;
         if (!state.equals(currentState)) {
             switch (state) {
                 case NONE:
@@ -58,6 +57,7 @@ public class NotificationsHelper {
                             context.getString(R.string.log_notification_sensor_critical));
                     break;
             }
+            sensorStateNotifications.put(sensor.getId(), currentState);
         }
     }
 

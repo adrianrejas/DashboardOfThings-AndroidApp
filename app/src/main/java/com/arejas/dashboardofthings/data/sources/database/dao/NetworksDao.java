@@ -44,7 +44,7 @@ public abstract class NetworksDao {
                                                                Enumerators.LogLevel[] logLevels);
 
     @Insert
-    public abstract void insert(Network network);
+    public abstract long insert(Network network);
 
     @Insert
     public abstract void insertAll(Network... networks);

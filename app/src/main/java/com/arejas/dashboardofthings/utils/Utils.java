@@ -14,11 +14,13 @@ import android.text.Html;
 import android.text.Spanned;
 
 import androidx.annotation.DrawableRes;
+import androidx.core.content.ContextCompat;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.core.graphics.drawable.DrawableCompat;
 
 import com.arejas.dashboardofthings.DotApplication;
 import com.arejas.dashboardofthings.R;
+import com.arejas.dashboardofthings.domain.services.ControlService;
 import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.sucho.placepicker.MapType;
@@ -97,6 +99,16 @@ public class Utils {
             dataToPrint = dataToPrint.concat(" ").concat(unit);
         }
         return dataToPrint;
+    }
+
+    public static void startControlService() {
+        Intent serviceIntent = new Intent(DotApplication.getContext(), ControlService.class);
+        ContextCompat.startForegroundService(DotApplication.getContext(), serviceIntent);
+    }
+
+    public static void stopControlService() {
+        Intent serviceIntent = new Intent(DotApplication.getContext(), ControlService.class);
+        DotApplication.getContext().stopService(serviceIntent);
     }
 
 }
