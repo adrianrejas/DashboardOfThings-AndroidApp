@@ -10,11 +10,23 @@ With Dashboard of Things, you’ll be able to convert your phone or tablet in a 
 More information about the project in https://github.com/adrianrejas/DashboardOfThings-AndroidApp/blob/master/Capstone_Stage1.pdf
 
 
-## Screenshots
+## Sensors dashboard
 
-| Sensors dashboard | Actuators dashboard |  History dashboard |  Maps screen |
-|:-:|:-:|:-:|
-| ![First](https://github.com/adrianrejas/DashboardOfThings-AndroidApp/blob/master/captures/main_dash_sensors.png?raw=true) | ![Sec](https://github.com/adrianrejas/DashboardOfThings-AndroidApp/blob/master/captures/main_dash_actuators.png?raw=true) | ![Sec](https://github.com/adrianrejas/DashboardOfThings-AndroidApp/blob/master/captures/maindash_history.png?raw=true) | ![Sec](https://github.com/adrianrejas/DashboardOfThings-AndroidApp/blob/master/captures/maps.png?raw=true) |
+(https://github.com/adrianrejas/DashboardOfThings-AndroidApp/blob/master/captures/main_dash_sensors.png?raw=true)
+
+
+## Actuators dashboard
+
+(https://github.com/adrianrejas/DashboardOfThings-AndroidApp/blob/master/captures/maindash_history.png?raw=true)
+
+
+## History dashboard
+
+(https://github.com/adrianrejas/DashboardOfThings-AndroidApp/blob/master/captures/maindash_history.png?raw=true)
+
+
+## Maps screen
+(https://github.com/adrianrejas/DashboardOfThings-AndroidApp/blob/master/captures/maps.png?raw=true)
 
 
 ## Main libraries used 
