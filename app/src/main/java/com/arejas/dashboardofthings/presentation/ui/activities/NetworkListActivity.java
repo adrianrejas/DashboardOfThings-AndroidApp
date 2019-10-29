@@ -186,7 +186,7 @@ public class NetworkListActivity extends AppCompatActivity implements View.OnCli
     }
 
     /**
-     * Function called for setting a new movie list, requesting it to the REST API
+     * Function called for setting a new list, requesting it to the Database
      *
      * @param showLoading true if wanted to show the loading layout until info got (we don't want in
      *                case of swipe refresh, because it has it's own way to info about the loading process).

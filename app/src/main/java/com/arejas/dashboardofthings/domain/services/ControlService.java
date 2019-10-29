@@ -56,9 +56,24 @@ public class ControlService extends Service {
     private List<Network> networks;
     private List<Sensor> sensors;
 
+    private boolean initiated;
+
     @Override
     public void onCreate() {
+        AndroidInjection.inject(this);
+
         this.networkHelpers = new HashMap<>();
+
+        if (!initiated) {
+            dbExecutorManagement.execute(() -> {
+                initializeNetworkHelpers();
+            });
+            initializeSubscriptionsToNetworksAndSensorsManagementChanges();
+            initializeSubscriptionsToActuatorDataUpdates();
+            initializeSubscriptionsToSensorReloadRequests();
+            initializeSubscriptionsToDataReceived();
+        }
+        initiated = true;
         super.onCreate();
     }
 
@@ -66,30 +81,16 @@ public class ControlService extends Service {
     public int onStartCommand(Intent intent, int flags, int startId) {
         startForeground(NotificationsHelper.FOREGROUND_SERVICE_NOTIFICATION_ID,
                 NotificationsHelper.showNotificationForegroundService(getApplicationContext()));
-        AndroidInjection.inject(this);
-
-        dbExecutorManagement.execute(() -> {
-            initializeNetworkHelpers();
-        });
-        initializeSubscriptionsToNetworksAndSensorsManagementChanges();
-        initializeSubscriptionsToActuatorDataUpdates();
-        initializeSubscriptionsToSensorReloadRequests();
-        initializeSubscriptionsToDataReceived();
-        return START_NOT_STICKY;
+        return START_STICKY;
     }
 
     public void initializeNetworkHelpers() {
         synchronized (networkHelpersLock) {
+            sensors = dotRepository.getListOfSensorsBlocking();
             networks = dotRepository.getListOfNetworksBlocking();
             if (networks != null) {
                 for (Network network : networks) {
                     initNetworkHelper(network);
-                }
-            }
-            sensors = dotRepository.getListOfSensorsBlocking();
-            if (sensors != null) {
-                for (Sensor sensor : sensors) {
-                    registerSensorInNetwork(sensor);
                 }
             }
         }
@@ -237,9 +238,8 @@ public class ControlService extends Service {
 
     private boolean restartNetworkHelper(@NotNull Network network) {
         synchronized (networkHelpersLock) {
-            if(closeNetworkHelper(network))
-                return initNetworkHelper(network);
-            return false;
+            closeNetworkHelper(network);
+            return initNetworkHelper(network);
         }
     }
 

@@ -15,6 +15,8 @@ public abstract class NetworkInterfaceHelper {
 
     private Map<Integer, Sensor> sensorsRegistered;
 
+    private final Object sensorsLock = new Object();
+
     public NetworkInterfaceHelper(Network network) {
         this.network = network;
         sensorsRegistered = new HashMap<>();
@@ -41,10 +43,28 @@ public abstract class NetworkInterfaceHelper {
     }
 
     public Map<Integer, Sensor> getSensorsRegistered() {
-        return sensorsRegistered;
+        synchronized (sensorsLock) {
+            Map<Integer, Sensor> returnedMap = new HashMap<>();
+            returnedMap.putAll(sensorsRegistered);
+            return returnedMap;
+        }
     }
 
     public void setSensorsRegistered(Map<Integer, Sensor> sensorsRegistered) {
-        this.sensorsRegistered = sensorsRegistered;
+        synchronized (sensorsLock) {
+            this.sensorsRegistered = sensorsRegistered;
+        }
+    }
+
+    public void registerSensor(Sensor sensor) {
+        synchronized (sensorsLock) {
+            this.sensorsRegistered.put(sensor.getId(), sensor);
+        }
+    }
+
+    public void unregisterSensor(Sensor sensor) {
+        synchronized (sensorsLock) {
+            this.sensorsRegistered.remove(sensor.getId());
+        }
     }
 }

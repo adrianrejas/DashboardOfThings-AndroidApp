@@ -99,7 +99,7 @@ public class ActuatorDetailsFragment extends Fragment {
         }
 
         // Init the view pager with a fragment adapter for showing the fragments with different info
-        // of the movie in a tab system
+        // of the actuator details in a tab system
         ActuatorDetailsFragmentPagerAdapter fragmentAdapter = new ActuatorDetailsFragmentPagerAdapter(getActivity().getSupportFragmentManager(), getContext(), actuatorId);
         uiBinding.vpActuatordetailsMaindashboard.setAdapter(fragmentAdapter);
         uiBinding.tlTabsActuatordetails.setupWithViewPager(uiBinding.vpActuatordetailsMaindashboard);
@@ -147,7 +147,7 @@ public class ActuatorDetailsFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
         // Inject dependencies
         AndroidSupportInjection.inject(this);
-        // If the recipe ID is defined load the suitable viewmodel.
+        // If the actuator ID is defined load the suitable viewmodel and observe the suitable data.
         if (actuatorId != null) {
             // Get the viewmodel
             actuatorDetailsViewModel = ViewModelProviders.of(getActivity(), this.viewModelFactory).get(ActuatorDetailsViewModel.class);
@@ -177,7 +177,7 @@ public class ActuatorDetailsFragment extends Fragment {
     }
 
     /**
-     * This adapter is used for defining the tab system of the movie activity, providing the
+     * This adapter is used for defining the tab system of the actuator details activity, providing the
      * fragments it will used, so as the tab configuration.
      */
     static class ActuatorDetailsFragmentPagerAdapter extends FragmentStatePagerAdapter {

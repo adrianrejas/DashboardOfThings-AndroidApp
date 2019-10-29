@@ -144,7 +144,7 @@ public class DataMessageHelper {
             XmlPullParser parser = Xml.newPullParser();
             parser.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, false);
             parser.setInput(new StringReader(messageBody));
-            parser.nextTag();
+            boolean getInfoFromNextText = false;
             while (parser.next() != XmlPullParser.END_DOCUMENT) {
                 if (parser.getEventType() == XmlPullParser.START_TAG) {
                     String tagToCheck = parser.getName();
@@ -153,8 +153,7 @@ public class DataMessageHelper {
                         if (indexToCountNodes >= thresholdToCountNodes) {
                             xmlTreeIndex++;
                             if (xmlTreeIndex >= xmlNodes.length) {
-                                String result = parser.getText();
-                                return ((result != null) && (!result.isEmpty())) ? result : null;
+                                getInfoFromNextText = true;
                             } else {
                                 Matcher matcher2 = arrayNodePattern.matcher(xmlNodes[xmlTreeIndex]);
                                 if (matcher2.find()) {
@@ -170,6 +169,12 @@ public class DataMessageHelper {
                                 }
                             }
                         }
+                    }
+                }
+                else if (parser.getEventType() == XmlPullParser.TEXT) {
+                    if (getInfoFromNextText) {
+                        String result = parser.getText();
+                        return ((result != null) && (!result.isEmpty())) ? result : null;
                     }
                 }
             }

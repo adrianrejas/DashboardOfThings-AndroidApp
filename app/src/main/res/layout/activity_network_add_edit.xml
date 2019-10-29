@@ -377,11 +377,15 @@
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintTop_toBottomOf="@id/ed_network_addedit_http_auth_password"
+                            android:focusable="true"
                             android:text="@string/edit_label_http_use_ssl"
                             android:checked="@{((network != null) &amp;&amp; (network.httpConfiguration != null)) ? network.httpConfiguration.httpUseSsl : false}"
                             app:checkingListener="@{(checked) -> presenter.httpUseSslChanged(checked)}"
                             style="@style/Theme.Dot.TextDataBold" />
 
+                        <!-- TODO The use of CA certificates for HTTPS connection hasn't be tested yet
+                        because of that, and as okhttp don't requir.e it for establishing SSL connection,
+                        the UI elements corresponding have been configure to Visibility.GONE for now-->
                         <ImageButton
                             android:id="@+id/ib_network_addedit_http_cert_picker"
                             android:layout_width="@dimen/edit_icon_size"
@@ -397,8 +401,11 @@
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toBottomOf="@id/cb_network_addedit_http_use_ssl"
                             app:srcCompat="@drawable/pick"
-                            android:visibility="@{useSslInHttp ? View.VISIBLE : View.GONE}" />
+                            android:visibility="gone" />
 
+                        <!-- TODO The use of CA certificates for HTTPS connection hasn't be tested yet
+                        because of that, and as okhttp don't requir.e it for establishing SSL connection,
+                        the UI elements corresponding have been configure to Visibility.GONE for now-->
                         <ImageButton
                             android:id="@+id/ib_network_addedit_http_cert_clear"
                             android:layout_width="@dimen/edit_icon_size"
@@ -408,16 +415,19 @@
                             android:adjustViewBounds="true"
                             android:background="@drawable/selector_icon"
                             android:contentDescription="@string/content_description_clear_certificate"
-                            android:onClick="@{(v) -> presenter.cancelHttpCert()()}"
+                            android:onClick="@{(v) -> presenter.cancelHttpCert()}"
                             android:scaleType="fitXY"
                             android:tint="@color/primaryTextColor"
-                            android:visibility="@{(useSslInHttp &amp;&amp; (httpCertPicked != null) &amp;&amp; (!httpCertPicked.isEmpty())) ? View.VISIBLE : View.GONE }"
+                            android:visibility="gone"
                             app:layout_constraintBottom_toBottomOf="@id/ib_network_addedit_http_cert_picker"
                             app:layout_constraintStart_toEndOf="@id/ib_network_addedit_http_cert_picker"
                             app:layout_constraintEnd_toStartOf="@id/tv_network_addedit_http_pick_cert_label"
                             app:layout_constraintTop_toTopOf="@id/ib_network_addedit_http_cert_picker"
                             app:srcCompat="@drawable/cancel" />
 
+                        <!-- TODO The use of CA certificates for HTTPS connection hasn't be tested yet
+                        because of that, and as okhttp don't requir.e it for establishing SSL connection,
+                        the UI elements corresponding have been configure to Visibility.GONE for now-->
                         <TextView
                             android:id="@+id/tv_network_addedit_http_pick_cert_label"
                             style="@style/Theme.Dot.TextDataBold"
@@ -432,7 +442,7 @@
                             app:layout_constraintStart_toEndOf="@id/ib_network_addedit_http_cert_clear"
                             app:layout_constraintTop_toTopOf="@id/ib_network_addedit_http_cert_picker"
                             tools:text="@string/edit_hint_http_cert_picked"
-                            android:visibility="@{useSslInHttp ? View.VISIBLE : View.GONE}" />
+                            android:visibility="gone" />
 
                     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -619,7 +629,7 @@
                             android:adjustViewBounds="true"
                             android:background="@drawable/selector_icon"
                             android:contentDescription="@string/content_description_clear_certificate"
-                            android:onClick="@{(v) -> presenter.cancelMqttCert()()}"
+                            android:onClick="@{(v) -> presenter.cancelMqttCert()}"
                             android:scaleType="fitXY"
                             android:tint="@color/primaryTextColor"
                             android:visibility="@{(useSslInMqtt &amp;&amp; (mqttCertPicked != null) &amp;&amp; (!mqttCertPicked.isEmpty())) ? View.VISIBLE : View.GONE }"

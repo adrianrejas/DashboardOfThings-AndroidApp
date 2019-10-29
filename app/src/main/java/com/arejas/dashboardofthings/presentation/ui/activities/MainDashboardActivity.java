@@ -125,7 +125,7 @@ public class MainDashboardActivity extends AppCompatActivity {
                 });
 
         // Init the view pager with a fragment adapter for showing the fragments with different info
-        // of the movie in a tab system
+        // of the main dashboard in a tab system
         MainDashboardFragmentAdapter fragmentAdapter = new MainDashboardFragmentAdapter(getSupportFragmentManager(), this);
         uiBinding.vpTabViewerMaindashboard.setAdapter(fragmentAdapter);
         uiBinding.tlTabsMaindashboard.setupWithViewPager(uiBinding.vpTabViewerMaindashboard);
@@ -173,7 +173,7 @@ public class MainDashboardActivity extends AppCompatActivity {
     }
 
     /**
-     * This adapter is used for defining the tab system of the movie activity, providing the
+     * This adapter is used for defining the tab system of the main dashboard activity, providing the
      * fragments it will used, so as the tab configuration.
      */
     static class MainDashboardFragmentAdapter extends FragmentStatePagerAdapter {

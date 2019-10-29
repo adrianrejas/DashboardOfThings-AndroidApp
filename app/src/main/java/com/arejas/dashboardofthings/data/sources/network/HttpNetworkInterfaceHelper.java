@@ -67,7 +67,7 @@ public class HttpNetworkInterfaceHelper extends NetworkInterfaceHelper{
                     .setExtras(extras)
                     .build();
             dispatcher.mustSchedule(sensorJob);
-            getSensorsRegistered().put(sensor.getId(), sensor);
+            registerSensor(sensor);
             return true;
         } catch (Exception e) {
             RxHelper.publishLog(sensor.getId(), Enumerators.ElementType.SENSOR,
@@ -79,7 +79,7 @@ public class HttpNetworkInterfaceHelper extends NetworkInterfaceHelper{
 
     @Override
     public boolean unconfigureSensorReceiving(Context context, Sensor sensor) {
-        getSensorsRegistered().remove(sensor.getId());
+        unregisterSensor(sensor);
         dispatcher.cancel(Integer.toString(sensor.getId()));
         return true;
     }

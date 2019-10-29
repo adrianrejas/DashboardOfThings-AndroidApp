@@ -73,7 +73,7 @@ public class ActuatorDetailsDetailsFragment extends Fragment implements Actuator
         // Inject dependencies
         AndroidSupportInjection.inject(this);
         if (actuatorId != null) {
-            // Get the movie activity view model and observe the changes in the details
+            // Get the actuator details activity view model and observe the changes in the details
             actuatorDetailsViewModel = ViewModelProviders.of(Objects.requireNonNull(getActivity()), viewModelFactory).get(ActuatorDetailsViewModel.class);
             actuatorDetailsViewModel.setActuatorId(actuatorId);
             setData(true, false);
@@ -94,7 +94,7 @@ public class ActuatorDetailsDetailsFragment extends Fragment implements Actuator
     }
 
     /**
-     * Function called for setting a new movie list, requesting it to the REST API
+     * Function called for setting new data, requesting it to the Database
      *
      * @param showLoading true if wanted to show the loading layout until info got (we don't want in
      *                case of swipe refresh, because it has it's own way to info about the loading process).

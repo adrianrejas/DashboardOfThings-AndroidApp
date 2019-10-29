@@ -24,9 +24,9 @@ public class DataHelper {
                     int thresholdBelowCritical = (thresholdBelowCriticalRaw != null) ?
                             thresholdBelowCriticalRaw.intValue() : Integer.MIN_VALUE;
                     int intValue = Integer.valueOf(dataReceived);
-                    if ((intValue >= thresholdAboveCritical) && (intValue <= thresholdBelowCritical)) {
+                    if ((intValue >= thresholdAboveCritical) || (intValue <= thresholdBelowCritical)) {
                         return Enumerators.NotificationState.CRITICAL;
-                    } else if ((intValue >= thresholdAboveWarning) && (intValue <= thresholdBelowWarning)) {
+                    } else if ((intValue >= thresholdAboveWarning) || (intValue <= thresholdBelowWarning)) {
                         return Enumerators.NotificationState.WARNING;
                     } else {
                         return Enumerators.NotificationState.NONE;
@@ -41,9 +41,9 @@ public class DataHelper {
                     float thresholdBelowCritical = (thresholdBelowCriticalRaw != null) ?
                             thresholdBelowCriticalRaw : Float.MIN_VALUE;
                     float floatValue = Float.valueOf(dataReceived);
-                    if ((floatValue >= thresholdAboveCritical) && (floatValue <= thresholdBelowCritical)) {
+                    if ((floatValue >= thresholdAboveCritical) || (floatValue <= thresholdBelowCritical)) {
                         return Enumerators.NotificationState.CRITICAL;
-                    } else if ((floatValue >= thresholdAboveWarning) && (floatValue <= thresholdBelowWarning)) {
+                    } else if ((floatValue >= thresholdAboveWarning) || (floatValue <= thresholdBelowWarning)) {
                         return Enumerators.NotificationState.WARNING;
                     } else {
                         return Enumerators.NotificationState.NONE;

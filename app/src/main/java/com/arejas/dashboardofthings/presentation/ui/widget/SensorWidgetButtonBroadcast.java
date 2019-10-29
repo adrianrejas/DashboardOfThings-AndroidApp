@@ -9,7 +9,7 @@ public class SensorWidgetButtonBroadcast extends BroadcastReceiver {
     private static final String ACTION_REQUEST_SENSOR_RELOAD = "com.arejas.dashboardofthings.presentation.ui.widget.ACTION_REQUEST_SENSOR_RELOAD";
     private static final String ACTION_REQUEST_SELECT_SENSOR = "com.arejas.dashboardofthings.presentation.ui.widget.ACTION_REQUEST_SELECT_SENSOR";
 
-    private static final String EXTRA_WIDGET_ID = "org.udacity.android.arejas.recipes.presentation.interfaces.broadcast.extra.WIDGET_ID";
+    private static final String EXTRA_WIDGET_ID = "com.arejas.dashboardofthings.presentation.ui.widget.WIDGET_ID";
 
     @Override
     public void onReceive(Context context, Intent intent) {

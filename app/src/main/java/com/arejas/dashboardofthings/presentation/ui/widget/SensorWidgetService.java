@@ -114,7 +114,7 @@ public class SensorWidgetService extends JobIntentService {
         // For each of the widget instances
         Map<Integer, Integer> sensorIdToWidgetIdMap = new HashMap<>();
         for (int widgetId: appWidgetIds) {
-            // Get recipe Id for widget from preferences
+            // Get sensor Id for widget from preferences
             int sensorId = getSensorIdForWidgetId(this, widgetId);
             // if sensor id selected, put in a map for processing it
             // if not, launch the update of the widget for the selection of sensor
@@ -173,7 +173,7 @@ public class SensorWidgetService extends JobIntentService {
         saveSensorIdForWidgetId(getApplicationContext(), widgetId, sensorId);
         //Set now widget as loading
         SensorWidget.updateAppWidgetAsLoading(this, appWidgetManager, widgetId);
-        // Request data of the new recipe and update the widget with it
+        // Request data of the sensor and update the widget with it
         sensorManagementUseCase.getSensorInfoForWidget(sensorId ,sensorInfo -> {
             //Now update the widget
             if (sensorInfo != null) {
@@ -267,12 +267,12 @@ public class SensorWidgetService extends JobIntentService {
     }
 
     /**
-     * Starts this service to perform action SetRecipeForWidget with the given parameters. If
+     * Starts this service to perform action SetSensorForWidget with the given parameters. If
      * the service is already performing a task this action will be queued.
      *
      * @see IntentService
      */
-    public static void startActionSetRecipeForWidget(Context context, int widgetId, int sensorId) {
+    public static void startActionSetSensorForWidget(Context context, int widgetId, int sensorId) {
         Intent intent = new Intent(context, SensorWidgetService.class);
         intent.setAction(ACTION_SET_SENSOR_FOR_WIDGET);
         intent.putExtra(EXTRA_WIDGET_ID, widgetId);

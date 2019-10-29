@@ -48,6 +48,8 @@ public class SensorAddEditActivity extends AppCompatActivity implements AddEditS
 
     public static final String SENSOR_ID = "sensor_id";
 
+    public static final int NEW_SENSOR_ID = -1000;
+
     public static final int MIN_HTTP_INTERVAL = 60;
 
     public static final int REQUEST_PICK_IMAGE = 41;
@@ -85,33 +87,44 @@ public class SensorAddEditActivity extends AppCompatActivity implements AddEditS
         setSupportActionBar(uiBinding.toolbar);
         getSupportActionBar().setHomeAsUpIndicator(R.drawable.cancel);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        
-        if ((savedInstanceState != null) && (savedInstanceState.containsKey(SENSOR_ID))) {
-            sensorId = savedInstanceState.getInt(SENSOR_ID);
-        } if ((getIntent().getExtras() != null) && (getIntent().getExtras().containsKey(SENSOR_ID))) {
-            sensorId = getIntent().getIntExtra(SENSOR_ID, -1);
-        } else {
-            sensorId = null;
-        }
-        if ((sensorId == null) || (sensorId < 0)) {
-            editionMode = false;
-        } else {
-            editionMode = true;
-        }
 
         /* Get view model*/
         sensorAddEditViewModel = ViewModelProviders.of(this, this.viewModelFactory).get(SensorAddEditViewModel.class);
-        sensorAddEditViewModel.setSensorId(sensorId);
 
+        // Load the data in order to preserve data when orientation changes, setting the network id
+        // in the viewmodel only if it's a new activity, in order to preserve the entity currently being modified
+        if ((savedInstanceState != null) && (savedInstanceState.containsKey(SENSOR_ID))) {
+            sensorId = savedInstanceState.getInt(SENSOR_ID);
+            if (sensorId == NEW_SENSOR_ID) {
+                sensorId = null;
+            }
+        } else if ((getIntent().getExtras() != null) && (getIntent().getExtras().containsKey(SENSOR_ID))) {
+            sensorId = getIntent().getIntExtra(SENSOR_ID, -1);
+            sensorAddEditViewModel.setSensorId(sensorId);
+        } else {
+            sensorId = null;
+            sensorAddEditViewModel.setSensorId(null);
+        }
+
+        // set if entity is being edited or created
+        if ((sensorId == null) || (sensorId < 0)) {
+            editionMode = false;
+            getSupportActionBar().setTitle(getString(R.string.toolbar_title_new_sensor));
+        } else {
+            editionMode = true;
+            getSupportActionBar().setTitle(getString(R.string.toolbar_title_edit_sensor));
+        }
+
+        // set listener and edition mode
         uiBinding.setPresenter(this);
         uiBinding.setEditionMode(editionMode);
 
+        // set the UI based on if the element is being created or edited, and if an in-edition version
+        // of the entity exists
         mHttpHeaders = new HashMap<>();
         configureListAdapter();
         updateHttpHeaderList();
-
         if (editionMode) {
-            uiBinding.toolbar.setTitle(getString(R.string.toolbar_title_edit_sensor));
             if (sensorAddEditViewModel.getSensorBeingEdited() == null) {
                 sensorAddEditViewModel.getSensor(true).observe(this, sensorExtendedResource -> {
                     try {
@@ -148,7 +161,6 @@ public class SensorAddEditActivity extends AppCompatActivity implements AddEditS
                 }
             }
         } else {
-            uiBinding.toolbar.setTitle(getString(R.string.toolbar_title_new_sensor));
             showEditArea();
             if (sensorAddEditViewModel.getSensorBeingEdited() != null) {
                 try {
@@ -230,6 +242,8 @@ public class SensorAddEditActivity extends AppCompatActivity implements AddEditS
         }
         if (sensorId != null) {
             outState.putInt(SENSOR_ID, sensorId);
+        } else {
+            outState.putInt(SENSOR_ID, NEW_SENSOR_ID);
         }
         super.onSaveInstanceState(outState);
     }

@@ -52,13 +52,16 @@ public class HttpRequestHelper {
             if (network.getHttpConfiguration().getHttpUseSsl()) {
                 if ((network.getHttpConfiguration().getCertAuthorityUri() != null) &&
                         (!network.getHttpConfiguration().getCertAuthorityUri().isEmpty())) {
-                    SslUtility.getInstance().createSocketFactoryAndTrustManager(network.getId(),
+                    // TODO The use of CA certificates for HTTPS connection hasn't be tested yet
+                    // because of that, and as okhttp don't require it for establishing SSL connection,
+                    // the functionality code has been commented for now.
+                    /*SslUtility.getInstance().createSocketFactoryAndTrustManager(network.getId(),
                             network.getHttpConfiguration().getCertAuthorityUri());
                     socketFactory = SslUtility.getInstance().getSocketFactory(network.getId());
                     trustManager = SslUtility.getInstance().getTrustedManager(network.getId());
                     if ((socketFactory == null) || (trustManager == null)) {
                         throw new SSLException("");
-                    }
+                    }*/
                 }
             }
             String url = Uri.parse(network.getHttpConfiguration().getHttpBaseUrl())
@@ -140,13 +143,16 @@ public class HttpRequestHelper {
             if (network.getHttpConfiguration().getHttpUseSsl()) {
                 if ((network.getHttpConfiguration().getCertAuthorityUri() != null) &&
                         (!network.getHttpConfiguration().getCertAuthorityUri().isEmpty())) {
-                    SslUtility.getInstance().createSocketFactoryAndTrustManager(network.getId(),
+                    // TODO The use of CA certificates for HTTPS connection hasn't be tested yet
+                    // because of that, and as okhttp don't require it for establishing SSL connection,
+                    // the functionality code has been commented for now.
+                    /*SslUtility.getInstance().createSocketFactoryAndTrustManager(network.getId(),
                             network.getHttpConfiguration().getCertAuthorityUri());
                     socketFactory = SslUtility.getInstance().getSocketFactory(network.getId());
                     trustManager = SslUtility.getInstance().getTrustedManager(network.getId());
                     if ((socketFactory == null) || (trustManager == null)) {
                         throw new SSLException("");
-                    }
+                    }*/
                 }
             }
             if (DataTransformationHelper.checkIfDataTypeIsCorrect(dataToSend, actuator.getDataType())) {
@@ -214,13 +220,21 @@ public class HttpRequestHelper {
                                            Enumerators.HttpAuthenticationType authenticationType,
                                            String username, String password,
                                            boolean usesSslConnection,
-                                           SSLSocketFactory socketFactory,
+                                           SSLSocketFactory sslSocketFactory,
                                            X509TrustManager trustManager) throws Exception {
         OkHttpClient.Builder clientBuilder = new OkHttpClient.Builder();
         if (usesSslConnection) {
             clientBuilder = clientBuilder.connectionSpecs(
                     Arrays.asList(ConnectionSpec.MODERN_TLS, ConnectionSpec.COMPATIBLE_TLS));
         }
+
+        // TODO The use of CA certificates for HTTPS connection hasn't be tested yet
+        // because of that, and as okhttp don't require it for establishing SSL connection,
+        // the functionality code has been commented for now.
+        /*if (sslSocketFactory != null) {
+            clientBuilder.sslSocketFactory(sslSocketFactory, trustManager);
+        }*/
+
         if (!authenticationType.equals(Enumerators.HttpAuthenticationType.NONE)) {
             clientBuilder.authenticator(new Authenticator() {
                 @Nullable
@@ -233,6 +247,7 @@ public class HttpRequestHelper {
         }
 
         OkHttpClient client = clientBuilder.build();
+
         Request.Builder requestBuilder = new Request.Builder();
 
         if (!URLUtil.isValidUrl(url)){

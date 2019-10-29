@@ -71,7 +71,7 @@ public class NetworkDetailsDetailsFragment extends Fragment {
         // Inject dependencies
         AndroidSupportInjection.inject(this);
         if (networkId != null) {
-            // Get the movie activity view model and observe the changes in the details
+            // Get the network details activity view model and observe the changes in the details
             networkDetailsViewModel = ViewModelProviders.of(Objects.requireNonNull(getActivity()), viewModelFactory).get(NetworkDetailsViewModel.class);
             networkDetailsViewModel.setNetworkId(networkId);
             setData(true, false);
@@ -91,7 +91,7 @@ public class NetworkDetailsDetailsFragment extends Fragment {
     }
 
     /**
-     * Function called for setting a new movie list, requesting it to the REST API
+     * Function called for setting a new list, requesting it to the Database
      *
      * @param showLoading true if wanted to show the loading layout until info got (we don't want in
      *                case of swipe refresh, because it has it's own way to info about the loading process).

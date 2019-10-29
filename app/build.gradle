@@ -21,9 +21,9 @@ android {
     signingConfigs {
         config {
             keyAlias 'arejas'
-            keyPassword 'xxx'
+            keyPassword 'arejas'
             storeFile file('../dashboardofthings-keystore.jks')
-            storePassword 'xxx'
+            storePassword 'arejas'
         }
     }
     buildTypes {

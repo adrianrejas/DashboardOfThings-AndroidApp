@@ -49,6 +49,8 @@ public class ActuatorAddEditActivity extends AppCompatActivity implements AddEdi
 
     public static final String ACTUATOR_ID = "actuator_id";
 
+    public static final int NEW_ACTUATOR_ID = -1000;
+
     public static final int MIN_HTTP_INTERVAL = 60;
 
     public static final int REQUEST_PICK_IMAGE = 41;
@@ -86,33 +88,44 @@ public class ActuatorAddEditActivity extends AppCompatActivity implements AddEdi
         setSupportActionBar(uiBinding.toolbar);
         getSupportActionBar().setHomeAsUpIndicator(R.drawable.cancel);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        
-        if ((savedInstanceState != null) && (savedInstanceState.containsKey(ACTUATOR_ID))) {
-            actuatorId = savedInstanceState.getInt(ACTUATOR_ID);
-        } if ((getIntent().getExtras() != null) && (getIntent().getExtras().containsKey(ACTUATOR_ID))) {
-            actuatorId = getIntent().getIntExtra(ACTUATOR_ID, -1);
-        } else {
-            actuatorId = null;
-        }
-        if ((actuatorId == null) || (actuatorId < 0)) {
-            editionMode = false;
-        } else {
-            editionMode = true;
-        }
 
         /* Get view model*/
         actuatorAddEditViewModel = ViewModelProviders.of(this, this.viewModelFactory).get(ActuatorAddEditViewModel.class);
-        actuatorAddEditViewModel.setActuatorId(actuatorId);
 
+        // Load the data in order to preserve data when orientation changes, setting the network id
+        // in the viewmodel only if it's a new activity, in order to preserve the entity currently being modified
+        if ((savedInstanceState != null) && (savedInstanceState.containsKey(ACTUATOR_ID))) {
+            actuatorId = savedInstanceState.getInt(ACTUATOR_ID);
+            if (actuatorId == NEW_ACTUATOR_ID) {
+                actuatorId = null;
+            }
+        } else if ((getIntent().getExtras() != null) && (getIntent().getExtras().containsKey(ACTUATOR_ID))) {
+            actuatorId = getIntent().getIntExtra(ACTUATOR_ID, -1);
+            actuatorAddEditViewModel.setActuatorId(actuatorId);
+        } else {
+            actuatorId = null;
+            actuatorAddEditViewModel.setActuatorId(null);
+        }
+
+        // set if entity is being edited or created
+        if ((actuatorId == null) || (actuatorId < 0)) {
+            editionMode = false;
+            getSupportActionBar().setTitle(getString(R.string.toolbar_title_new_actuator));
+        } else {
+            editionMode = true;
+            getSupportActionBar().setTitle(getString(R.string.toolbar_title_edit_sensor));
+        }
+
+        // set listener and edition mode
         uiBinding.setPresenter(this);
         uiBinding.setEditionMode(editionMode);
 
+        // set the UI based on if the element is being created or edited, and if an in-edition version
+        // of the entity exists
         mHttpHeaders = new HashMap<>();
         configureListAdapter();
         updateHttpHeaderList();
-
         if (editionMode) {
-            uiBinding.toolbar.setTitle(getString(R.string.toolbar_title_edit_sensor));
             if (actuatorAddEditViewModel.getActuatorBeingEdited() == null) {
                 actuatorAddEditViewModel.getActuator(true).observe(this, actuatorExtendedResource -> {
                     try {
@@ -149,7 +162,6 @@ public class ActuatorAddEditActivity extends AppCompatActivity implements AddEdi
                 }
             }
         } else {
-            uiBinding.toolbar.setTitle(getString(R.string.toolbar_title_new_actuator));
             showEditArea();
             if (actuatorAddEditViewModel.getActuatorBeingEdited() != null) {
                 try {
@@ -231,6 +243,8 @@ public class ActuatorAddEditActivity extends AppCompatActivity implements AddEdi
         }
         if (actuatorId != null) {
             outState.putInt(ACTUATOR_ID, actuatorId);
+        } else {
+            outState.putInt(ACTUATOR_ID, NEW_ACTUATOR_ID);
         }
         super.onSaveInstanceState(outState);
     }

@@ -64,7 +64,7 @@ public class SensorDetailsLogsFragment extends Fragment {
         // Inject dependencies
         AndroidSupportInjection.inject(this);
         if (sensorId != null) {
-            // Get the movie activity view model and observe the changes in the details
+            // Get the sensor details activity view model and observe the changes in the details
             sensorDetailsViewModel = ViewModelProviders.of(Objects.requireNonNull(getActivity()), viewModelFactory).get(SensorDetailsViewModel.class);
             sensorDetailsViewModel.setSensorId(sensorId);
             setList(true, false);
@@ -86,7 +86,7 @@ public class SensorDetailsLogsFragment extends Fragment {
     }
 
     /**
-     * Function called for setting a new movie list, requesting it to the REST API
+     * Function called for setting a new list, requesting it to the Database
      *
      * @param showLoading true if wanted to show the loading layout until info got (we don't want in
      *                case of swipe refresh, because it has it's own way to info about the loading process).

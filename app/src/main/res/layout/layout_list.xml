@@ -17,8 +17,7 @@
             android:layout_height="match_parent"
             android:layout_margin="@dimen/list_element_magin"
             android:visibility="visible"
-            tools:visibility="visible"
-            tools:context=".presentation.ui.activities.RecipesListActivity"/>
+            tools:visibility="visible"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

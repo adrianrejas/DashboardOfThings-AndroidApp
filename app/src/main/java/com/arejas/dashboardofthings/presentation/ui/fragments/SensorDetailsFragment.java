@@ -99,7 +99,7 @@ public class SensorDetailsFragment extends Fragment {
         }
 
         // Init the view pager with a fragment adapter for showing the fragments with different info
-        // of the movie in a tab system
+        // of the sensor details in a tab system
         SensorDetailsFragmentPagerAdapter fragmentAdapter = new SensorDetailsFragmentPagerAdapter(getActivity().getSupportFragmentManager(), getContext(), sensorId);
         uiBinding.vpSensordetailsMaindashboard.setAdapter(fragmentAdapter);
         uiBinding.tlTabsSensordetails.setupWithViewPager(uiBinding.vpSensordetailsMaindashboard);
@@ -158,7 +158,7 @@ public class SensorDetailsFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
         // Inject dependencies
         AndroidSupportInjection.inject(this);
-        // If the recipe ID is defined load the suitable viewmodel.
+        // If the sensor ID is defined load the suitable viewmodel and observe the suitable data.
         if (sensorId != null) {
             // Get the viewmodel
             sensorDetailsViewModel = ViewModelProviders.of(getActivity(), this.viewModelFactory).get(SensorDetailsViewModel.class);
@@ -188,7 +188,7 @@ public class SensorDetailsFragment extends Fragment {
     }
 
     /**
-     * This adapter is used for defining the tab system of the movie activity, providing the
+     * This adapter is used for defining the tab system of the sensor details activity, providing the
      * fragments it will used, so as the tab configuration.
      */
     static class SensorDetailsFragmentPagerAdapter extends FragmentStatePagerAdapter {

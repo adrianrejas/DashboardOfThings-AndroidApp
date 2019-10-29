@@ -1,12 +1,15 @@
 package com.arejas.dashboardofthings.data.sources.network;
 
 import android.content.Context;
+import android.net.Uri;
+import android.os.Handler;
 
+import com.arejas.dashboardofthings.DotApplication;
 import com.arejas.dashboardofthings.R;
 import com.arejas.dashboardofthings.data.format.DataTransformationHelper;
 import com.arejas.dashboardofthings.data.interfaces.DotRepository;
 import com.arejas.dashboardofthings.data.sources.network.data.DataMessageHelper;
-import com.arejas.dashboardofthings.data.sources.network.http.SslUtility;
+import com.arejas.dashboardofthings.data.sources.network.mqtt.SocketFactory;
 import com.arejas.dashboardofthings.domain.entities.database.Actuator;
 import com.arejas.dashboardofthings.domain.entities.database.Network;
 import com.arejas.dashboardofthings.domain.entities.database.Sensor;
@@ -23,6 +26,8 @@ import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
 import org.eclipse.paho.client.mqttv3.MqttException;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
 import org.eclipse.paho.client.mqttv3.MqttTopic;
+
+import java.io.InputStream;
 
 public class MqttNetworkInterfaceHelper extends NetworkInterfaceHelper {
 
@@ -60,7 +65,7 @@ public class MqttNetworkInterfaceHelper extends NetworkInterfaceHelper {
                 public void messageArrived(String topic, MqttMessage mqttMessage) throws Exception {
                     try {
                         // For each sensor, check if its topic filter matches
-                        for (Sensor sensor : sensors) {
+                        for (Sensor sensor : getSensorsRegistered().values()) {
                             if (MqttTopic.isMatched(sensor.getMqttTopicToSubscribe(), topic)) {
                                 // If filter matches, extract data and report data received
                                 if (mqttMessage.getPayload() != null) {
@@ -104,20 +109,29 @@ public class MqttNetworkInterfaceHelper extends NetworkInterfaceHelper {
             MqttConnectOptions mqttConnectOptions = new MqttConnectOptions();
             mqttConnectOptions.setAutomaticReconnect(true);
             mqttConnectOptions.setCleanSession(getNetwork().getMqttConfiguration().getMqttCleanSession());
-            mqttConnectOptions.setUserName(getNetwork().getMqttConfiguration().getMqttUsername());
-            mqttConnectOptions.setPassword(getNetwork().getMqttConfiguration().getMqttPassword().toCharArray());
-            mqttConnectOptions.setConnectionTimeout(getNetwork().getMqttConfiguration().getMqttConnTimeout());
+            if ((getNetwork().getMqttConfiguration().getMqttUsername() != null) &&
+                    (!getNetwork().getMqttConfiguration().getMqttUsername().isEmpty()))
+                mqttConnectOptions.setUserName(getNetwork().getMqttConfiguration().getMqttUsername());
+            if ((getNetwork().getMqttConfiguration().getMqttPassword() != null) &&
+                    (!getNetwork().getMqttConfiguration().getMqttPassword().isEmpty()))
+                mqttConnectOptions.setPassword(getNetwork().getMqttConfiguration().getMqttPassword().toCharArray());
+            if ((getNetwork().getMqttConfiguration().getMqttConnTimeout() != null) &&
+            (!getNetwork().getMqttConfiguration().getMqttConnTimeout().equals(0)))
+                mqttConnectOptions.setConnectionTimeout(getNetwork().getMqttConfiguration().getMqttConnTimeout());
+            if ((getNetwork().getMqttConfiguration().getMqttKeepaliveInterval() != null) &&
+                    (!getNetwork().getMqttConfiguration().getMqttKeepaliveInterval().equals(0)))
+                mqttConnectOptions.setKeepAliveInterval(getNetwork().getMqttConfiguration().getMqttKeepaliveInterval());
             if (getNetwork().getMqttConfiguration().getMqttUseSsl()) {
-                SslUtility.getInstance().createSocketFactoryAndTrustManager(getNetwork().getId(),
-                        getNetwork().getMqttConfiguration().getMqttCertAuthorityUri());
-                mqttConnectOptions.setSocketFactory(SslUtility.getInstance().getSocketFactory(getNetwork().getId()));
+                SocketFactory.SocketFactoryOptions socketFactoryOptions = new SocketFactory.SocketFactoryOptions();
+                Uri certUri = Uri.parse(getNetwork().getMqttConfiguration().getMqttCertAuthorityUri());
+                InputStream certInputStream = DotApplication.getContext().getContentResolver().openInputStream(certUri);
+                socketFactoryOptions.withCaInputStream(certInputStream);
+                mqttConnectOptions.setSocketFactory(new SocketFactory(socketFactoryOptions));
             }
             try {
-
                 mqttAndroidClient.connect(mqttConnectOptions, null, new IMqttActionListener() {
                     @Override
                     public void onSuccess(IMqttToken asyncActionToken) {
-
                         DisconnectedBufferOptions disconnectedBufferOptions = new DisconnectedBufferOptions();
                         disconnectedBufferOptions.setBufferEnabled(true);
                         disconnectedBufferOptions.setBufferSize(100);
@@ -131,6 +145,7 @@ public class MqttNetworkInterfaceHelper extends NetworkInterfaceHelper {
                         RxHelper.publishLog(getNetwork().getId(), Enumerators.ElementType.NETWORK,
                                 getNetwork().getName(), Enumerators.LogLevel.ERROR,
                                 context.getString(R.string.log_critical_mqtt_connection_fail));
+                        exception.printStackTrace();
                     }
                 });
                 return true;
@@ -171,12 +186,19 @@ public class MqttNetworkInterfaceHelper extends NetworkInterfaceHelper {
     public boolean configureSensorReceiving(Context context, Sensor sensor) {
         try {
             mqttAndroidClient.subscribe(sensor.getMqttTopicToSubscribe(), sensor.getMqttQosLevel().ordinal());
-            getSensorsRegistered().put(sensor.getId(), sensor);
+            registerSensor(sensor);
+            RxHelper.publishLog(sensor.getId(), Enumerators.ElementType.SENSOR,
+                    sensor.getName(), Enumerators.LogLevel.INFO,
+                    context.getString(R.string.log_critical_mqtt_sensor_subscription_success));
             return true;
         } catch (Exception e) {
             RxHelper.publishLog(sensor.getId(), Enumerators.ElementType.SENSOR,
                     sensor.getName(), Enumerators.LogLevel.ERROR,
                     context.getString(R.string.log_critical_mqtt_sensor_subscription_fail));
+            // Retry the subscription in 60 seconds
+            (new Handler()).postDelayed(() -> {
+                configureSensorReceiving(context, sensor);
+            }, 60000);
             return false;
         }
     }
@@ -184,8 +206,17 @@ public class MqttNetworkInterfaceHelper extends NetworkInterfaceHelper {
     @Override
     public boolean unconfigureSensorReceiving(Context context, Sensor sensor) {
         try {
-            getSensorsRegistered().remove(sensor.getId());
-            mqttAndroidClient.unsubscribe(sensor.getMqttTopicToSubscribe());
+            unregisterSensor(sensor);
+            boolean otherSensorUsingSameTopicFilter = false;
+            for (Sensor otherSensor : getSensorsRegistered().values()) {
+                if (otherSensor.getMqttTopicToSubscribe().equals(sensor.getMqttTopicToSubscribe())) {
+                    otherSensorUsingSameTopicFilter = true;
+                    break;
+                }
+            }
+            if (!otherSensorUsingSameTopicFilter) {
+                mqttAndroidClient.unsubscribe(sensor.getMqttTopicToSubscribe());
+            }
             return true;
         } catch (Exception e) {
             RxHelper.publishLog(sensor.getId(), Enumerators.ElementType.SENSOR,

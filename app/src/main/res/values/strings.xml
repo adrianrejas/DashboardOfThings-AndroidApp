@@ -221,7 +221,7 @@
          - ${DATA}: Replaced by the value sent by the actuator in the default format.\n
          - ${TIMESTAMP}: Replaced by the current timestamp.</string>
     <string name="edit_label_xml_node">XML node to locate data: </string>
-    <string name="edit_hint_xml_node">Example: node1.node2.node3</string>
+    <string name="edit_hint_xml_node">Example: node1.node2[2].node3</string>
     <string name="edit_label_json_variables">JSON options</string>
     <string name="edit_label_json_node">JSON node to locate data: </string>
     <string name="edit_hint_json_node">Example: first_node.second_node.third_node</string>
@@ -276,6 +276,8 @@
     <string name="edit_toast_check_mqtt_username">Select MQTT username ...</string>
     <string name="edit_toast_check_mqtt_password">Select MQTT password ...</string>
     <string name="edit_toast_check_mqtt_brokerurl">Check MQTT broker URL ...</string>
+    <string name="edit_toast_check_mqtt_clientid">Check MQTT broker Client ID ...</string>
+    <string name="edit_toast_check_mqtt_certificate">MQTT SSL use requires to pick a CA certificate ...</string>
     <string name="edit_toast_check_http_headers">Check the fields for introducing a new HTTP header ...</string>
     <string name="edit_toast_check_network">Select a network ...</string>
     <string name="edit_toast_check_http_relativeurl">Check HTTP relative URL ...</string>
@@ -324,6 +326,7 @@
     <string name="log_critical_mqtt_connection_fail">MQTT connection failed.</string>
     <string name="log_critical_mqtt_disconnection_fail">MQTT disconnection failed.</string>
     <string name="log_critical_mqtt_sensor_subscription_fail">MQTT sensor subscription failed.</string>
+    <string name="log_critical_mqtt_sensor_subscription_success">MQTT sensor subscription success.</string>
     <string name="log_critical_mqtt_sensor_unsubscription_fail">MQTT sensor unsubscription failed.</string>
     <string name="log_critical_mqtt_actuator_send_failed">Failed to send MQTT message for actuator.</string>
     <string name="log_critical_unexpected_mqtt_network_sending">Unexpected error when sending MQTT message.</string>

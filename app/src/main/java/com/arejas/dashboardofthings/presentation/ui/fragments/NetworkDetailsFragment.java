@@ -100,7 +100,7 @@ public class NetworkDetailsFragment extends Fragment {
         }
 
         // Init the view pager with a fragment adapter for showing the fragments with different info
-        // of the movie in a tab system
+        // of the network in a tab system
         NetworkDetailsFragmentPagerAdapter fragmentAdapter = new NetworkDetailsFragmentPagerAdapter(getActivity().getSupportFragmentManager(), getContext(), networkId);
         uiBinding.vpNetworkdetailsMaindashboard.setAdapter(fragmentAdapter);
         uiBinding.tlTabsNetworkdetails.setupWithViewPager(uiBinding.vpNetworkdetailsMaindashboard);
@@ -148,7 +148,7 @@ public class NetworkDetailsFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
         // Inject dependencies
         AndroidSupportInjection.inject(this);
-        // If the recipe ID is defined load the suitable viewmodel.
+        // If the network ID is defined load the suitable viewmodel and observe datainterested.
         if (networkId != null) {
             // Get the viewmodel
             networkDetailsViewModel = ViewModelProviders.of(getActivity(), this.viewModelFactory).get(NetworkDetailsViewModel.class);
@@ -178,7 +178,7 @@ public class NetworkDetailsFragment extends Fragment {
     }
 
     /**
-     * This adapter is used for defining the tab system of the movie activity, providing the
+     * This adapter is used for defining the tab system of the network details activity, providing the
      * fragments it will used, so as the tab configuration.
      */
     static class NetworkDetailsFragmentPagerAdapter extends FragmentStatePagerAdapter {

@@ -220,7 +220,7 @@ public class SelectSensorForWidgetActivity extends AppCompatActivity {
             public void onClick(View view) {
                 SensorExtended item = (SensorExtended) view.getTag();
                 SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(mParentActivity);
-                SensorWidgetService.startActionSetRecipeForWidget(mParentActivity.getApplicationContext(), widgetId, item.getId());
+                SensorWidgetService.startActionSetSensorForWidget(mParentActivity.getApplicationContext(), widgetId, item.getId());
                 mParentActivity.finish();
             }
         };
