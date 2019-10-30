@@ -113,10 +113,10 @@ public class NetworkDetailsFragment extends Fragment {
 
                 switch (item.getItemId()) {
                     case R.id.menu_edit:
-                        Intent intent = new Intent(DotApplication.getContext(),
+                        Intent intent = new Intent(getContext(),
                                 NetworkAddEditActivity.class);
                         intent.putExtra(NetworkAddEditActivity.NETWORK_ID, networkId);
-                        DotApplication.getContext().startActivity(intent);
+                        startActivity(intent);
                         break;
                     case R.id.menu_remove:
                         if (networkObject != null) {

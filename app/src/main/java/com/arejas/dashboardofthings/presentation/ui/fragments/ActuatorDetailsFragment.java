@@ -112,10 +112,10 @@ public class ActuatorDetailsFragment extends Fragment {
 
                 switch (item.getItemId()) {
                     case R.id.menu_edit:
-                        Intent intent = new Intent(DotApplication.getContext(),
+                        Intent intent = new Intent(getContext(),
                                 ActuatorAddEditActivity.class);
                         intent.putExtra(ActuatorAddEditActivity.ACTUATOR_ID, actuatorId);
-                        DotApplication.getContext().startActivity(intent);
+                        startActivity(intent);
                         break;
                     case R.id.menu_remove:
                         if (actuatorObject != null) {

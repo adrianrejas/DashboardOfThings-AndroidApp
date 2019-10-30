@@ -123,10 +123,10 @@ public class SensorDetailsFragment extends Fragment {
                                 });
                         break;
                     case R.id.menu_edit:
-                        Intent intent = new Intent(DotApplication.getContext(),
+                        Intent intent = new Intent(getContext(),
                                 SensorAddEditActivity.class);
                         intent.putExtra(SensorAddEditActivity.SENSOR_ID, sensorId);
-                        DotApplication.getContext().startActivity(intent);
+                        startActivity(intent);
                         break;
                     case R.id.menu_remove:
                         if (sensorObject != null) {

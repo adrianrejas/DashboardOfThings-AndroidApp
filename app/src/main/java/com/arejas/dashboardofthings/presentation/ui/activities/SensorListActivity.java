@@ -310,9 +310,8 @@ public class SensorListActivity extends AppCompatActivity implements View.OnClic
 
     @Override
     public void onClick(View v) {
-        Intent intent = new Intent(DotApplication.getContext(),
-                SensorAddEditActivity.class);
-        DotApplication.getContext().startActivity(intent);
+        Intent intent = new Intent(this, SensorAddEditActivity.class);
+        startActivity(intent);
     }
 
     public static class SensorListAdapter
@@ -420,10 +419,10 @@ public class SensorListActivity extends AppCompatActivity implements View.OnClic
                     public boolean onMenuItemClick(MenuItem item) {
                         switch (item.getItemId()) {
                             case R.id.menu_edit:
-                                Intent intent = new Intent(DotApplication.getContext(),
+                                Intent intent = new Intent(mParentActivity.getApplicationContext(),
                                         SensorAddEditActivity.class);
                                 intent.putExtra(SensorAddEditActivity.SENSOR_ID, sensor.getId());
-                                DotApplication.getContext().startActivity(intent);
+                                mParentActivity.startActivity(intent);
                                 break;
                             case R.id.menu_remove:
                                 RemoveSensorDialogFragment dialog =

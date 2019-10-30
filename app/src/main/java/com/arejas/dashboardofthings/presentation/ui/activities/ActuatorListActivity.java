@@ -301,9 +301,8 @@ public class ActuatorListActivity extends AppCompatActivity implements View.OnCl
 
     @Override
     public void onClick(View v) {
-        Intent intent = new Intent(DotApplication.getContext(),
-                ActuatorAddEditActivity.class);
-        DotApplication.getContext().startActivity(intent);
+        Intent intent = new Intent(this, ActuatorAddEditActivity.class);
+        startActivity(intent);
     }
 
     public static class ActuatorListAdapter
@@ -410,10 +409,10 @@ public class ActuatorListActivity extends AppCompatActivity implements View.OnCl
                     public boolean onMenuItemClick(MenuItem item) {
                         switch (item.getItemId()) {
                             case R.id.menu_edit:
-                                Intent intent = new Intent(DotApplication.getContext(),
+                                Intent intent = new Intent(mParentActivity.getApplicationContext(),
                                         ActuatorAddEditActivity.class);
                                 intent.putExtra(ActuatorAddEditActivity.ACTUATOR_ID, actuator.getId());
-                                DotApplication.getContext().startActivity(intent);
+                                mParentActivity.startActivity(intent);
                                 break;
                             case R.id.menu_remove:
                                 RemoveActuatorDialogFragment dialog =
